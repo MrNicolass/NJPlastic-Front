@@ -1,0 +1,67 @@
+# .github/workflows/generate-tests.yml
+on:
+  push:
+    branches-ignore: [release/qa, main, develop]
+permissions:
+  contents: write
+jobs:
+  generate-tests:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Claude Code with Vault context
+        run: |
+          CHANGED=$(git diff HEAD~1 --name-only)
+          PROMPT=$(cat <<'EOF'
+          Execute a test generation skill for the modified files.
+          Save all test files inside the repository.
+          Apply the `react-tests` skill from the Vault for each modified file under src/.
+          Modified files:
+          EOF
+          )
+          claude-smart --permission-mode bypassPermissions --print "$PROMPT
+          $CHANGED"
+
+      - name: Commit generated tests
+        run: |
+          # Extrai o código da issue do nome da branch (ex: feature/TAPIEMS-943-some-description → TAPIEMS-943)
+          BRANCH_NAME="${GITHUB_REF_NAME}"
+          ISSUE_CODE=$(echo "$BRANCH_NAME" | grep -oE '[A-Z]+-[0-9]+' | head -1)
+
+          if [ -z "$ISSUE_CODE" ]; then
+            ISSUE_CODE="NO-ISSUE"
+          fi
+
+          git add src/__tests__/ 2>/dev/null || true
+
+          if git diff --staged --quiet; then
+            echo "No test files to commit."
+            exit 0
+          fi
+
+          STAGED_FILES=$(git diff --staged --name-only)
+
+          COMMIT_BODY=""
+          LAST_FILE=$(echo "$STAGED_FILES" | tail -1)
+          while IFS= read -r file; do
+            if [ "$file" = "$LAST_FILE" ]; then
+              COMMIT_BODY="${COMMIT_BODY}- ${ISSUE_CODE}: Generated/updated test file \`${file}\`"
+            else
+              COMMIT_BODY="${COMMIT_BODY}- ${ISSUE_CODE}: Generated/updated test file \`${file}\`;\n"
+            fi
+          done <<< "$STAGED_FILES"
+
+          COMMIT_TITLE="${ISSUE_CODE}: Generated tests by Claude Code agent"
+
+          COMMIT_MSG="${COMMIT_TITLE}
+
+          ${COMMIT_BODY}"
+
+          git config user.name "Claude Code Agent"
+          git config user.email "claude@njplastic.com"
+          git commit -m "$COMMIT_MSG"
+          git push
