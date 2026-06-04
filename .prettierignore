@@ -1,0 +1,6 @@
+.next/
+node_modules/
+src/api/schema.ts
+src/api/openapi.json
+coverage/
+package-lock.json
