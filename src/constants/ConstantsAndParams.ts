@@ -52,6 +52,10 @@ export const AUTH = {
       LOGIN: 'Usuario',
       PASSWORD: 'Senha',
       SUBMIT: 'Entrar',
+      REMEMBER: 'Manter sessao neste dispositivo',
+      FORGOT_PASSWORD: 'Esqueci minha senha',
+      SSO: 'SSO corporativo',
+      SSO_TOOLTIP: 'Em breve',
     },
     PLACEHOLDERS: {
       LOGIN: 'Digite seu usuario',
@@ -66,17 +70,87 @@ export const AUTH = {
       PASSWORD_MIN_LENGTH: (min: number) => `A senha deve ter pelo menos ${min} caracteres.`,
     },
   },
+  PASSWORD_RESET: {
+    REQUEST: {
+      TITLE: 'Esqueci minha senha',
+      DESCRIPTION:
+        'Informe seu usuario e enviaremos um link para redefinir a senha caso a conta exista.',
+      LABELS: { LOGIN: 'Usuario' },
+      PLACEHOLDERS: { LOGIN: 'Digite seu usuario' },
+      BUTTONS: { SUBMIT: 'Enviar link', BACK: 'Voltar ao login' },
+      VALIDATION_MESSAGES: { LOGIN_REQUIRED: 'Informe o usuario.' },
+    },
+    CONFIRM: {
+      TITLE: 'Redefinir senha',
+      DESCRIPTION:
+        'Defina uma nova senha. Use ao menos 12 caracteres com letras, numeros e simbolos.',
+      LABELS: { NEW_PASSWORD: 'Nova senha', CONFIRM_PASSWORD: 'Confirmar senha' },
+      PLACEHOLDERS: {
+        NEW_PASSWORD: 'Digite a nova senha',
+        CONFIRM_PASSWORD: 'Confirme a nova senha',
+      },
+      BUTTONS: { SUBMIT: 'Salvar nova senha', BACK: 'Voltar ao login' },
+      VALIDATION_MESSAGES: {
+        NEW_PASSWORD_REQUIRED: 'Informe a nova senha.',
+        CONFIRM_REQUIRED: 'Confirme a nova senha.',
+        MISMATCH: 'As senhas nao coincidem.',
+        MIN_LENGTH: (min: number) => `A senha deve ter pelo menos ${min} caracteres.`,
+        MISSING_TOKEN: 'Link invalido. Solicite uma nova recuperacao de senha.',
+      },
+    },
+  },
+  ERROR_PAGES: {
+    UNAUTHORIZED: {
+      TITLE: 'Sessao expirada',
+      MESSAGE: 'Sua sessao expirou. Faca login novamente para continuar.',
+      BUTTON: 'Voltar ao login',
+    },
+    FORBIDDEN: {
+      TITLE: 'Acesso negado',
+      MESSAGE: 'Voce nao tem permissao para acessar esta pagina.',
+      BUTTON: 'Voltar ao dashboard',
+    },
+  },
   NOTIFICATIONS: {
     WARNING: { KEYS: {}, TITLES: {}, MESSAGES: {} },
     ERROR: {
-      KEYS: { INVALID_CREDENTIALS: 'auth-invalid-credentials' },
-      TITLES: { INVALID_CREDENTIALS: 'Credenciais invalidas' },
-      MESSAGES: { INVALID_CREDENTIALS: 'Usuario ou senha incorretos.' },
+      KEYS: {
+        INVALID_CREDENTIALS: 'auth-invalid-credentials',
+        RESET_TOKEN_INVALID: 'auth-reset-token-invalid',
+        LOGOUT_FAILED: 'auth-logout-failed',
+      },
+      TITLES: {
+        INVALID_CREDENTIALS: 'Credenciais invalidas',
+        RESET_TOKEN_INVALID: 'Link invalido ou expirado',
+        LOGOUT_FAILED: 'Falha ao encerrar sessao',
+      },
+      MESSAGES: {
+        INVALID_CREDENTIALS: 'Usuario ou senha incorretos.',
+        RESET_TOKEN_INVALID:
+          'Solicite uma nova recuperacao de senha para gerar um novo link.',
+        LOGOUT_FAILED: 'Nao foi possivel encerrar a sessao no servidor.',
+      },
     },
     SUCCESS: {
-      KEYS: { LOGIN: 'auth-login-success' },
-      TITLES: { LOGIN: 'Sessao iniciada' },
-      MESSAGES: { LOGIN: 'Bem-vindo de volta.' },
+      KEYS: {
+        LOGIN: 'auth-login-success',
+        LOGOUT: 'auth-logout-success',
+        PASSWORD_RESET_REQUESTED: 'auth-password-reset-requested',
+        PASSWORD_RESET_CONFIRMED: 'auth-password-reset-confirmed',
+      },
+      TITLES: {
+        LOGIN: 'Sessao iniciada',
+        LOGOUT: 'Sessao encerrada',
+        PASSWORD_RESET_REQUESTED: 'Solicitacao recebida',
+        PASSWORD_RESET_CONFIRMED: 'Senha redefinida',
+      },
+      MESSAGES: {
+        LOGIN: 'Bem-vindo de volta.',
+        LOGOUT: 'Voce saiu da plataforma.',
+        PASSWORD_RESET_REQUESTED:
+          'Se a conta existir, voce recebera um email com o link de redefinicao.',
+        PASSWORD_RESET_CONFIRMED: 'Senha atualizada. Faca login com a nova senha.',
+      },
     },
   },
 } as const;

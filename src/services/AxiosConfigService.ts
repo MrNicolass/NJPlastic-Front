@@ -4,9 +4,18 @@ import axios, {
   type InternalAxiosRequestConfig,
 } from 'axios';
 import { GENERIC_NOTIFICATIONS } from '@/constants/ConstantsAndParams';
+import { readAccessTokenExpSeconds } from '@/utils/CookieUtils';
 import { NotificationUtils } from '@/utils/NotificationUtils';
 
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8111';
+
+const REFRESH_THRESHOLD_SECONDS = 5 * 60;
+const REFRESH_BYPASS_PATHS = [
+  '/auth/login',
+  '/auth/refresh',
+  '/auth/password-reset',
+  '/auth/password-reset/confirm',
+];
 
 export type NotificationConfig = {
   key?: string;
@@ -38,6 +47,7 @@ type InterceptorCallbacks = {
 };
 
 let interceptorsInstalled = false;
+let refreshInFlight: Promise<void> | null = null;
 
 const generateRequestId = (): string => {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
@@ -47,6 +57,49 @@ const generateRequestId = (): string => {
 };
 
 const isLoginEndpoint = (url?: string): boolean => Boolean(url && url.endsWith('/auth/login'));
+
+const shouldBypassProactiveRefresh = (url?: string): boolean => {
+  if (!url) {
+    return false;
+  }
+  return REFRESH_BYPASS_PATHS.some((path) => url.endsWith(path));
+};
+
+const triggerRefresh = (): Promise<void> => {
+  if (refreshInFlight) {
+    return refreshInFlight;
+  }
+  refreshInFlight = axios
+    .post(`${baseURL}/auth/refresh`, undefined, {
+      withCredentials: true,
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then(() => undefined)
+    .catch(() => undefined)
+    .finally(() => {
+      refreshInFlight = null;
+    });
+  return refreshInFlight;
+};
+
+const handleRequest = async (
+  config: InternalAxiosRequestConfig,
+): Promise<InternalAxiosRequestConfig> => {
+  config.headers.set('X-Request-Id', generateRequestId());
+  if (shouldBypassProactiveRefresh(config.url)) {
+    return config;
+  }
+  const expSeconds = readAccessTokenExpSeconds();
+  if (expSeconds === null) {
+    return config;
+  }
+  const nowSeconds = Math.floor(Date.now() / 1000);
+  if (expSeconds - nowSeconds > REFRESH_THRESHOLD_SECONDS) {
+    return config;
+  }
+  await triggerRefresh();
+  return config;
+};
 
 const handleSuccess = (response: AxiosResponse): AxiosResponse => {
   const config = response.config.notificationConfig;
@@ -112,10 +165,7 @@ export function setupAxiosInterceptors(callbacks: InterceptorCallbacks): void {
   if (interceptorsInstalled) {
     return;
   }
-  http.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-    config.headers.set('X-Request-Id', generateRequestId());
-    return config;
-  });
+  http.interceptors.request.use(handleRequest);
   http.interceptors.response.use(handleSuccess, handleError(callbacks));
   interceptorsInstalled = true;
 }
