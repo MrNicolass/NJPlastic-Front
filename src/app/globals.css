@@ -26,3 +26,13 @@ a {
 .font-mono {
   font-family: var(--font-ibm-plex-mono), monospace;
 }
+
+.login-decorative-column {
+  display: none;
+}
+
+@media (min-width: 960px) {
+  .login-decorative-column {
+    display: flex;
+  }
+}
