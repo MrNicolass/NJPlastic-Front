@@ -487,6 +487,260 @@ export const MACHINES = {
   },
 } as const;
 
+export const EVENTS = {
+  KEY: 'events',
+  TYPES: {
+    TRAINING: 'TRAINING',
+    CLEANING: 'CLEANING',
+    MEETING: 'MEETING',
+    OTHER: 'OTHER',
+  },
+  TYPE_LABELS: {
+    TRAINING: 'Treinamento',
+    CLEANING: 'Limpeza',
+    MEETING: 'Reuniao',
+    OTHER: 'Outro',
+  },
+  RECENT: {
+    LABELS: {
+      EMPTY: 'Sem eventos no periodo.',
+      LOAD_ERROR: 'Falha ao carregar os eventos recentes.',
+      RELATIVE_FALLBACK: 'agora',
+    },
+    TYPE_LABELS: {
+      MANUAL_EVENT: 'Evento manual',
+      MANUAL_PAUSE: 'Pausa registrada',
+      AUTO_STOP: 'Parada automatica',
+      STOP_MESSAGE_EDIT: 'Edicao de mensagem',
+    },
+  },
+  REGISTER_MODAL: {
+    TITLE: 'Registrar evento manual',
+    SUBTITLE: 'Treinamento, limpeza, reuniao ou outro tipo de evento operacional.',
+    LABELS: {
+      MACHINE: 'Maquina',
+      TYPE: 'Tipo de evento',
+      DESCRIPTION: 'Descricao',
+      STARTED_AT: 'Inicio',
+      ENDED_AT: 'Termino (opcional)',
+    },
+    PLACEHOLDERS: {
+      MACHINE: 'Selecione a maquina',
+      TYPE: 'Selecione o tipo',
+      DESCRIPTION: 'Descreva brevemente o que ocorreu (ate 500 caracteres)',
+    },
+    BUTTONS: {
+      SAVE: 'Registrar evento',
+      CANCEL: 'Cancelar',
+    },
+    VALIDATION_MESSAGES: {
+      MACHINE_REQUIRED: 'Selecione a maquina.',
+      TYPE_REQUIRED: 'Selecione o tipo do evento.',
+      DESCRIPTION_MAX_LENGTH: (max: number) => `Maximo de ${max} caracteres.`,
+      STARTED_REQUIRED: 'Informe o inicio.',
+      ENDED_BEFORE_STARTED: 'O termino deve ser posterior ao inicio.',
+    },
+  },
+  NOTIFICATIONS: {
+    WARNING: { KEYS: {}, TITLES: {}, MESSAGES: {} },
+    ERROR: {
+      KEYS: {
+        REGISTER_FAILED: 'events-register-failed',
+        RECENT_FAILED: 'events-recent-failed',
+        LIST_FAILED: 'events-list-failed',
+      },
+      TITLES: {
+        REGISTER_FAILED: 'Falha ao registrar o evento',
+        RECENT_FAILED: 'Falha ao carregar os eventos recentes',
+        LIST_FAILED: 'Falha ao listar eventos',
+      },
+      MESSAGES: {
+        REGISTER_FAILED: 'Nao foi possivel registrar o evento. Revise os dados e tente novamente.',
+        RECENT_FAILED:
+          'Nao foi possivel atualizar o painel de eventos recentes. Tente novamente em instantes.',
+        LIST_FAILED: 'Nao foi possivel carregar a lista de eventos.',
+      },
+    },
+    SUCCESS: {
+      KEYS: { REGISTERED: 'events-registered' },
+      TITLES: { REGISTERED: 'Evento registrado' },
+      MESSAGES: { REGISTERED: 'O evento foi gravado e aparece no painel "Eventos recentes".' },
+    },
+  },
+} as const;
+
+export const ORDERS = {
+  KEY: 'orders',
+  LABELS: {
+    TITLE: 'Ordens de Producao',
+    KPI_IN_PROD: 'Em producao',
+    KPI_QUEUED: 'Na fila',
+    KPI_OVERDUE: 'Em atraso',
+    KPI_COMPLETED: 'Completadas',
+    COL_ERP_ORDER_ID: 'OP',
+    COL_PRODUCT: 'Produto',
+    COL_MACHINE: 'Maquina',
+    COL_TARGET: 'Qtde alvo',
+    COL_DUE_DATE: 'Prazo',
+    COL_STATUS: 'Status',
+    COL_SYNC: 'Sync ERP',
+    EMPTY: 'Nenhuma ordem de producao no escopo.',
+    NEW_ORDER_TOOLTIP: 'Em breve - disponivel em versao futura',
+    LAST_UPDATE: (at: string) => `Atualizado as ${at}`,
+    NO_MACHINE: '-',
+  },
+  BUTTONS: {
+    NEW_ORDER: '+ Nova ordem',
+    CLEAR_FILTERS: 'Limpar filtros',
+  },
+  FILTER_LABELS: {
+    STATUS: 'Status',
+    MACHINE: 'Maquina',
+    PERIOD: 'Periodo do prazo',
+  },
+  SYNC_STATUS_LABELS: {
+    SYNCED: 'Sincronizada',
+    PENDING: 'Pendente',
+    ERROR_RETRY: 'Erro / retry',
+    UNKNOWN: 'Desconhecido',
+  },
+  NOTIFICATIONS: {
+    WARNING: { KEYS: {}, TITLES: {}, MESSAGES: {} },
+    ERROR: {
+      KEYS: {
+        LIST_FAILED: 'orders-list-failed',
+        SUMMARY_FAILED: 'orders-summary-failed',
+      },
+      TITLES: {
+        LIST_FAILED: 'Falha ao listar ordens',
+        SUMMARY_FAILED: 'Falha ao carregar o resumo',
+      },
+      MESSAGES: {
+        LIST_FAILED: 'Nao foi possivel carregar as ordens. Tente novamente em instantes.',
+        SUMMARY_FAILED: 'Nao foi possivel carregar os KPIs.',
+      },
+    },
+    SUCCESS: { KEYS: {}, TITLES: {}, MESSAGES: {} },
+  },
+} as const;
+
+export const HISTORY = {
+  KEY: 'history',
+  LABELS: {
+    TITLE: 'Historico de Ciclos e Pausas',
+    TAB_CYCLES: 'Ciclos',
+    TAB_PAUSES: 'Pausas',
+    TAB_AUTO_STOPS: 'Paradas automaticas',
+    TAB_EVENTS: 'Eventos',
+    FILTER_MACHINE: 'Maquina',
+    FILTER_PERIOD: 'Periodo',
+    FILTER_MACHINE_PLACEHOLDER: 'Selecione uma maquina',
+    EMPTY: 'Sem registros para o filtro atual.',
+    COL_PULSE: 'Pulso',
+    COL_RECEIVED: 'Recebido em',
+    COL_SEQUENCE: 'Sequencia',
+    COL_INTERVAL_MS: 'Intervalo (ms)',
+    COL_STATE: 'Estado',
+    COL_REASON: 'Motivo',
+    COL_MESSAGE: 'Mensagem',
+    COL_START: 'Inicio',
+    COL_END: 'Fim',
+    COL_TYPE: 'Tipo',
+    COL_DESCRIPTION: 'Descricao',
+    COL_AUTHOR: 'Autor',
+    DEFAULT_LOOKBACK_HOURS: 24,
+  },
+  NOTIFICATIONS: {
+    WARNING: { KEYS: {}, TITLES: {}, MESSAGES: {} },
+    ERROR: {
+      KEYS: { LOAD_FAILED: 'history-load-failed' },
+      TITLES: { LOAD_FAILED: 'Falha ao carregar o historico' },
+      MESSAGES: { LOAD_FAILED: 'Nao foi possivel carregar o historico. Tente novamente.' },
+    },
+    SUCCESS: { KEYS: {}, TITLES: {}, MESSAGES: {} },
+  },
+} as const;
+
+export const REPORTS_SCREEN = {
+  KEY: 'reports-screen',
+  LABELS: {
+    TITLE: 'Relatorio de Turno',
+    FILTER_PERIOD: 'Periodo',
+    FILTER_SECTOR: 'Setor',
+    FILTER_SHIFT: 'Turno',
+    GENERATE: 'Gerar relatorio',
+    EXPORT_TOOLTIP: 'Disponivel em EP-FE-07 (RF16)',
+    EXPORT_BUTTON: 'Exportar',
+    EMPTY_TITLE: 'Sem dados no periodo',
+    EMPTY_DESCRIPTION:
+      'Ajuste o periodo ou o setor selecionado para gerar o relatorio.',
+    MACHINE_SECTION_TITLE: (code: string) => `Maquina ${code}`,
+    MANUAL_PAUSES_TITLE: 'Pausas manuais',
+    AUTO_STOPS_TITLE: 'Paradas automaticas',
+    CYCLES_LABEL: 'Ciclos confirmados',
+    OEE_LABEL: 'OEE no periodo',
+  },
+  NOTIFICATIONS: {
+    WARNING: { KEYS: {}, TITLES: {}, MESSAGES: {} },
+    ERROR: {
+      KEYS: { LOAD_FAILED: 'reports-screen-load-failed' },
+      TITLES: { LOAD_FAILED: 'Falha ao gerar o relatorio' },
+      MESSAGES: { LOAD_FAILED: 'Nao foi possivel gerar o relatorio do turno.' },
+    },
+    SUCCESS: { KEYS: {}, TITLES: {}, MESSAGES: {} },
+  },
+} as const;
+
+export const LEADER_DASHBOARD = {
+  KEY: 'leader-dashboard',
+  LABELS: {
+    GREETING: (name: string) => `Ola, ${name}`,
+    SCOPE_BADGE: 'Visao do turno (RN03)',
+    LAST_UPDATE: (at: string) => `Atualizado as ${at}`,
+    KPI_OEE_AVERAGE: 'OEE medio do turno',
+    KPI_RUNNING: 'Em producao',
+    KPI_PAUSED: 'Em pausa',
+    KPI_AUTO_STOPPED: 'Em parada automatica',
+    KPI_OFFLINE: 'Offline',
+    KPI_OPEN_STOPS: 'Paradas em aberto',
+    KPI_CYCLES_SHIFT: 'Ciclos confirmados no turno',
+    MACHINES_TITLE: 'Maquinas do setor',
+    RECENT_EVENTS_TITLE: 'Eventos recentes',
+    EMPTY_TITLE: 'Sem maquinas no escopo',
+    EMPTY_DESCRIPTION:
+      'Voce nao possui maquinas atribuidas ao seu turno/setor. Consulte o gestor.',
+    OEE_UNAVAILABLE: 'OEE indisponivel',
+  },
+  BUTTONS: {
+    REGISTER_EVENT: 'Registrar evento',
+  },
+  NOTIFICATIONS: {
+    WARNING: { KEYS: {}, TITLES: {}, MESSAGES: {} },
+    ERROR: {
+      KEYS: {
+        SNAPSHOT_FAILED: 'leader-dashboard-snapshot-failed',
+      },
+      TITLES: {
+        SNAPSHOT_FAILED: 'Falha ao carregar o dashboard do turno',
+      },
+      MESSAGES: {
+        SNAPSHOT_FAILED:
+          'Nao foi possivel atualizar a visao consolidada. Tente novamente em instantes.',
+      },
+    },
+    SUCCESS: { KEYS: {}, TITLES: {}, MESSAGES: {} },
+  },
+} as const;
+
+export const MANAGER_DASHBOARD = {
+  KEY: 'manager-dashboard',
+  LABELS: {
+    PLACEHOLDER_TITLE: 'Dashboard Gerencial',
+    PLACEHOLDER_DESCRIPTION:
+      'Tela do Gestor sera entregue em EP-FE-06. Por enquanto utilize as telas de Administracao.',
+  },
+} as const;
+
 export const OEE = {
   KEY: 'oee',
   LABELS: {
