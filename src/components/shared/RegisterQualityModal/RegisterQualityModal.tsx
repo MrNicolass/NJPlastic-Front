@@ -121,7 +121,7 @@ export function RegisterQualityModal(props: RegisterQualityModalProps): React.Re
         </Space>
       }
     >
-      <Space direction="vertical" size={12} style={{ width: '100%' }}>
+      <Space orientation="vertical" size={12} style={{ width: '100%' }}>
         <Paragraph type="secondary" style={{ marginBottom: 0 }}>
           {MACHINES.QUALITY.REGISTER_MODAL.SUBTITLE}
         </Paragraph>

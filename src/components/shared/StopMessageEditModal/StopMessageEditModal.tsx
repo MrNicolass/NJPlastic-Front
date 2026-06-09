@@ -173,7 +173,7 @@ export function StopMessageEditModal(props: StopMessageEditModalProps): React.Re
         </Space>
       }
     >
-      <Space direction="vertical" size={16} style={{ width: '100%' }}>
+      <Space orientation="vertical" size={16} style={{ width: '100%' }}>
         <Tag color="default" style={{ alignSelf: 'flex-start' }}>
           {scopeLabel}
         </Tag>
@@ -201,9 +201,9 @@ export function StopMessageEditModal(props: StopMessageEditModalProps): React.Re
             <Text type="secondary" italic>
               {currentMessageAuthor
                 ? MACHINES.STOPS.EDIT_MODAL.READ_ONLY_AUTHOR(
-                    currentMessageAuthor.name,
-                    formatDateTime(currentMessageAuthor.editedAt),
-                  )
+                  currentMessageAuthor.name,
+                  formatDateTime(currentMessageAuthor.editedAt),
+                )
                 : MACHINES.STOPS.EDIT_MODAL.READ_ONLY_NEVER_EDITED}
             </Text>
           </Descriptions.Item>
@@ -294,7 +294,7 @@ export function StopMessageEditModal(props: StopMessageEditModalProps): React.Re
               </Paragraph>
             ) : (
               <Space
-                direction="vertical"
+                orientation="vertical"
                 size={8}
                 style={{ width: '100%', marginTop: 8 }}
               >

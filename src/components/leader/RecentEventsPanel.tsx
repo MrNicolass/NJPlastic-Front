@@ -113,7 +113,7 @@ export function RecentEventsPanel({ panelRef, onItemClick }: RecentEventsPanelPr
                 </Space>
               }
               description={
-                <Space direction="vertical" size={0} style={{ width: '100%' }}>
+                <Space orientation="vertical" size={0} style={{ width: '100%' }}>
                   <Text>{description}</Text>
                   <Space size={8} wrap>
                     <Text type="secondary">{relative}</Text>

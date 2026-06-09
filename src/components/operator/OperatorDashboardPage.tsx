@@ -197,7 +197,7 @@ export function OperatorDashboardPage() {
   }
 
   return (
-    <Space direction="vertical" size={24} style={{ width: '100%' }}>
+    <Space orientation="vertical" size={24} style={{ width: '100%' }}>
       <header>
         <Title level={3} style={{ marginBottom: 4 }}>
           {MACHINES.DASHBOARD.LABELS.GREETING(user?.name ?? '')}
@@ -244,7 +244,7 @@ export function OperatorDashboardPage() {
         {entries.length === 0 ? (
           <Empty
             description={
-              <Space direction="vertical" size={0}>
+              <Space orientation="vertical" size={0}>
                 <Text strong>{MACHINES.DASHBOARD.LABELS.EMPTY_TITLE}</Text>
                 <Text type="secondary">{MACHINES.DASHBOARD.LABELS.EMPTY_DESCRIPTION}</Text>
               </Space>

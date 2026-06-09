@@ -110,7 +110,7 @@ export function MachineStopsTable(props: MachineStopsTableProps): React.ReactNod
   ];
 
   return (
-    <Space direction="vertical" size={8} style={{ width: '100%' }}>
+    <Space orientation="vertical" size={8} style={{ width: '100%' }}>
       <Text strong>{MACHINES.DETAIL.LABELS.STOPS_TABLE_TITLE}</Text>
       <Table<Entry>
         dataSource={dataSource}

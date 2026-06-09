@@ -208,7 +208,7 @@ export default function HistoricoPage() {
   };
 
   return (
-    <Space direction="vertical" size={24} style={{ width: '100%' }}>
+    <Space orientation="vertical" size={24} style={{ width: '100%' }}>
       <header>
         <Title level={3} style={{ marginBottom: 4 }}>
           {HISTORY.LABELS.TITLE}

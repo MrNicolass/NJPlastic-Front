@@ -36,3 +36,8 @@ a {
     display: flex;
   }
 }
+
+.app-sider .ant-layout-sider-trigger {
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+  font-size: medium;
+}

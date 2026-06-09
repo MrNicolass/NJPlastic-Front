@@ -172,7 +172,7 @@ export function LeaderDashboardPage({
   }
 
   return (
-    <Space direction="vertical" size={24} style={{ width: '100%' }}>
+    <Space orientation="vertical" size={24} style={{ width: '100%' }}>
       <header>
         <Row justify="space-between" align="middle" gutter={[16, 16]} wrap>
           <Col flex="auto">
@@ -236,7 +236,7 @@ export function LeaderDashboardPage({
             {entries.length === 0 ? (
               <Empty
                 description={
-                  <Space direction="vertical" size={0}>
+                  <Space orientation="vertical" size={0}>
                     <Text strong>{LEADER_DASHBOARD.LABELS.EMPTY_TITLE}</Text>
                     <Text type="secondary">{LEADER_DASHBOARD.LABELS.EMPTY_DESCRIPTION}</Text>
                   </Space>

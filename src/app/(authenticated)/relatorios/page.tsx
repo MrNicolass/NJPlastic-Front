@@ -69,7 +69,7 @@ export default function RelatoriosPage() {
   const sections = report?.machines ?? [];
 
   return (
-    <Space direction="vertical" size={24} style={{ width: '100%' }}>
+    <Space orientation="vertical" size={24} style={{ width: '100%' }}>
       <header>
         <Title level={3} style={{ marginBottom: 4 }}>
           {REPORTS_SCREEN.LABELS.TITLE}
@@ -117,14 +117,14 @@ export default function RelatoriosPage() {
       ) : sections.length === 0 ? (
         <Empty
           description={
-            <Space direction="vertical" size={0}>
+            <Space orientation="vertical" size={0}>
               <Text strong>{REPORTS_SCREEN.LABELS.EMPTY_TITLE}</Text>
               <Text type="secondary">{REPORTS_SCREEN.LABELS.EMPTY_DESCRIPTION}</Text>
             </Space>
           }
         />
       ) : (
-        <Space direction="vertical" size={16} style={{ width: '100%' }}>
+        <Space orientation="vertical" size={16} style={{ width: '100%' }}>
           {sections.map((section) => {
             const oee = section.oee?.oee ?? null;
             const cycles = section.confirmedCycles ?? 0;

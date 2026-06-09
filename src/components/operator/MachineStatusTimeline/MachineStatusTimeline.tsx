@@ -74,7 +74,7 @@ export function MachineStatusTimeline(props: MachineStatusTimelineProps): React.
 
   if (segments.length === 0) {
     return (
-      <Space direction="vertical" size={8} style={{ width: '100%' }}>
+      <Space orientation="vertical" size={8} style={{ width: '100%' }}>
         <Text strong>{MACHINES.DETAIL.LABELS.TIMELINE_TITLE}</Text>
         <Empty description="Sem transicoes no periodo" />
       </Space>
@@ -82,7 +82,7 @@ export function MachineStatusTimeline(props: MachineStatusTimelineProps): React.
   }
 
   return (
-    <Space direction="vertical" size={8} style={{ width: '100%' }}>
+    <Space orientation="vertical" size={8} style={{ width: '100%' }}>
       <Text strong>{MACHINES.DETAIL.LABELS.TIMELINE_TITLE}</Text>
       <div
         style={{
@@ -99,7 +99,7 @@ export function MachineStatusTimeline(props: MachineStatusTimelineProps): React.
             <Tooltip
               key={segment.id}
               title={
-                <Space direction="vertical" size={0}>
+                <Space orientation="vertical" size={0}>
                   <Text style={{ color: '#fff' }}>{STATE_LABEL[stateKey]}</Text>
                   <Text style={{ color: '#fff' }}>
                     {formatHour(segment.startTime)} →{' '}

@@ -106,7 +106,7 @@ export default function OrdersPage() {
   }
 
   return (
-    <Space direction="vertical" size={24} style={{ width: '100%' }}>
+    <Space orientation="vertical" size={24} style={{ width: '100%' }}>
       <header>
         <Row justify="space-between" align="middle" gutter={[16, 16]} wrap>
           <Col flex="auto">

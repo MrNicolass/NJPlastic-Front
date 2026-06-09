@@ -68,8 +68,8 @@ export function MachineCard(props: MachineCardProps): React.ReactNode {
         borderLeft: isAutoStopped ? `4px solid ${njPalette.cinnabar}` : undefined,
       }}
     >
-      <Space direction="vertical" size={12} style={{ width: '100%' }}>
-        <Space direction="vertical" size={0}>
+      <Space orientation="vertical" size={12} style={{ width: '100%' }}>
+        <Space orientation="vertical" size={0}>
           <Text type="secondary">Ciclos no turno</Text>
           <Text code style={{ fontSize: 28, color: njPalette.charcoal }}>
             {cyclesInShift ?? 0}
@@ -86,7 +86,7 @@ export function MachineCard(props: MachineCardProps): React.ReactNode {
         ) : null}
 
         {isAutoStopped && currentStop ? (
-          <Space direction="vertical" size={2}>
+          <Space orientation="vertical" size={2}>
             <Text type="secondary">{MACHINES.STOPS.LABELS.MESSAGE}</Text>
             <Text>{currentStop.message ?? '-'}</Text>
           </Space>

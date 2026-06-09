@@ -6,6 +6,7 @@ import { useMemo, useState } from 'react';
 import { LAYOUT } from '@/constants/ConstantsAndParams';
 import type { Role } from '@/stores/useSessionStore';
 import { buildMenuItemsForRole, resolveActiveMenuKey } from './navigationMenu';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 
 const { Sider } = Layout;
 const { LABELS } = LAYOUT.SIDER;
@@ -45,6 +46,7 @@ export function AppSider({ role }: AppSiderProps) {
       onCollapse={setCollapsed}
       breakpoint="lg"
       aria-label={collapsed ? LABELS.EXPAND : LABELS.COLLAPSE}
+      className="app-sider"
     >
       <Menu
         mode="inline"

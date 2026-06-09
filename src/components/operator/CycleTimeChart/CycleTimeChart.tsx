@@ -122,7 +122,7 @@ export function CycleTimeChart(props: CycleTimeChartProps): React.ReactNode {
   const yTicks = Array.from({ length: 5 }, (_, index) => (yMax / 4) * index);
 
   return (
-    <Space direction="vertical" size={12} style={{ width: '100%' }}>
+    <Space orientation="vertical" size={12} style={{ width: '100%' }}>
       <Space style={{ justifyContent: 'space-between', width: '100%' }} align="center">
         <Text strong>{MACHINES.DETAIL.LABELS.CHART_TITLE}</Text>
         <Segmented
