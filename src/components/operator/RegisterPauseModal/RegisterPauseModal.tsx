@@ -114,7 +114,7 @@ export function RegisterPauseModal(props: RegisterPauseModalProps): React.ReactN
         </Space>
       }
     >
-      <Space direction="vertical" size={16} style={{ width: '100%' }}>
+      <Space orientation="vertical" size={16} style={{ width: '100%' }}>
         <Tag color="default" style={{ alignSelf: 'flex-start' }}>
           {MACHINES.PAUSES.REGISTER_MODAL.SCOPE_LABEL}
         </Tag>

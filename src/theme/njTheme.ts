@@ -25,6 +25,7 @@ export const njTheme: ThemeConfig = {
     Layout: {
       siderBg: njPalette.tealDeep,
       headerBg: njPalette.tealDeep,
+      triggerBg: njPalette.tealDeep,
     },
     Menu: {
       darkItemBg: njPalette.tealDeep,

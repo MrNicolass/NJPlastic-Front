@@ -37,7 +37,7 @@ export function AttentionBanner({ items, onSelect }: AttentionBannerProps): Reac
       style={{ borderLeft: `4px solid ${njPalette.cinnabar}` }}
       message={<Text strong>{MACHINES.BANNER.ATTENTION.TITLE}</Text>}
       description={
-        <Space direction="vertical" size={6} style={{ width: '100%' }}>
+        <Space orientation="vertical" size={6} style={{ width: '100%' }}>
           <Text>{MACHINES.BANNER.ATTENTION.MESSAGE(items.length)}</Text>
           <Space wrap>
             {items.map((item) => (

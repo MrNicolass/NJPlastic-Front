@@ -42,7 +42,7 @@ export function NotificationUtils(args: NotificationUtilsArgs): void {
   const key =
     args.key ??
     (args.defaultType ? GENERIC_NOTIFICATIONS.KEYS[args.defaultType] : undefined);
-  const message =
+  const title =
     args.message ?? (args.defaultType && fallback ? fallback.TITLES[args.defaultType] : '');
   const description =
     args.description ??
@@ -53,7 +53,7 @@ export function NotificationUtils(args: NotificationUtilsArgs): void {
   }
   notification[kind]({
     key,
-    message,
+    title,
     description,
     placement: GENERIC_NOTIFICATIONS.CONFIGS.PLACEMENT,
     duration: GENERIC_NOTIFICATIONS.CONFIGS.DURATION,
