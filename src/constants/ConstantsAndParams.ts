@@ -157,6 +157,19 @@ export const AUTH = {
 
 export const MACHINES = {
   KEY: 'machines',
+  STATES: {
+    RUNNING: 'RUNNING',
+    PAUSED: 'PAUSED',
+    AUTO_STOPPED: 'AUTO_STOPPED',
+    OFFLINE: 'OFFLINE',
+  },
+  STATE_LABELS: {
+    RUNNING: 'Produzindo',
+    PAUSED: 'Em pausa',
+    AUTO_STOPPED: 'Parada automatica',
+    OFFLINE: 'Offline',
+    UNKNOWN: 'Sem estado',
+  },
   LIST: {
     LABELS: {
       CODE: 'Código',
@@ -175,6 +188,196 @@ export const MACHINES = {
       CONSECUTIVE_PAUSES_TO_STOP: 'consecutivePausesToStop',
       CURRENT_STATE: 'currentState',
       ACTIVE: 'active',
+    },
+  },
+  DASHBOARD: {
+    LABELS: {
+      GREETING: (name: string) => `Ola, ${name}`,
+      SHIFT_COUNTERS_TITLE: 'Resumo do turno',
+      COUNTER_RUNNING: 'Em producao',
+      COUNTER_PAUSED: 'Em pausa',
+      COUNTER_AUTO_STOPPED: 'Em parada automatica',
+      EMPTY_TITLE: 'Nenhuma maquina visivel',
+      EMPTY_DESCRIPTION: 'Voce nao possui maquinas atribuidas ao seu turno.',
+      CARD_ORDER_FALLBACK: 'Sem OS em execucao',
+      LAST_UPDATE: (at: string) => `Atualizado as ${at}`,
+    },
+    BUTTONS: {
+      REGISTER_PAUSE: 'Registrar pausa',
+      EDIT_STOP_MESSAGE: 'Editar mensagem da parada',
+      VIEW_DETAIL: 'Ver detalhe',
+    },
+  },
+  DETAIL: {
+    LABELS: {
+      HEADER_BADGE_PREFIX: 'Estado atual:',
+      KPI_OEE: 'OEE',
+      KPI_CYCLES: 'Ciclos',
+      KPI_AVG_CYCLE_TIME: 'Tempo de ciclo medio',
+      KPI_MTBF: 'MTBF',
+      KPI_SCRAP: 'Refugo',
+      KPI_AVAILABILITY: 'Disponibilidade',
+      KPI_PERFORMANCE: 'Performance',
+      KPI_QUALITY: 'Qualidade',
+      CHART_TITLE: 'Tempo de ciclo (janela 30s) x banda de tolerancia',
+      CHART_X_AXIS: 'Horario',
+      CHART_Y_AXIS: 'Tempo (ms)',
+      CHART_RANGE_4H: 'Ultimas 4h',
+      CHART_RANGE_SHIFT: 'Turno',
+      CHART_RANGE_24H: 'Ultimas 24h',
+      CHART_RANGE_7D: 'Ultimos 7d',
+      TIMELINE_TITLE: 'Linha do tempo do turno',
+      STOPS_TABLE_TITLE: 'Pausas e paradas do turno',
+      STOPS_COL_STATE: 'Estado',
+      STOPS_COL_REASON: 'Motivo',
+      STOPS_COL_MESSAGE: 'Mensagem',
+      STOPS_COL_AUTHOR: 'Ultima edicao',
+      STOPS_COL_START: 'Inicio',
+      STOPS_COL_END: 'Fim',
+      MOLD_TITLE: 'Ficha do molde',
+      MOLD_CAVITIES: 'Cavidades ativas',
+      MOLD_STANDARD_CYCLE: 'Ciclo padrao',
+      MOLD_TOLERANCE: 'Fator de tolerancia',
+      MOLD_CONSECUTIVE_PAUSES: 'Pausas consecutivas para parada',
+      OPERATORS_TITLE: 'Operadores no turno',
+      EXPORT_BUTTON: 'Exportar dados',
+      BACK_BUTTON: 'Voltar ao dashboard',
+    },
+    BUTTONS: {
+      REGISTER_QUALITY: 'Registrar qualidade',
+      EDIT_STOP_MESSAGE: 'Editar mensagem da parada',
+      REGISTER_PAUSE: 'Registrar pausa',
+    },
+  },
+  STOPS: {
+    LABELS: { MESSAGE: 'Mensagem da parada' },
+    KEYS: { MESSAGE: 'message' },
+    CATEGORIES: {
+      OPERATOR: [
+        { value: 'REFUGO_QUALIDADE', label: 'Refugo / qualidade' },
+        { value: 'SETUP_TROCA_DE_MOLDE', label: 'Setup / troca de molde' },
+        { value: 'MANUTENCAO_CORRETIVA', label: 'Manutencao corretiva' },
+        { value: 'FALTA_DE_MATERIA_PRIMA', label: 'Falta de materia-prima' },
+        { value: 'OUTROS', label: 'Outros' },
+      ],
+      LEADER_MANAGER: [
+        { value: 'REFUGO_QUALIDADE', label: 'Refugo / qualidade' },
+        { value: 'SETUP_TROCA_DE_MOLDE', label: 'Setup / troca de molde' },
+        { value: 'MANUTENCAO_CORRETIVA', label: 'Manutencao corretiva' },
+        { value: 'FALTA_DE_MATERIA_PRIMA', label: 'Falta de materia-prima' },
+        { value: 'FALTA_DE_OPERADOR', label: 'Falta de operador' },
+        { value: 'OUTROS', label: 'Outros' },
+      ],
+    },
+    EDIT_MODAL: {
+      TITLE: 'Editar mensagem da parada automatica',
+      SCOPE_OPERATOR: 'Escopo: suas maquinas (RN02)',
+      SCOPE_LEADER: (sector: string, shift: string) => `Setor ${sector} · Turno ${shift} (RN03)`,
+      SCOPE_MANAGER: 'Visao completa (RN04)',
+      READ_ONLY_TITLE: 'Detalhes da parada',
+      READ_ONLY_MACHINE: 'Maquina',
+      READ_ONLY_DETECTED: 'Detectada em',
+      READ_ONLY_DURATION: 'Duracao corrente',
+      READ_ONLY_CURRENT_MESSAGE: 'Mensagem atual',
+      READ_ONLY_AUTHOR: (name: string, editedAt: string) =>
+        `Editada por ${name} em ${editedAt}`,
+      READ_ONLY_NEVER_EDITED: 'Nao editada anteriormente · mensagem padrao do sistema',
+      CATEGORY_LABEL: 'Categoria do motivo real',
+      CATEGORY_PLACEHOLDER: 'Selecione a categoria',
+      MESSAGE_LABEL: 'Nova mensagem',
+      MESSAGE_PLACEHOLDER: 'Descreva a causa real da parada (8 a 500 caracteres)',
+      MESSAGE_COUNTER: (current: number, max: number) => `${current} / ${max}`,
+      AUDIT_CALLOUT_TITLE: 'Esta edicao entra no log imutavel de auditoria (RN12 · RF20)',
+      AUDIT_CALLOUT_DESCRIPTION:
+        'Seu nome, o horario e o conteudo anterior ficam registrados permanentemente.',
+      HISTORY_TITLE: 'Historico de edicoes · auditavel (RN12)',
+      HISTORY_EMPTY: 'Sem edicoes anteriores registradas.',
+      HISTORY_ERROR:
+        'Nao foi possivel carregar o historico de edicoes. Tente novamente em instantes.',
+      HISTORY_ITEM: (author: string, editedAt: string) => `${author} · ${editedAt}`,
+      BUTTONS: {
+        SAVE: 'Salvar e registrar em auditoria',
+        CANCEL: 'Cancelar',
+      },
+      VALIDATION_MESSAGES: {
+        MESSAGE_REQUIRED: 'Informe a mensagem.',
+        MESSAGE_MIN_LENGTH: (min: number) => `Minimo de ${min} caracteres.`,
+        MESSAGE_MAX_LENGTH: (max: number) => `Maximo de ${max} caracteres.`,
+        CATEGORY_REQUIRED: 'Selecione a categoria do motivo real.',
+      },
+    },
+  },
+  PAUSES: {
+    LABELS: { REASON: 'Motivo da pausa' },
+    KEYS: { REASON: 'reason' },
+    CATEGORIES: [
+      { value: 'REFUGO', label: 'Refugo' },
+      { value: 'SETUP', label: 'Setup' },
+      { value: 'MANUTENCAO', label: 'Manutencao' },
+      { value: 'OUTRO', label: 'Outro' },
+    ],
+    REGISTER_MODAL: {
+      TITLE: 'Registrar pausa manual',
+      READ_ONLY_TITLE: 'Detalhes da pausa',
+      READ_ONLY_MACHINE: 'Maquina',
+      READ_ONLY_ORDER: 'Ordem em execucao',
+      READ_ONLY_ORDER_FALLBACK: 'Sem OS em execucao',
+      READ_ONLY_STARTED_AT: 'Inicio da pausa',
+      SCOPE_LABEL: 'Pausa registrada como tipo PAUSA (RN07) · escopo RN02',
+      LABELS: {
+        REASON: 'Motivo',
+        OBSERVATION: 'Observacao (opcional)',
+      },
+      PLACEHOLDERS: {
+        REASON: 'Selecione o motivo',
+        OBSERVATION: 'Detalhe complementar para a lider',
+      },
+      BUTTONS: { SAVE: 'Confirmar', CANCEL: 'Cancelar' },
+      VALIDATION_MESSAGES: {
+        REASON_REQUIRED: 'Selecione o motivo.',
+        REASON_MAX_LENGTH: (max: number) => `Maximo de ${max} caracteres.`,
+        OTHER_REQUIRED: 'Descreva o motivo quando "Outro" for selecionado.',
+        OBSERVATION_MAX_LENGTH: (max: number) =>
+          `A observacao deve ter no maximo ${max} caracteres.`,
+      },
+    },
+  },
+  QUALITY: {
+    REGISTER_MODAL: {
+      TITLE: 'Registrar qualidade',
+      SUBTITLE: 'Apontamento manual do fator Qualidade (RF10)',
+      LABELS: {
+        GOOD_COUNT: 'Pecas boas',
+        TOTAL_COUNT: 'Total de pecas',
+        FROM: 'Inicio do periodo',
+        TO: 'Fim do periodo',
+        MACHINE: 'Maquina',
+      },
+      PLACEHOLDERS: {
+        GOOD_COUNT: 'Quantidade aprovada',
+        TOTAL_COUNT: 'Quantidade produzida',
+      },
+      HELPER: 'Periodo padrao: janela da OS ativa ou ultimas 8 horas.',
+      BUTTONS: { SAVE: 'Registrar', CANCEL: 'Cancelar' },
+      VALIDATION_MESSAGES: {
+        GOOD_REQUIRED: 'Informe as pecas boas.',
+        TOTAL_REQUIRED: 'Informe o total de pecas.',
+        GOOD_NEGATIVE: 'A contagem de pecas boas deve ser positiva.',
+        TOTAL_NEGATIVE: 'A contagem total deve ser positiva.',
+        TOTAL_BELOW_GOOD: 'O total nao pode ser menor que pecas boas.',
+        PERIOD_REQUIRED: 'Selecione o periodo.',
+        PERIOD_INVERTED: 'O inicio deve ser anterior ao fim do periodo.',
+      },
+    },
+  },
+  BANNER: {
+    ATTENTION: {
+      TITLE: 'ATENCAO · ACAO NECESSARIA',
+      MESSAGE: (count: number) =>
+        count === 1
+          ? '1 maquina em parada automatica aguarda classificacao.'
+          : `${count} maquinas em parada automatica aguardam classificacao.`,
+      EDIT_LINK: (code: string) => `Editar mensagem · ${code}`,
     },
   },
   STATUS: {
@@ -211,61 +414,57 @@ export const MACHINES = {
       STATE: 'state',
     },
   },
-  STOPS: {
-    LABELS: { MESSAGE: 'Mensagem da parada' },
-    KEYS: { MESSAGE: 'message' },
-    EDIT_MODAL: {
-      LABELS: { MESSAGE: 'Nova mensagem' },
-      PLACEHOLDERS: { MESSAGE: 'Descreva a parada automática' },
-      BUTTONS: { SAVE: 'Salvar', CANCEL: 'Cancelar' },
-      VALIDATION_MESSAGES: {
-        MESSAGE_REQUIRED: 'Informe a mensagem.',
-        MESSAGE_MAX_LENGTH: (max: number) => `Máximo de ${max} caracteres.`,
-      },
-    },
-  },
-  PAUSES: {
-    LABELS: { REASON: 'Motivo da pausa' },
-    KEYS: { REASON: 'reason' },
-    REGISTER_MODAL: {
-      LABELS: { REASON: 'Motivo' },
-      PLACEHOLDERS: { REASON: 'Selecione ou descreva o motivo' },
-      BUTTONS: { SAVE: 'Registrar', CANCEL: 'Cancelar' },
-      VALIDATION_MESSAGES: {
-        REASON_REQUIRED: 'Informe o motivo.',
-        REASON_MAX_LENGTH: (max: number) => `Máximo de ${max} caracteres.`,
-      },
-    },
-  },
   NOTIFICATIONS: {
     WARNING: {
-      KEYS: { NO_MACHINES_IN_SCOPE: 'machines-empty-scope' },
-      TITLES: { NO_MACHINES_IN_SCOPE: 'Nenhuma máquina visível' },
+      KEYS: {
+        NO_MACHINES_IN_SCOPE: 'machines-empty-scope',
+        PAUSE_ALREADY_CLASSIFIED: 'machines-pause-already-classified',
+      },
+      TITLES: {
+        NO_MACHINES_IN_SCOPE: 'Nenhuma máquina visível',
+        PAUSE_ALREADY_CLASSIFIED: 'Sem pausa pendente',
+      },
       MESSAGES: {
         NO_MACHINES_IN_SCOPE:
           'Você não possui máquinas no seu setor. Consulte o gestor.',
+        PAUSE_ALREADY_CLASSIFIED:
+          'Não há pausa pendente de classificação para esta máquina no momento.',
       },
     },
     ERROR: {
       KEYS: {
         LIST_FAILED: 'machines-list-failed',
         STATUS_FAILED: 'machines-status-failed',
+        DETAIL_FAILED: 'machines-detail-failed',
+        CYCLES_FAILED: 'machines-cycles-failed',
         PAUSE_CLASSIFY_FAILED: 'machines-pause-classify-failed',
         STOP_EDIT_FAILED: 'machines-stop-edit-failed',
+        QUALITY_FAILED: 'machines-quality-failed',
+        EDIT_HISTORY_FAILED: 'machines-edit-history-failed',
       },
       TITLES: {
         LIST_FAILED: 'Falha ao listar máquinas',
         STATUS_FAILED: 'Falha ao carregar o estado da máquina',
+        DETAIL_FAILED: 'Falha ao carregar o detalhe da máquina',
+        CYCLES_FAILED: 'Falha ao carregar os ciclos',
         PAUSE_CLASSIFY_FAILED: 'Falha ao classificar a pausa',
         STOP_EDIT_FAILED: 'Falha ao editar mensagem da parada',
+        QUALITY_FAILED: 'Falha ao registrar qualidade',
+        EDIT_HISTORY_FAILED: 'Falha ao carregar histórico de edições',
       },
       MESSAGES: {
         LIST_FAILED: 'Não foi possível carregar as máquinas.',
         STATUS_FAILED: 'Não foi possível carregar o estado atual.',
+        DETAIL_FAILED: 'Não foi possível carregar a máquina.',
+        CYCLES_FAILED: 'Não foi possível carregar a série de ciclos.',
         PAUSE_CLASSIFY_FAILED:
           'Verifique se existe uma pausa pendente de classificação.',
         STOP_EDIT_FAILED:
           'A mensagem só pode ser editada em registros AUTO_STOPPED.',
+        QUALITY_FAILED:
+          'Verifique os apontamentos informados e tente novamente.',
+        EDIT_HISTORY_FAILED:
+          'Tente novamente em instantes ou consulte o gestor.',
       },
     },
     SUCCESS: {

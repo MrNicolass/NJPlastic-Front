@@ -130,4 +130,36 @@ export interface IMachineService {
     shift: string | undefined,
     suppressError?: boolean,
   ): Promise<Schemas['ShiftReportResponseDTO']>;
+
+  /**
+   * Retrieves the full machine projection including detection parameters
+   * (standard cycle, tolerance factor, consecutive pauses to stop) used
+   * by the machine detail screen of EP-FE-04.
+   *
+   * @param machineId - The machine UUID.
+   * @param suppressError - Optional. If set to `true`, suppresses errors that may occur during retrieval.
+   * @returns A promise resolving to the machine detail projection.
+   */
+  getDetail(
+    machineId: string,
+    suppressError?: boolean,
+  ): Promise<Schemas['MachineDetailResponseDTO']>;
+
+  /**
+   * Retrieves the audit-log-backed edition history of an AUTO_STOPPED
+   * message (UC12, RN12, RF20). Paginated and ordered newest-first by
+   * the backend.
+   *
+   * @param pageable - The pagination parameters for the request.
+   * @param machineId - The owning machine UUID.
+   * @param stopId - The stop record UUID.
+   * @param suppressError - Optional. If set to `true`, suppresses errors that may occur during retrieval.
+   * @returns A promise resolving to a `Page` of stop edition entries.
+   */
+  listStopEdits(
+    pageable: PageParams,
+    machineId: string,
+    stopId: string,
+    suppressError?: boolean,
+  ): Promise<Page<Schemas['StopEditDTO']>>;
 }
