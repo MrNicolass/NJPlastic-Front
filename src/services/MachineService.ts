@@ -174,6 +174,41 @@ const MachineService: IMachineService = {
       throw error;
     }
   },
+
+  async getDetail(
+    machineId: string,
+    suppressError?: boolean,
+  ): Promise<Schemas['MachineDetailResponseDTO']> {
+    try {
+      const response: AxiosResponse<Schemas['MachineDetailResponseDTO']> = await http.get(
+        `/machines/${machineId}/detail`,
+        { notificationConfig: buildNotificationConfig(MACHINES.KEY, suppressError) },
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async listStopEdits(
+    pageable: PageParams,
+    machineId: string,
+    stopId: string,
+    suppressError?: boolean,
+  ): Promise<Page<Schemas['StopEditDTO']>> {
+    try {
+      const response: AxiosResponse<Page<Schemas['StopEditDTO']>> = await http.get(
+        `/machines/${machineId}/stops/${stopId}/edits`,
+        {
+          params: pageable,
+          notificationConfig: buildNotificationConfig(MACHINES.KEY, suppressError),
+        },
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default MachineService;
