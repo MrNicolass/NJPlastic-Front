@@ -38,12 +38,6 @@ function ResetPasswordForm() {
         token,
         newPassword: values.newPassword,
       });
-      NotificationUtils({
-        key: AUTH.NOTIFICATIONS.SUCCESS.KEYS.PASSWORD_RESET_CONFIRMED,
-        type: 'success',
-        message: AUTH.NOTIFICATIONS.SUCCESS.TITLES.PASSWORD_RESET_CONFIRMED,
-        description: AUTH.NOTIFICATIONS.SUCCESS.MESSAGES.PASSWORD_RESET_CONFIRMED,
-      });
       router.replace('/login');
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 400) {

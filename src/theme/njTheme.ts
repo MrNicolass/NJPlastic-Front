@@ -26,5 +26,15 @@ export const njTheme: ThemeConfig = {
       siderBg: njPalette.tealDeep,
       headerBg: njPalette.tealDeep,
     },
+    Menu: {
+      darkItemBg: njPalette.tealDeep,
+      darkSubMenuItemBg: njPalette.tealDeep,
+      darkItemColor: '#fff',
+      darkItemHoverBg: njPalette.cerulean,
+      darkItemHoverColor: '#fff',
+      darkItemSelectedBg: njPalette.cobalt,
+      darkItemSelectedColor: '#fff',
+      darkGroupTitleColor: njPalette.bone,
+    },
   },
 };

@@ -2,6 +2,7 @@
 
 import { Button, Form, Input, Typography } from 'antd';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { AUTH } from '@/constants/ConstantsAndParams';
 import AuthService from '@/services/AuthService';
@@ -11,14 +12,14 @@ type RequestFormValues = {
 };
 
 export default function ForgotPasswordPage() {
+  const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
 
   const onSubmit = async (values: RequestFormValues) => {
     setSubmitting(true);
     try {
       await AuthService.requestPasswordReset({ login: values.login });
-      setSubmitted(true);
+      router.replace('/login');
     } catch {
       // Notifications are handled by the axios interceptor.
     } finally {
@@ -43,11 +44,7 @@ export default function ForgotPasswordPage() {
         <Typography.Paragraph type="secondary" style={{ marginBottom: 24 }}>
           {AUTH.PASSWORD_RESET.REQUEST.DESCRIPTION}
         </Typography.Paragraph>
-        <Form<RequestFormValues>
-          layout="vertical"
-          onFinish={onSubmit}
-          disabled={submitting || submitted}
-        >
+        <Form<RequestFormValues> layout="vertical" onFinish={onSubmit} disabled={submitting}>
           <Form.Item
             label={AUTH.PASSWORD_RESET.REQUEST.LABELS.LOGIN}
             name="login"
