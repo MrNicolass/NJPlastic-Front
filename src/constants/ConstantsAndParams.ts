@@ -32,16 +32,16 @@ export const GENERIC_NOTIFICATIONS = {
     GENERIC_ERROR: 'generic-error',
   },
   TITLES: {
-    SESSION_EXPIRED: 'Sessao expirada',
+    SESSION_EXPIRED: 'Sessão expirada',
     UNAUTHORIZED: 'Acesso negado',
     INTERNAL_SERVER_ERROR: 'Erro interno',
     GENERIC_ERROR: 'Erro inesperado',
   },
   MESSAGES: {
-    SESSION_EXPIRED: 'Faca login novamente para continuar.',
-    UNAUTHORIZED: 'Voce nao tem permissao para esta operacao.',
+    SESSION_EXPIRED: 'Faça login novamente para continuar.',
+    UNAUTHORIZED: 'Você não tem permissão para esta operação.',
     INTERNAL_SERVER_ERROR: 'O servidor encontrou um erro. Tente novamente em instantes.',
-    GENERIC_ERROR: 'Nao foi possivel concluir a operacao.',
+    GENERIC_ERROR: 'Não foi possível concluir a operação.',
   },
 } as const;
 
@@ -49,23 +49,23 @@ export const AUTH = {
   KEY: 'auth',
   LOGIN: {
     LABELS: {
-      LOGIN: 'Usuario',
+      LOGIN: 'Usuário',
       PASSWORD: 'Senha',
       SUBMIT: 'Entrar',
-      REMEMBER: 'Manter sessao neste dispositivo',
+      REMEMBER: 'Manter sessão neste dispositivo',
       FORGOT_PASSWORD: 'Esqueci minha senha',
       SSO: 'SSO corporativo',
       SSO_TOOLTIP: 'Em breve',
     },
     PLACEHOLDERS: {
-      LOGIN: 'Digite seu usuario',
+      LOGIN: 'Digite seu usuário',
       PASSWORD: 'Digite sua senha',
     },
     BUTTONS: {
       SUBMIT: 'Entrar',
     },
     VALIDATION_MESSAGES: {
-      LOGIN_REQUIRED: 'Informe o usuario.',
+      LOGIN_REQUIRED: 'Informe o usuário.',
       PASSWORD_REQUIRED: 'Informe a senha.',
       PASSWORD_MIN_LENGTH: (min: number) => `A senha deve ter pelo menos ${min} caracteres.`,
     },
@@ -74,16 +74,16 @@ export const AUTH = {
     REQUEST: {
       TITLE: 'Esqueci minha senha',
       DESCRIPTION:
-        'Informe seu usuario e enviaremos um link para redefinir a senha caso a conta exista.',
-      LABELS: { LOGIN: 'Usuario' },
-      PLACEHOLDERS: { LOGIN: 'Digite seu usuario' },
+        'Informe seu usuário e enviaremos um link para redefinir a senha caso a conta exista.',
+      LABELS: { LOGIN: 'Usuário' },
+      PLACEHOLDERS: { LOGIN: 'Digite seu usuário' },
       BUTTONS: { SUBMIT: 'Enviar link', BACK: 'Voltar ao login' },
-      VALIDATION_MESSAGES: { LOGIN_REQUIRED: 'Informe o usuario.' },
+      VALIDATION_MESSAGES: { LOGIN_REQUIRED: 'Informe o usuário.' },
     },
     CONFIRM: {
       TITLE: 'Redefinir senha',
       DESCRIPTION:
-        'Defina uma nova senha. Use ao menos 12 caracteres com letras, numeros e simbolos.',
+        'Defina uma nova senha. Use ao menos 12 caracteres com letras, números e símbolos.',
       LABELS: { NEW_PASSWORD: 'Nova senha', CONFIRM_PASSWORD: 'Confirmar senha' },
       PLACEHOLDERS: {
         NEW_PASSWORD: 'Digite a nova senha',
@@ -93,21 +93,21 @@ export const AUTH = {
       VALIDATION_MESSAGES: {
         NEW_PASSWORD_REQUIRED: 'Informe a nova senha.',
         CONFIRM_REQUIRED: 'Confirme a nova senha.',
-        MISMATCH: 'As senhas nao coincidem.',
+        MISMATCH: 'As senhas não coincidem.',
         MIN_LENGTH: (min: number) => `A senha deve ter pelo menos ${min} caracteres.`,
-        MISSING_TOKEN: 'Link invalido. Solicite uma nova recuperacao de senha.',
+        MISSING_TOKEN: 'Link inválido. Solicite uma nova recuperação de senha.',
       },
     },
   },
   ERROR_PAGES: {
     UNAUTHORIZED: {
-      TITLE: 'Sessao expirada',
-      MESSAGE: 'Sua sessao expirou. Faca login novamente para continuar.',
+      TITLE: 'Sessão expirada',
+      MESSAGE: 'Sua sessão expirou. Faça login novamente para continuar.',
       BUTTON: 'Voltar ao login',
     },
     FORBIDDEN: {
       TITLE: 'Acesso negado',
-      MESSAGE: 'Voce nao tem permissao para acessar esta pagina.',
+      MESSAGE: 'Você não tem permissão para acessar esta página.',
       BUTTON: 'Voltar ao dashboard',
     },
   },
@@ -120,15 +120,15 @@ export const AUTH = {
         LOGOUT_FAILED: 'auth-logout-failed',
       },
       TITLES: {
-        INVALID_CREDENTIALS: 'Credenciais invalidas',
-        RESET_TOKEN_INVALID: 'Link invalido ou expirado',
-        LOGOUT_FAILED: 'Falha ao encerrar sessao',
+        INVALID_CREDENTIALS: 'Credenciais inválidas',
+        RESET_TOKEN_INVALID: 'Link inválido ou expirado',
+        LOGOUT_FAILED: 'Falha ao encerrar sessão',
       },
       MESSAGES: {
-        INVALID_CREDENTIALS: 'Usuario ou senha incorretos.',
+        INVALID_CREDENTIALS: 'Usuário ou senha incorretos.',
         RESET_TOKEN_INVALID:
-          'Solicite uma nova recuperacao de senha para gerar um novo link.',
-        LOGOUT_FAILED: 'Nao foi possivel encerrar a sessao no servidor.',
+          'Solicite uma nova recuperação de senha para gerar um novo link.',
+        LOGOUT_FAILED: 'Não foi possível encerrar a sessão no servidor.',
       },
     },
     SUCCESS: {
@@ -139,17 +139,17 @@ export const AUTH = {
         PASSWORD_RESET_CONFIRMED: 'auth-password-reset-confirmed',
       },
       TITLES: {
-        LOGIN: 'Sessao iniciada',
-        LOGOUT: 'Sessao encerrada',
-        PASSWORD_RESET_REQUESTED: 'Solicitacao recebida',
+        LOGIN: 'Sessão iniciada',
+        LOGOUT: 'Sessão encerrada',
+        PASSWORD_RESET_REQUESTED: 'Solicitação recebida',
         PASSWORD_RESET_CONFIRMED: 'Senha redefinida',
       },
       MESSAGES: {
         LOGIN: 'Bem-vindo de volta.',
-        LOGOUT: 'Voce saiu da plataforma.',
+        LOGOUT: 'Você saiu da plataforma.',
         PASSWORD_RESET_REQUESTED:
-          'Se a conta existir, voce recebera um email com o link de redefinicao.',
-        PASSWORD_RESET_CONFIRMED: 'Senha atualizada. Faca login com a nova senha.',
+          'Se a conta existir, você receberá um email com o link de redefinição.',
+        PASSWORD_RESET_CONFIRMED: 'Senha atualizada. Faça login com a nova senha.',
       },
     },
   },
@@ -159,10 +159,10 @@ export const MACHINES = {
   KEY: 'machines',
   LIST: {
     LABELS: {
-      CODE: 'Codigo',
-      DESCRIPTION: 'Descricao',
+      CODE: 'Código',
+      DESCRIPTION: 'Descrição',
       SECTOR: 'Setor',
-      STANDARD_CYCLE_MS: 'Ciclo padrao (ms)',
+      STANDARD_CYCLE_MS: 'Ciclo padrão (ms)',
       CONSECUTIVE_PAUSES_TO_STOP: 'Pausas para parada',
       CURRENT_STATE: 'Estado atual',
       ACTIVE: 'Ativa',
@@ -180,7 +180,7 @@ export const MACHINES = {
   STATUS: {
     LABELS: {
       CURRENT: 'Estado atual',
-      START_TIME: 'Inicio',
+      START_TIME: 'Início',
       END_TIME: 'Fim',
       REASON: 'Motivo',
       MESSAGE: 'Mensagem',
@@ -199,7 +199,7 @@ export const MACHINES = {
     LABELS: {
       PULSE_TIMESTAMP: 'Pulso',
       RECEIVED_AT: 'Recebido em',
-      SEQUENCE: 'Sequencia',
+      SEQUENCE: 'Sequência',
       INTERVAL_MS: 'Intervalo (ms)',
       STATE: 'Estado',
     },
@@ -216,11 +216,11 @@ export const MACHINES = {
     KEYS: { MESSAGE: 'message' },
     EDIT_MODAL: {
       LABELS: { MESSAGE: 'Nova mensagem' },
-      PLACEHOLDERS: { MESSAGE: 'Descreva a parada automatica' },
+      PLACEHOLDERS: { MESSAGE: 'Descreva a parada automática' },
       BUTTONS: { SAVE: 'Salvar', CANCEL: 'Cancelar' },
       VALIDATION_MESSAGES: {
         MESSAGE_REQUIRED: 'Informe a mensagem.',
-        MESSAGE_MAX_LENGTH: (max: number) => `Maximo de ${max} caracteres.`,
+        MESSAGE_MAX_LENGTH: (max: number) => `Máximo de ${max} caracteres.`,
       },
     },
   },
@@ -233,17 +233,17 @@ export const MACHINES = {
       BUTTONS: { SAVE: 'Registrar', CANCEL: 'Cancelar' },
       VALIDATION_MESSAGES: {
         REASON_REQUIRED: 'Informe o motivo.',
-        REASON_MAX_LENGTH: (max: number) => `Maximo de ${max} caracteres.`,
+        REASON_MAX_LENGTH: (max: number) => `Máximo de ${max} caracteres.`,
       },
     },
   },
   NOTIFICATIONS: {
     WARNING: {
       KEYS: { NO_MACHINES_IN_SCOPE: 'machines-empty-scope' },
-      TITLES: { NO_MACHINES_IN_SCOPE: 'Nenhuma maquina visivel' },
+      TITLES: { NO_MACHINES_IN_SCOPE: 'Nenhuma máquina visível' },
       MESSAGES: {
         NO_MACHINES_IN_SCOPE:
-          'Voce nao possui maquinas no seu setor. Consulte o gestor.',
+          'Você não possui máquinas no seu setor. Consulte o gestor.',
       },
     },
     ERROR: {
@@ -254,18 +254,18 @@ export const MACHINES = {
         STOP_EDIT_FAILED: 'machines-stop-edit-failed',
       },
       TITLES: {
-        LIST_FAILED: 'Falha ao listar maquinas',
-        STATUS_FAILED: 'Falha ao carregar o estado da maquina',
+        LIST_FAILED: 'Falha ao listar máquinas',
+        STATUS_FAILED: 'Falha ao carregar o estado da máquina',
         PAUSE_CLASSIFY_FAILED: 'Falha ao classificar a pausa',
         STOP_EDIT_FAILED: 'Falha ao editar mensagem da parada',
       },
       MESSAGES: {
-        LIST_FAILED: 'Nao foi possivel carregar as maquinas.',
-        STATUS_FAILED: 'Nao foi possivel carregar o estado atual.',
+        LIST_FAILED: 'Não foi possível carregar as máquinas.',
+        STATUS_FAILED: 'Não foi possível carregar o estado atual.',
         PAUSE_CLASSIFY_FAILED:
-          'Verifique se existe uma pausa pendente de classificacao.',
+          'Verifique se existe uma pausa pendente de classificação.',
         STOP_EDIT_FAILED:
-          'A mensagem so pode ser editada em registros AUTO_STOPPED.',
+          'A mensagem só pode ser editada em registros AUTO_STOPPED.',
       },
     },
     SUCCESS: {
@@ -296,7 +296,7 @@ export const OEE = {
     QUALITY: 'Qualidade',
     OEE: 'OEE',
     PARTIAL: 'Resultado parcial',
-    PERIOD: 'Periodo',
+    PERIOD: 'Período',
   },
   NOTIFICATIONS: {
     WARNING: {
@@ -304,13 +304,13 @@ export const OEE = {
       TITLES: { PARTIAL_RESULT: 'OEE parcial' },
       MESSAGES: {
         PARTIAL_RESULT:
-          'Sem registros de qualidade no periodo. O fator Qualidade nao foi calculado.',
+          'Sem registros de qualidade no período. O fator Qualidade não foi calculado.',
       },
     },
     ERROR: {
       KEYS: { CALCULATION_FAILED: 'oee-calculation-failed' },
       TITLES: { CALCULATION_FAILED: 'Falha ao calcular OEE' },
-      MESSAGES: { CALCULATION_FAILED: 'Nao foi possivel calcular o OEE.' },
+      MESSAGES: { CALCULATION_FAILED: 'Não foi possível calcular o OEE.' },
     },
     SUCCESS: { KEYS: {}, TITLES: {}, MESSAGES: {} },
   },
@@ -320,13 +320,13 @@ export const REPORTS = {
   KEY: 'reports',
   SHIFT: {
     LABELS: {
-      PERIOD_START: 'Inicio',
+      PERIOD_START: 'Início',
       PERIOD_END: 'Fim',
       SECTOR: 'Setor',
       SHIFT: 'Turno',
       CONFIRMED_CYCLES: 'Ciclos confirmados',
       MANUAL_PAUSES: 'Pausas manuais',
-      AUTO_STOPS: 'Paradas automaticas',
+      AUTO_STOPS: 'Paradas automáticas',
     },
     KEYS: {
       PERIOD_START: 'periodStart',
@@ -342,9 +342,45 @@ export const REPORTS = {
     WARNING: { KEYS: {}, TITLES: {}, MESSAGES: {} },
     ERROR: {
       KEYS: { LOAD_FAILED: 'reports-load-failed' },
-      TITLES: { LOAD_FAILED: 'Falha ao gerar o relatorio' },
-      MESSAGES: { LOAD_FAILED: 'Nao foi possivel gerar o relatorio do turno.' },
+      TITLES: { LOAD_FAILED: 'Falha ao gerar o relatório' },
+      MESSAGES: { LOAD_FAILED: 'Não foi possível gerar o relatório do turno.' },
     },
+    SUCCESS: { KEYS: {}, TITLES: {}, MESSAGES: {} },
+  },
+} as const;
+
+export const LAYOUT = {
+  KEY: 'layout',
+  HEADER: {
+    LABELS: {
+      LOGO_TITLE: 'NJPlastic',
+      LOGO_SUBTITLE: 'Meplas - Monitoramento de injetoras',
+      LOGOUT_BUTTON: 'Sair',
+      ROLE_OPERATOR: 'Operador',
+      ROLE_LEADER: 'Líder de turno',
+      ROLE_MANAGER: 'Gestor',
+      ROLE_ADMIN: 'Administrador',
+    },
+  },
+  SIDER: {
+    LABELS: {
+      DASHBOARD: 'Chão de fábrica',
+      MACHINES: 'Máquinas',
+      ORDERS: 'Ordens de produção',
+      HISTORY: 'Histórico',
+      REPORTS: 'Relatórios',
+      ACCOUNT: 'Minha conta',
+      ADMIN_GROUP: 'Administração',
+      USERS: 'Usuários',
+      ERP: 'Integração ERP',
+      AUDIT: 'Auditoria',
+      COLLAPSE: 'Recolher menu',
+      EXPAND: 'Expandir menu',
+    },
+  },
+  NOTIFICATIONS: {
+    WARNING: { KEYS: {}, TITLES: {}, MESSAGES: {} },
+    ERROR: { KEYS: {}, TITLES: {}, MESSAGES: {} },
     SUCCESS: { KEYS: {}, TITLES: {}, MESSAGES: {} },
   },
 } as const;
