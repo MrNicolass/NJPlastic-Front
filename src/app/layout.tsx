@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google';
+import { GlobalErrorBoundary } from '@/components/shared/GlobalErrorBoundary';
 import { Providers } from './providers';
 import './globals.css';
 
@@ -28,7 +29,9 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${ibmPlexSans.variable} ${ibmPlexMono.variable}`}>
       <body>
-        <Providers>{children}</Providers>
+        <GlobalErrorBoundary>
+          <Providers>{children}</Providers>
+        </GlobalErrorBoundary>
       </body>
     </html>
   );

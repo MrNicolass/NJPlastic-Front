@@ -20,12 +20,18 @@ const REFRESH_BYPASS_PATHS = [
   '/auth/password-reset/confirm',
 ];
 
+const RETRY_MAX_ATTEMPTS_DEFAULT = 3;
+const RETRY_BACKOFF_MS = [250, 500, 1000];
+const RETRY_STATUS_CODES = new Set([502, 503, 504]);
+
 declare module 'axios' {
   export interface AxiosRequestConfig {
     notificationConfig?: NotificationConfig;
+    retryAttempt?: number;
   }
   export interface InternalAxiosRequestConfig {
     notificationConfig?: NotificationConfig;
+    retryAttempt?: number;
   }
 }
 
@@ -108,7 +114,26 @@ const handleSuccess = (response: AxiosResponse): AxiosResponse => {
   return response;
 };
 
-const handleError = (callbacks: InterceptorCallbacks) => (error: AxiosError) => {
+const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
+
+const isTransientFailure = (error: AxiosError): boolean => {
+  if (!error.response) {
+    return true;
+  }
+  return RETRY_STATUS_CODES.has(error.response.status);
+};
+
+const shouldRetry = (error: AxiosError): boolean => {
+  const requestConfig = error.config;
+  if (!requestConfig?.notificationConfig?.retry) {
+    return false;
+  }
+  const maxAttempts = requestConfig.notificationConfig.maxRetryAttempts ?? RETRY_MAX_ATTEMPTS_DEFAULT;
+  const currentAttempt = requestConfig.retryAttempt ?? 0;
+  return currentAttempt < maxAttempts && isTransientFailure(error);
+};
+
+const handleError = (callbacks: InterceptorCallbacks) => async (error: AxiosError) => {
   const status = error.response?.status;
   const config = error.config?.notificationConfig;
   const url = error.config?.url;
@@ -122,6 +147,14 @@ const handleError = (callbacks: InterceptorCallbacks) => (error: AxiosError) => 
       });
     }
     return Promise.reject(error);
+  }
+
+  if (error.config && shouldRetry(error)) {
+    const attempt = (error.config.retryAttempt ?? 0) + 1;
+    const backoff = RETRY_BACKOFF_MS[Math.min(attempt - 1, RETRY_BACKOFF_MS.length - 1)];
+    await sleep(backoff);
+    error.config.retryAttempt = attempt;
+    return http.request(error.config);
   }
 
   if (config?.suppressErrorNotification) {

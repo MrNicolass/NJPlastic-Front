@@ -1,15 +1,23 @@
 'use client';
 
-import { Button, Col, Row, Skeleton, Space, Tooltip, Typography } from 'antd';
+import { Button, Col, Row, Space, Tooltip, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { OrdersKpis } from '@/components/orders/OrdersKpis';
 import { OrdersTable } from '@/components/orders/OrdersTable';
-import { ORDERS, UTILS } from '@/constants/ConstantsAndParams';
+import { ExportButton, type ExportFormat } from '@/components/shared/ExportButton';
+import { TableSkeleton } from '@/components/shared/Skeletons';
+import { EXPORT, ORDERS, UTILS } from '@/constants/ConstantsAndParams';
 import { usePolling } from '@/hooks/usePolling';
 import type { OrdersSnapshot } from '@/models/types/OrdersSnapshot';
 import MachineService from '@/services/MachineService';
 import ProductionOrderService from '@/services/ProductionOrderService';
+import {
+  buildExportFilename,
+  exportToCsv,
+  exportToPdf,
+  type ExportColumn,
+} from '@/utils/ExportUtils';
 import { NotificationUtils } from '@/utils/NotificationUtils';
 
 const { Title, Text } = Typography;
@@ -89,8 +97,66 @@ export default function OrdersPage() {
     }
   }, [error, tableRows.length]);
 
+  const handleExport = useCallback(
+    (format: ExportFormat) => {
+      if (tableRows.length === 0) {
+        NotificationUtils({
+          key: EXPORT.NOTIFICATIONS.ERROR.KEYS.EXPORT_FAILED,
+          type: 'warning',
+          message: EXPORT.NOTIFICATIONS.ERROR.TITLES.EXPORT_FAILED,
+          description: EXPORT.NOTIFICATIONS.ERROR.MESSAGES.EMPTY_DATASET,
+        });
+        return;
+      }
+      const columns: ExportColumn<Record<string, unknown>>[] = [
+        { key: 'erpOrderId', label: 'OS (ERP)' },
+        { key: 'productCode', label: 'Produto' },
+        { key: 'machineCode', label: 'Máquina' },
+        { key: 'targetQuantity', label: 'Quantidade meta' },
+        { key: 'status', label: 'Status' },
+        { key: 'lastSyncAt', label: 'Última sincronização' },
+      ];
+      const rows: Record<string, unknown>[] = tableRows.map((order) => ({
+        erpOrderId: order.erpOrderId ?? '',
+        productCode: order.productCode ?? '',
+        machineCode: machineCodeById.get(order.machineId ?? '') ?? '-',
+        targetQuantity: order.targetQuantity ?? '',
+        status: order.status ?? '',
+        lastSyncAt: order.lastSyncAt ? dayjs(order.lastSyncAt).format(UTILS.DATE_FORMATS.DISPLAY) : '-',
+      }));
+      const filename = buildExportFilename(EXPORT.FILENAMES.ORDERS, format);
+      try {
+        if (format === 'csv') {
+          exportToCsv(rows, columns, filename);
+        } else {
+          exportToPdf(rows, columns, filename, {
+            title: ORDERS.LABELS.TITLE,
+            subtitle: dayjs().format(UTILS.DATE_FORMATS.DISPLAY),
+          });
+        }
+        NotificationUtils({
+          key: EXPORT.NOTIFICATIONS.SUCCESS.KEYS.EXPORTED,
+          type: 'success',
+          message: EXPORT.NOTIFICATIONS.SUCCESS.TITLES.EXPORTED,
+          description: EXPORT.NOTIFICATIONS.SUCCESS.MESSAGES.EXPORTED(
+            format.toUpperCase() as 'CSV' | 'PDF',
+            rows.length,
+          ),
+        });
+      } catch {
+        NotificationUtils({
+          key: EXPORT.NOTIFICATIONS.ERROR.KEYS.EXPORT_FAILED,
+          type: 'error',
+          message: EXPORT.NOTIFICATIONS.ERROR.TITLES.EXPORT_FAILED,
+          description: EXPORT.NOTIFICATIONS.ERROR.MESSAGES.EXPORT_FAILED,
+        });
+      }
+    },
+    [machineCodeById, tableRows],
+  );
+
   if (loading && !data) {
-    return <Skeleton active paragraph={{ rows: 8 }} />;
+    return <TableSkeleton rowCount={8} />;
   }
 
   return (
@@ -110,9 +176,15 @@ export default function OrdersPage() {
             ) : null}
           </Col>
           <Col>
-            <Tooltip title={ORDERS.LABELS.NEW_ORDER_TOOLTIP}>
-              <Button disabled>{ORDERS.BUTTONS.NEW_ORDER}</Button>
-            </Tooltip>
+            <Space>
+              <ExportButton
+                onExport={handleExport}
+                disabled={tableRows.length === 0}
+              />
+              <Tooltip title={ORDERS.LABELS.NEW_ORDER_TOOLTIP}>
+                <Button disabled>{ORDERS.BUTTONS.NEW_ORDER}</Button>
+              </Tooltip>
+            </Space>
           </Col>
         </Row>
       </header>

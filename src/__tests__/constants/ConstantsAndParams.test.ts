@@ -45,10 +45,10 @@ describe('ConstantsAndParams', () => {
   describe('AUTH', () => {
     it('exposes the login screen labels and validation messages', () => {
       expect(AUTH.KEY).toBe('auth');
-      expect(AUTH.LOGIN.LABELS.LOGIN).toBe('Usuario');
+      expect(AUTH.LOGIN.LABELS.LOGIN).toBe('Usuário');
       expect(AUTH.LOGIN.LABELS.PASSWORD).toBe('Senha');
       expect(AUTH.LOGIN.BUTTONS.SUBMIT).toBe('Entrar');
-      expect(AUTH.LOGIN.VALIDATION_MESSAGES.LOGIN_REQUIRED).toBe('Informe o usuario.');
+      expect(AUTH.LOGIN.VALIDATION_MESSAGES.LOGIN_REQUIRED).toBe('Informe o usuário.');
       expect(AUTH.LOGIN.VALIDATION_MESSAGES.PASSWORD_MIN_LENGTH(8)).toBe(
         'A senha deve ter pelo menos 8 caracteres.',
       );
@@ -56,9 +56,9 @@ describe('ConstantsAndParams', () => {
 
     it('exposes the invalid credentials notification trio', () => {
       expect(AUTH.NOTIFICATIONS.ERROR.KEYS.INVALID_CREDENTIALS).toBe('auth-invalid-credentials');
-      expect(AUTH.NOTIFICATIONS.ERROR.TITLES.INVALID_CREDENTIALS).toBe('Credenciais invalidas');
+      expect(AUTH.NOTIFICATIONS.ERROR.TITLES.INVALID_CREDENTIALS).toBe('Credenciais inválidas');
       expect(AUTH.NOTIFICATIONS.ERROR.MESSAGES.INVALID_CREDENTIALS).toBe(
-        'Usuario ou senha incorretos.',
+        'Usuário ou senha incorretos.',
       );
     });
   });

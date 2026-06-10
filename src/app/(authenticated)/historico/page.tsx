@@ -1,15 +1,23 @@
 'use client';
 
-import { Card, Col, DatePicker, Empty, Row, Select, Skeleton, Space, Table, Tabs, Tag, Typography } from 'antd';
+import { Card, Col, DatePicker, Empty, Row, Select, Space, Table, Tabs, Tag, Typography } from 'antd';
 import type { TablePaginationConfig } from 'antd';
 import dayjs, { type Dayjs } from 'dayjs';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Schemas } from '@/api/types';
-import { HISTORY, MACHINES, UTILS } from '@/constants/ConstantsAndParams';
+import { ExportButton, type ExportFormat } from '@/components/shared/ExportButton';
+import { TableSkeleton } from '@/components/shared/Skeletons';
+import { EXPORT, HISTORY, MACHINES, UTILS } from '@/constants/ConstantsAndParams';
 import type { Page } from '@/models/types/Page';
 import type { ProductionCycleResponse } from '@/models/types/ProductionCycleResponse';
 import MachineService from '@/services/MachineService';
 import ProductionEventService from '@/services/ProductionEventService';
+import {
+  buildExportFilename,
+  exportToCsv,
+  exportToPdf,
+  type ExportColumn,
+} from '@/utils/ExportUtils';
 import { NotificationUtils } from '@/utils/NotificationUtils';
 
 const { Title, Text } = Typography;
@@ -207,6 +215,116 @@ export default function HistoricoPage() {
     },
   };
 
+  const handleExport = useCallback(
+    (format: ExportFormat) => {
+      const machineCode = machines.find((m) => m.id === machineId)?.code ?? '-';
+      const subtitle = `${machineCode}  •  ${range[0].format(UTILS.DATE_FORMATS.DISPLAY)} - ${range[1].format(UTILS.DATE_FORMATS.DISPLAY)}`;
+
+      let rows: Record<string, unknown>[] = [];
+      let columns: ExportColumn<Record<string, unknown>>[] = [];
+      let pattern = '';
+
+      if (activeTab === 'cycles') {
+        rows = (cyclesData?.content ?? []).map((row) => ({
+          pulse: formatDate(row.pulseTimestamp),
+          received: formatDate(row.receivedAt),
+          sequence: row.sequence,
+          intervalMs: row.intervalMs ?? '',
+          state: row.state ?? '',
+        }));
+        columns = [
+          { key: 'pulse', label: HISTORY.LABELS.COL_PULSE },
+          { key: 'received', label: HISTORY.LABELS.COL_RECEIVED },
+          { key: 'sequence', label: HISTORY.LABELS.COL_SEQUENCE },
+          { key: 'intervalMs', label: HISTORY.LABELS.COL_INTERVAL_MS },
+          { key: 'state', label: HISTORY.LABELS.COL_STATE },
+        ];
+        pattern = EXPORT.FILENAMES.HISTORY_CYCLES;
+      } else if (activeTab === 'pauses') {
+        rows = pauses.map((row) => ({
+          start: formatDate(row.startTime),
+          end: formatDate(row.endTime),
+          reason: row.reason ?? '',
+          message: row.message ?? '',
+        }));
+        columns = [
+          { key: 'start', label: HISTORY.LABELS.COL_START },
+          { key: 'end', label: HISTORY.LABELS.COL_END },
+          { key: 'reason', label: HISTORY.LABELS.COL_REASON },
+          { key: 'message', label: HISTORY.LABELS.COL_MESSAGE },
+        ];
+        pattern = EXPORT.FILENAMES.HISTORY_PAUSES;
+      } else if (activeTab === 'autoStops') {
+        rows = autoStops.map((row) => ({
+          start: formatDate(row.startTime),
+          end: formatDate(row.endTime),
+          reason: row.reason ?? '',
+          message: row.message ?? '',
+        }));
+        columns = [
+          { key: 'start', label: HISTORY.LABELS.COL_START },
+          { key: 'end', label: HISTORY.LABELS.COL_END },
+          { key: 'reason', label: HISTORY.LABELS.COL_REASON },
+          { key: 'message', label: HISTORY.LABELS.COL_MESSAGE },
+        ];
+        pattern = EXPORT.FILENAMES.HISTORY_STOPS;
+      } else {
+        rows = (eventsData?.content ?? []).map((row) => ({
+          start: formatDate(row.startedAt),
+          end: formatDate(row.endedAt),
+          type: row.type,
+          description: row.description ?? '',
+        }));
+        columns = [
+          { key: 'start', label: HISTORY.LABELS.COL_START },
+          { key: 'end', label: HISTORY.LABELS.COL_END },
+          { key: 'type', label: HISTORY.LABELS.COL_TYPE },
+          { key: 'description', label: HISTORY.LABELS.COL_DESCRIPTION },
+        ];
+        pattern = EXPORT.FILENAMES.HISTORY_EVENTS;
+      }
+
+      if (rows.length === 0) {
+        NotificationUtils({
+          key: EXPORT.NOTIFICATIONS.ERROR.KEYS.EXPORT_FAILED,
+          type: 'warning',
+          message: EXPORT.NOTIFICATIONS.ERROR.TITLES.EXPORT_FAILED,
+          description: EXPORT.NOTIFICATIONS.ERROR.MESSAGES.EMPTY_DATASET,
+        });
+        return;
+      }
+
+      const filename = buildExportFilename(pattern, format);
+      try {
+        if (format === 'csv') {
+          exportToCsv(rows, columns, filename);
+        } else {
+          exportToPdf(rows, columns, filename, {
+            title: HISTORY.LABELS.TITLE,
+            subtitle,
+          });
+        }
+        NotificationUtils({
+          key: EXPORT.NOTIFICATIONS.SUCCESS.KEYS.EXPORTED,
+          type: 'success',
+          message: EXPORT.NOTIFICATIONS.SUCCESS.TITLES.EXPORTED,
+          description: EXPORT.NOTIFICATIONS.SUCCESS.MESSAGES.EXPORTED(
+            format.toUpperCase() as 'CSV' | 'PDF',
+            rows.length,
+          ),
+        });
+      } catch {
+        NotificationUtils({
+          key: EXPORT.NOTIFICATIONS.ERROR.KEYS.EXPORT_FAILED,
+          type: 'error',
+          message: EXPORT.NOTIFICATIONS.ERROR.TITLES.EXPORT_FAILED,
+          description: EXPORT.NOTIFICATIONS.ERROR.MESSAGES.EXPORT_FAILED,
+        });
+      }
+    },
+    [activeTab, autoStops, cyclesData, eventsData, machineId, machines, pauses, range],
+  );
+
   return (
     <Space orientation="vertical" size={24} style={{ width: '100%' }}>
       <header>
@@ -248,11 +366,12 @@ export default function HistoricoPage() {
       </Card>
 
       {!machineId ? (
-        <Skeleton active paragraph={{ rows: 6 }} />
+        <TableSkeleton rowCount={6} />
       ) : (
         <Tabs
           activeKey={activeTab}
           onChange={(key) => setActiveTab(key as TabKey)}
+          tabBarExtraContent={<ExportButton onExport={handleExport} />}
           items={[
             {
               key: 'cycles',

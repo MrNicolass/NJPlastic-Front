@@ -45,6 +45,197 @@ export const GENERIC_NOTIFICATIONS = {
   },
 } as const;
 
+export const ERROR_BOUNDARY = {
+  TITLE: 'Algo deu errado nesta tela',
+  DESCRIPTION:
+    'A interface encontrou um erro inesperado. Tente recarregar a página. Se o problema persistir, contate o suporte.',
+  RELOAD_BUTTON: 'Recarregar',
+  BACK_BUTTON: 'Voltar ao início',
+  DETAILS_LABEL: 'Detalhes técnicos',
+} as const;
+
+export const REPORTS_LIBRARY = {
+  KEY: 'reports-library',
+  TAB_LABEL: 'Biblioteca',
+  TITLE: 'Biblioteca de relatórios',
+  DESCRIPTION: 'Relatórios gerados nos últimos 90 dias.',
+  FILTERS: {
+    TYPE_LABEL: 'Tipo de relatório',
+    TYPE_PLACEHOLDER: 'Todos',
+    PERIOD_LABEL: 'Período',
+    APPLY_BUTTON: 'Aplicar filtros',
+    CLEAR_BUTTON: 'Limpar',
+  },
+  COLUMNS: {
+    TYPE: 'Tipo',
+    FORMAT: 'Formato',
+    GENERATED_AT: 'Gerado em',
+    SIZE: 'Tamanho',
+    ORIGIN: 'Origem',
+    ACTIONS: 'Ações',
+  },
+  ORIGIN: {
+    MANUAL: 'Sob demanda',
+    SCHEDULED: 'Agendamento',
+  },
+  EMPTY: 'Nenhum relatório encontrado para os filtros aplicados.',
+  DOWNLOAD_BUTTON: 'Baixar',
+  NOTIFICATIONS: {
+    SUCCESS: {
+      KEYS: { DOWNLOADED: 'reports-library-downloaded' },
+      TITLES: { DOWNLOADED: 'Download iniciado' },
+      MESSAGES: { DOWNLOADED: 'O arquivo será salvo no diretório de downloads.' },
+    },
+    ERROR: {
+      KEYS: {
+        LIST_FAILED: 'reports-library-list-failed',
+        DOWNLOAD_FAILED: 'reports-library-download-failed',
+      },
+      TITLES: {
+        LIST_FAILED: 'Falha ao carregar a biblioteca',
+        DOWNLOAD_FAILED: 'Falha no download',
+      },
+      MESSAGES: {
+        LIST_FAILED: 'Não foi possível carregar os relatórios. Tente novamente.',
+        DOWNLOAD_FAILED:
+          'O arquivo não pôde ser baixado. Pode ter sido removido pela retenção de 90 dias.',
+      },
+    },
+  },
+} as const;
+
+export const REPORTS_SCHEDULE = {
+  KEY: 'reports-schedule',
+  TAB_LABEL: 'Agendamentos',
+  TITLE: 'Agendamentos de relatórios',
+  DESCRIPTION:
+    'Configure relatórios recorrentes entregues por e-mail. Apenas Gestores podem criar ou excluir agendamentos.',
+  COLUMNS: {
+    TYPE: 'Tipo',
+    CRON: 'Expressão Cron',
+    EMAIL: 'E-mail destino',
+    FORMAT: 'Formato',
+    CREATED_AT: 'Criado em',
+    ACTIONS: 'Ações',
+  },
+  EMPTY: 'Nenhum agendamento ativo.',
+  NEW_BUTTON: 'Novo agendamento',
+  DELETE_BUTTON: 'Excluir',
+  DELETE_CONFIRM_TITLE: 'Excluir agendamento?',
+  DELETE_CONFIRM_DESCRIPTION:
+    'O agendamento será removido. Relatórios já gerados permanecem na biblioteca.',
+  CONFIRM_OK: 'Excluir',
+  CONFIRM_CANCEL: 'Cancelar',
+  DRAWER: {
+    TITLE: 'Novo agendamento',
+    SUBMIT_BUTTON: 'Criar agendamento',
+    CANCEL_BUTTON: 'Cancelar',
+    LABELS: {
+      TYPE: 'Tipo de relatório',
+      FORMAT: 'Formato',
+      CRON: 'Expressão Cron (6 campos)',
+      EMAIL: 'E-mail destino',
+      PARAMS: 'Parâmetros (JSON)',
+    },
+    PLACEHOLDERS: {
+      CRON: '0 0 7 * * MON-FRI',
+      EMAIL: 'destinatario@empresa.com',
+      PARAMS: '{"sector":"INJECAO","shift":"TURNO_A","windowHours":8}',
+    },
+    HELP: {
+      CRON: 'Formato: segundo minuto hora dia-mês mês dia-semana. Exemplo: "0 0 7 * * MON-FRI" às 07:00 de segunda a sexta.',
+      FORMAT_PDF_DISABLED: 'PDF estará disponível em uma próxima entrega do backend.',
+      PARAMS: 'JSON livre. Aceita sector, shift e windowHours para o relatório de turno.',
+    },
+    VALIDATION: {
+      TYPE_REQUIRED: 'Selecione o tipo de relatório.',
+      FORMAT_REQUIRED: 'Selecione o formato.',
+      CRON_REQUIRED: 'Informe a expressão cron.',
+      CRON_INVALID: 'Expressão cron inválida. Use o formato de 6 campos do Spring.',
+      EMAIL_REQUIRED: 'Informe o e-mail.',
+      EMAIL_INVALID: 'E-mail inválido.',
+      PARAMS_INVALID: 'JSON inválido.',
+    },
+  },
+  TYPE_OPTIONS: [
+    { value: 'SHIFT', label: 'Relatório de turno' },
+    { value: 'DAILY', label: 'Relatório diário' },
+    { value: 'WEEKLY', label: 'Relatório semanal' },
+  ],
+  FORMAT_OPTIONS: [
+    { value: 'CSV', label: 'CSV' },
+    { value: 'PDF', label: 'PDF (em breve)', disabled: true },
+  ],
+  NOTIFICATIONS: {
+    SUCCESS: {
+      KEYS: {
+        CREATED: 'reports-schedule-created',
+        DELETED: 'reports-schedule-deleted',
+      },
+      TITLES: {
+        CREATED: 'Agendamento criado',
+        DELETED: 'Agendamento excluído',
+      },
+      MESSAGES: {
+        CREATED: 'O agendamento foi criado e já está ativo.',
+        DELETED: 'O agendamento foi removido.',
+      },
+    },
+    ERROR: {
+      KEYS: {
+        LIST_FAILED: 'reports-schedule-list-failed',
+        CREATE_FAILED: 'reports-schedule-create-failed',
+        DELETE_FAILED: 'reports-schedule-delete-failed',
+      },
+      TITLES: {
+        LIST_FAILED: 'Falha ao carregar agendamentos',
+        CREATE_FAILED: 'Falha ao criar agendamento',
+        DELETE_FAILED: 'Falha ao excluir agendamento',
+      },
+      MESSAGES: {
+        LIST_FAILED: 'Não foi possível carregar os agendamentos. Tente novamente.',
+        CREATE_FAILED: 'Não foi possível criar o agendamento.',
+        DELETE_FAILED: 'Não foi possível excluir o agendamento.',
+      },
+    },
+  },
+} as const;
+
+export const EXPORT = {
+  KEY: 'export',
+  BUTTON_LABEL: 'Exportar',
+  FORMAT_CSV: 'CSV',
+  FORMAT_PDF: 'PDF',
+  TOOLTIP_DISABLED: 'Gere o relatório antes de exportar.',
+  FILENAMES: {
+    SHIFT_REPORT: 'relatorio_de_turno_{timestamp}',
+    HISTORY_CYCLES: 'historico_ciclos_{timestamp}',
+    HISTORY_PAUSES: 'historico_pausas_{timestamp}',
+    HISTORY_STOPS: 'historico_paradas_{timestamp}',
+    HISTORY_EVENTS: 'historico_eventos_{timestamp}',
+    MACHINE_CYCLES: 'maquina_{code}_ciclos_{timestamp}',
+    ORDERS: 'ordens_de_producao_{timestamp}',
+  },
+  NOTIFICATIONS: {
+    SUCCESS: {
+      KEYS: { EXPORTED: 'export-success' },
+      TITLES: { EXPORTED: 'Exportação concluída' },
+      MESSAGES: {
+        EXPORTED: (format: 'CSV' | 'PDF', count: number) =>
+          `Arquivo ${format} gerado com ${count} ${count === 1 ? 'linha' : 'linhas'}.`,
+      },
+    },
+    ERROR: {
+      KEYS: { EXPORT_FAILED: 'export-failed' },
+      TITLES: { EXPORT_FAILED: 'Falha ao exportar' },
+      MESSAGES: {
+        EXPORT_FAILED: 'Não foi possível gerar o arquivo. Tente novamente.',
+        EMPTY_DATASET: 'Nenhum dado disponível para exportar.',
+      },
+    },
+  },
+} as const;
+
 export const AUTH = {
   KEY: 'auth',
   LOGIN: {
