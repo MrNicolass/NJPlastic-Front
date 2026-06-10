@@ -4,16 +4,13 @@ import { Layout, Menu } from 'antd';
 import { usePathname, useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { LAYOUT } from '@/constants/ConstantsAndParams';
-import type { Role } from '@/stores/useSessionStore';
+import type { AppSiderProps } from '@/models/interfaces/components/LayoutProps';
 import { buildMenuItemsForRole, resolveActiveMenuKey } from './navigationMenu';
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+
+export type { AppSiderProps } from '@/models/interfaces/components/LayoutProps';
 
 const { Sider } = Layout;
 const { LABELS } = LAYOUT.SIDER;
-
-type AppSiderProps = {
-  role: Role;
-};
 
 /**
  * Side navigation rendered for every role except OPERATOR. RFC §4.2.2

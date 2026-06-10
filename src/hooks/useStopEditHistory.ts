@@ -3,20 +3,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Schemas } from '@/api/types';
 import { createPageParams } from '@/models/types/PageParams';
+import type { UseStopEditHistoryOptions, UseStopEditHistoryResult } from '@/models/types/UseStopEditHistory';
 import MachineService from '@/services/MachineService';
 
-export type UseStopEditHistoryOptions = {
-  pageSize?: number;
-  enabled?: boolean;
-};
-
-export type UseStopEditHistoryResult = {
-  editHistory: Schemas['StopEditDTO'][];
-  loading: boolean;
-  error: unknown;
-  lastUpdatedAt: Date | null;
-  refetch: () => Promise<void>;
-};
+export type { UseStopEditHistoryOptions, UseStopEditHistoryResult } from '@/models/types/UseStopEditHistory';
 
 const DEFAULT_PAGE_SIZE = 20;
 

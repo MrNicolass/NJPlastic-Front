@@ -26,6 +26,24 @@ describe('IMachineService', () => {
     getOee: jest.fn(async () => ({}) as Schemas['OeeResultDTO']),
     registerQuality: jest.fn(async () => ({}) as Schemas['QualityRecord']),
     getShiftReport: jest.fn(async () => ({}) as Schemas['ShiftReportResponseDTO']),
+    getDetail: jest.fn(async () => ({}) as Schemas['MachineDetailResponseDTO']),
+    listStopEdits: jest.fn(
+      async () =>
+        ({
+          content: [],
+          totalElements: 0,
+          totalPages: 0,
+          size: 10,
+          number: 0,
+          first: true,
+          last: true,
+          numberOfElements: 0,
+          empty: true,
+        }) as Page<Schemas['StopEditDTO']>,
+    ),
+    createMachine: jest.fn(async () => ({}) as Schemas['MachineDetailResponseDTO']),
+    updateMachine: jest.fn(async () => ({}) as Schemas['MachineDetailResponseDTO']),
+    softDeleteMachine: jest.fn(async () => undefined),
   };
 
   it('declares every machine-bound method', () => {

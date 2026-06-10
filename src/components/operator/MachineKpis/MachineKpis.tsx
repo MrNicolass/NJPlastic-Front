@@ -3,16 +3,11 @@
 import { Card, Col, Row, Statistic, Typography } from 'antd';
 import type { Schemas } from '@/api/types';
 import { MACHINES } from '@/constants/ConstantsAndParams';
+import type { MachineKpisProps } from '@/models/interfaces/components/MachineProps';
+
+export type { MachineKpisProps } from '@/models/interfaces/components/MachineProps';
 
 const { Text } = Typography;
-
-export type MachineKpisProps = {
-  oee: Schemas['OeeResultDTO'] | null;
-  cyclesInShift: number;
-  averageCycleMs: number | null;
-  mtbfMinutes: number | null;
-  scrapPercent: number | null;
-};
 
 const formatPercent = (value: number | null | undefined): string => {
   if (value === null || value === undefined || Number.isNaN(value)) {

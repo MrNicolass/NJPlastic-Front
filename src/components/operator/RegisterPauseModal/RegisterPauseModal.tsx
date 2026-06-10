@@ -5,30 +5,18 @@ import { Button, Descriptions, Form, Input, Modal, Select, Space, Tag, Typograph
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { MACHINES, UTILS } from '@/constants/ConstantsAndParams';
+import type { RegisterPauseModalProps } from '@/models/interfaces/components/ModalProps';
+import type { RegisterPauseFormValues as FormValues } from '@/models/types/RegisterPauseFormValues';
 import MachineService from '@/services/MachineService';
 import { NotificationUtils } from '@/utils/NotificationUtils';
+
+export type { RegisterPauseModalProps } from '@/models/interfaces/components/ModalProps';
 
 const { Text } = Typography;
 
 const REASON_MAX_LENGTH = 120;
 const OBSERVATION_MAX_LENGTH = 240;
 const OTHER_VALUE = 'OUTRO';
-
-export type RegisterPauseModalProps = {
-  open: boolean;
-  onClose(): void;
-  machineId: string;
-  machineCode: string;
-  productionOrderCode?: string;
-  pauseStartedAt: string;
-  onRegistered?(): void;
-};
-
-type FormValues = {
-  reason: string;
-  otherDescription?: string;
-  observation?: string;
-};
 
 const formatDateTime = (iso: string): string => dayjs(iso).format(UTILS.DATE_FORMATS.DISPLAY);
 

@@ -6,13 +6,9 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useState } from 'react';
 import { AUTH } from '@/constants/ConstantsAndParams';
+import type { ConfirmFormValues } from '@/models/types/AuthFormValues';
 import AuthService from '@/services/AuthService';
 import { NotificationUtils } from '@/utils/NotificationUtils';
-
-type ConfirmFormValues = {
-  newPassword: string;
-  confirmPassword: string;
-};
 
 const PASSWORD_MIN_LENGTH = 12;
 

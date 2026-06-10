@@ -9,12 +9,12 @@ import {
   TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import type { MenuProps } from 'antd';
 import { createElement } from 'react';
 import { LAYOUT } from '@/constants/ConstantsAndParams';
+import type { NavigationMenuItem } from '@/models/types/NavigationMenuItem';
 import type { Role } from '@/stores/useSessionStore';
 
-export type NavigationMenuItem = NonNullable<MenuProps['items']>[number];
+export type { NavigationMenuItem } from '@/models/types/NavigationMenuItem';
 
 const { LABELS } = LAYOUT.SIDER;
 

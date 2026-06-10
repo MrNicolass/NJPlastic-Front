@@ -166,9 +166,21 @@ export const MACHINES = {
   STATE_LABELS: {
     RUNNING: 'Produzindo',
     PAUSED: 'Em pausa',
-    AUTO_STOPPED: 'Parada automatica',
+    AUTO_STOPPED: 'Parada automática',
     OFFLINE: 'Offline',
     UNKNOWN: 'Sem estado',
+  },
+  PAGE: {
+    TITLE: 'Máquinas',
+    SUBTITLE: 'Cadastro de injetoras monitoradas pelo NJPlastic.',
+    BUTTONS: {
+      CREATE: 'Nova máquina',
+      REFRESH: 'Atualizar',
+    },
+    EMPTY_TITLE: 'Nenhuma máquina cadastrada',
+    EMPTY_DESCRIPTION_MANAGER:
+      'Use o botão "Nova máquina" para cadastrar a primeira injetora.',
+    EMPTY_DESCRIPTION_LEADER: 'Solicite ao gestor o cadastro de uma máquina.',
   },
   LIST: {
     LABELS: {
@@ -441,6 +453,9 @@ export const MACHINES = {
         STOP_EDIT_FAILED: 'machines-stop-edit-failed',
         QUALITY_FAILED: 'machines-quality-failed',
         EDIT_HISTORY_FAILED: 'machines-edit-history-failed',
+        MACHINE_CREATE_FAILED: 'machines-create-failed',
+        MACHINE_UPDATE_FAILED: 'machines-update-failed',
+        MACHINE_DEACTIVATE_FAILED: 'machines-deactivate-failed',
       },
       TITLES: {
         LIST_FAILED: 'Falha ao listar máquinas',
@@ -451,6 +466,9 @@ export const MACHINES = {
         STOP_EDIT_FAILED: 'Falha ao editar mensagem da parada',
         QUALITY_FAILED: 'Falha ao registrar qualidade',
         EDIT_HISTORY_FAILED: 'Falha ao carregar histórico de edições',
+        MACHINE_CREATE_FAILED: 'Falha ao cadastrar máquina',
+        MACHINE_UPDATE_FAILED: 'Falha ao atualizar máquina',
+        MACHINE_DEACTIVATE_FAILED: 'Falha ao desativar máquina',
       },
       MESSAGES: {
         LIST_FAILED: 'Não foi possível carregar as máquinas.',
@@ -465,6 +483,12 @@ export const MACHINES = {
           'Verifique os apontamentos informados e tente novamente.',
         EDIT_HISTORY_FAILED:
           'Tente novamente em instantes ou consulte o gestor.',
+        MACHINE_CREATE_FAILED:
+          'Verifique o código informado e tente novamente. O código deve ser único.',
+        MACHINE_UPDATE_FAILED:
+          'Não foi possível atualizar a máquina. Tente novamente em instantes.',
+        MACHINE_DEACTIVATE_FAILED:
+          'Não foi possível desativar a máquina. Tente novamente em instantes.',
       },
     },
     SUCCESS: {
@@ -472,16 +496,25 @@ export const MACHINES = {
         PAUSE_CLASSIFIED: 'machines-pause-classified',
         STOP_MESSAGE_UPDATED: 'machines-stop-message-updated',
         QUALITY_REGISTERED: 'machines-quality-registered',
+        MACHINE_CREATED: 'machines-created',
+        MACHINE_UPDATED: 'machines-updated',
+        MACHINE_DEACTIVATED: 'machines-deactivated',
       },
       TITLES: {
         PAUSE_CLASSIFIED: 'Pausa classificada',
         STOP_MESSAGE_UPDATED: 'Mensagem atualizada',
         QUALITY_REGISTERED: 'Qualidade registrada',
+        MACHINE_CREATED: 'Máquina cadastrada',
+        MACHINE_UPDATED: 'Máquina atualizada',
+        MACHINE_DEACTIVATED: 'Máquina desativada',
       },
       MESSAGES: {
         PAUSE_CLASSIFIED: 'Motivo registrado na pausa atual.',
         STOP_MESSAGE_UPDATED: 'A mensagem da parada foi atualizada.',
         QUALITY_REGISTERED: 'Os apontamentos de qualidade foram salvos.',
+        MACHINE_CREATED: 'A nova máquina já aparece na lista.',
+        MACHINE_UPDATED: 'Os parâmetros da máquina foram atualizados.',
+        MACHINE_DEACTIVATED: 'A máquina foi desativada e não receberá mais pulsos.',
       },
     },
   },
@@ -590,7 +623,7 @@ export const ORDERS = {
     NO_MACHINE: '-',
   },
   BUTTONS: {
-    NEW_ORDER: '+ Nova ordem',
+    NEW_ORDER: 'Nova ordem',
     CLEAR_FILTERS: 'Limpar filtros',
   },
   FILTER_LABELS: {
@@ -664,52 +697,77 @@ export const HISTORY = {
 export const REPORTS_SCREEN = {
   KEY: 'reports-screen',
   LABELS: {
-    TITLE: 'Relatorio de Turno',
-    FILTER_PERIOD: 'Periodo',
+    TITLE: 'Relatório de Turno',
+    FILTER_PERIOD: 'Período',
     FILTER_SECTOR: 'Setor',
     FILTER_SHIFT: 'Turno',
-    GENERATE: 'Gerar relatorio',
-    EXPORT_TOOLTIP: 'Disponivel em EP-FE-07 (RF16)',
+    GENERATE: 'Gerar relatório',
+    EXPORT_TOOLTIP: 'Disponível em EP-FE-07 (RF16)',
     EXPORT_BUTTON: 'Exportar',
-    EMPTY_TITLE: 'Sem dados no periodo',
+    INITIAL_EMPTY_TITLE: 'Defina o período e clique em "Gerar relatório"',
+    INITIAL_EMPTY_DESCRIPTION:
+      'Selecione o intervalo, setor e turno desejados para consultar o relatório consolidado.',
+    EMPTY_TITLE: 'Sem dados no período',
     EMPTY_DESCRIPTION:
-      'Ajuste o periodo ou o setor selecionado para gerar o relatorio.',
-    MACHINE_SECTION_TITLE: (code: string) => `Maquina ${code}`,
+      'Ajuste o período ou o setor selecionado para gerar o relatório.',
+    MACHINE_SECTION_TITLE: (code: string) => `Máquina ${code}`,
     MANUAL_PAUSES_TITLE: 'Pausas manuais',
-    AUTO_STOPS_TITLE: 'Paradas automaticas',
+    AUTO_STOPS_TITLE: 'Paradas automáticas',
     CYCLES_LABEL: 'Ciclos confirmados',
-    OEE_LABEL: 'OEE no periodo',
+    OEE_LABEL: 'OEE no período',
+  },
+  FILTER_PLACEHOLDERS: {
+    SECTOR: 'Ex: INJEÇÃO',
+    SHIFT: 'A / B / C',
+  },
+  TABLE_LABELS: {
+    START: 'Início',
+    END: 'Fim',
+    REASON: 'Motivo',
+    MESSAGE: 'Mensagem',
+    NO_REASON_TAG: 'Sem motivo',
+    EMPTY_PAUSES: 'Sem pausas no período.',
+    EMPTY_STOPS: 'Sem paradas no período.',
   },
   NOTIFICATIONS: {
     WARNING: { KEYS: {}, TITLES: {}, MESSAGES: {} },
     ERROR: {
       KEYS: { LOAD_FAILED: 'reports-screen-load-failed' },
-      TITLES: { LOAD_FAILED: 'Falha ao gerar o relatorio' },
-      MESSAGES: { LOAD_FAILED: 'Nao foi possivel gerar o relatorio do turno.' },
+      TITLES: { LOAD_FAILED: 'Falha ao gerar o relatório' },
+      MESSAGES: { LOAD_FAILED: 'Não foi possível gerar o relatório do turno.' },
     },
-    SUCCESS: { KEYS: {}, TITLES: {}, MESSAGES: {} },
+    SUCCESS: {
+      KEYS: { REPORT_GENERATED: 'reports-screen-report-generated' },
+      TITLES: { REPORT_GENERATED: 'Relatório gerado' },
+      MESSAGES: {
+        REPORT_GENERATED: (count: number) =>
+          count === 0
+            ? 'A busca retornou sem máquinas no período.'
+            : `${count} máquina${count === 1 ? '' : 's'} no resultado.`,
+      },
+    },
   },
 } as const;
 
 export const LEADER_DASHBOARD = {
   KEY: 'leader-dashboard',
   LABELS: {
-    GREETING: (name: string) => `Ola, ${name}`,
-    SCOPE_BADGE: 'Visao do turno (RN03)',
-    LAST_UPDATE: (at: string) => `Atualizado as ${at}`,
-    KPI_OEE_AVERAGE: 'OEE medio do turno',
-    KPI_RUNNING: 'Em producao',
+    GREETING: (name: string) => `Olá, ${name}`,
+    SCOPE_BADGE: 'Visão do turno (RN03)',
+    LAST_UPDATE: (at: string) => `Atualizado às ${at}`,
+    KPI_OEE_AVERAGE: 'OEE médio do turno',
+    KPI_RUNNING: 'Em produção',
     KPI_PAUSED: 'Em pausa',
-    KPI_AUTO_STOPPED: 'Em parada automatica',
+    KPI_AUTO_STOPPED: 'Em parada automática',
     KPI_OFFLINE: 'Offline',
     KPI_OPEN_STOPS: 'Paradas em aberto',
     KPI_CYCLES_SHIFT: 'Ciclos confirmados no turno',
-    MACHINES_TITLE: 'Maquinas do setor',
+    MACHINES_TITLE: 'Máquinas do setor',
     RECENT_EVENTS_TITLE: 'Eventos recentes',
-    EMPTY_TITLE: 'Sem maquinas no escopo',
+    EMPTY_TITLE: 'Sem máquinas no escopo',
     EMPTY_DESCRIPTION:
-      'Voce nao possui maquinas atribuidas ao seu turno/setor. Consulte o gestor.',
-    OEE_UNAVAILABLE: 'OEE indisponivel',
+      'Você não possui máquinas atribuídas ao seu turno/setor. Consulte o gestor.',
+    OEE_UNAVAILABLE: 'OEE indisponível',
   },
   BUTTONS: {
     REGISTER_EVENT: 'Registrar evento',
@@ -725,19 +783,468 @@ export const LEADER_DASHBOARD = {
       },
       MESSAGES: {
         SNAPSHOT_FAILED:
-          'Nao foi possivel atualizar a visao consolidada. Tente novamente em instantes.',
+          'Não foi possível atualizar a visão consolidada. Tente novamente em instantes.',
       },
     },
     SUCCESS: { KEYS: {}, TITLES: {}, MESSAGES: {} },
   },
 } as const;
 
+export const DASHBOARD_SHARED = {
+  KEY: 'dashboard-shared',
+  STATE_FILTER: {
+    LABELS: {
+      ALL: 'Todas',
+      RUNNING: 'Produzindo',
+      PAUSED: 'Em pausa',
+      AUTO_STOPPED: 'Em parada',
+      OFFLINE: 'Offline',
+    },
+    VALUES: {
+      ALL: 'ALL',
+      RUNNING: 'RUNNING',
+      PAUSED: 'PAUSED',
+      AUTO_STOPPED: 'AUTO_STOPPED',
+      OFFLINE: 'OFFLINE',
+    },
+  },
+  OEE_CARD: {
+    TITLE: 'OEE médio',
+    PARTIAL_TAG: 'parcial',
+    UNAVAILABLE: 'OEE indisponível',
+  },
+} as const;
+
 export const MANAGER_DASHBOARD = {
   KEY: 'manager-dashboard',
   LABELS: {
-    PLACEHOLDER_TITLE: 'Dashboard Gerencial',
-    PLACEHOLDER_DESCRIPTION:
-      'Tela do Gestor sera entregue em EP-FE-06. Por enquanto utilize as telas de Administracao.',
+    GREETING: (name: string) => `Olá, ${name}`,
+    SCOPE_BADGE: 'Visão completa (RN04)',
+    LAST_UPDATE: (at: string) => `Atualizado às ${at}`,
+    KPI_OEE_AVERAGE: 'OEE médio geral',
+    KPI_RUNNING: 'Em produção',
+    KPI_PAUSED: 'Em pausa',
+    KPI_AUTO_STOPPED: 'Em parada automática',
+    KPI_OFFLINE: 'Offline',
+    KPI_TOTAL_MACHINES: 'Máquinas no escopo',
+    SECTOR_FILTER: 'Setor',
+    SHIFT_FILTER: 'Turno',
+    SECTOR_ALL: 'Todos os setores',
+    SHIFT_ALL: 'Todos os turnos',
+    OEE_BY_SECTOR_TITLE: 'OEE médio por setor',
+    OEE_BY_SECTOR_EMPTY: 'Sem dados de OEE no escopo selecionado.',
+    MACHINES_TITLE: 'Máquinas',
+    RECENT_EVENTS_TITLE: 'Eventos recentes',
+    EMPTY_TITLE: 'Sem máquinas no escopo',
+    EMPTY_DESCRIPTION: 'Ajuste os filtros de setor/turno ou cadastre uma nova máquina.',
+    OEE_UNAVAILABLE: 'OEE indisponível',
+  },
+  BUTTONS: {
+    REGISTER_EVENT: 'Registrar evento',
+  },
+  NOTIFICATIONS: {
+    WARNING: { KEYS: {}, TITLES: {}, MESSAGES: {} },
+    ERROR: {
+      KEYS: {
+        SNAPSHOT_FAILED: 'manager-dashboard-snapshot-failed',
+      },
+      TITLES: {
+        SNAPSHOT_FAILED: 'Falha ao carregar o dashboard gerencial',
+      },
+      MESSAGES: {
+        SNAPSHOT_FAILED:
+          'Não foi possível atualizar a visão consolidada. Tente novamente em instantes.',
+      },
+    },
+    SUCCESS: { KEYS: {}, TITLES: {}, MESSAGES: {} },
+  },
+} as const;
+
+export const USERS = {
+  KEY: 'users',
+  ROLES: {
+    OPERATOR: 'OPERATOR',
+    LEADER: 'LEADER',
+    MANAGER: 'MANAGER',
+    ADMIN: 'ADMIN',
+  },
+  ROLE_LABELS: {
+    OPERATOR: 'Operador',
+    LEADER: 'Líder de turno',
+    MANAGER: 'Gestor',
+    ADMIN: 'Administrador',
+  },
+  LIST: {
+    TITLE: 'Usuários',
+    SUBTITLE: 'Cadastro de pessoas com acesso ao sistema',
+    BUTTONS: {
+      CREATE: 'Novo usuário',
+      EDIT: 'Editar',
+      DEACTIVATE: 'Desativar',
+      REFRESH: 'Atualizar',
+      APPLY: 'Aplicar',
+    },
+    FILTERS: {
+      ROLE: 'Perfil',
+      ROLE_PLACEHOLDER: 'Filtrar por perfil',
+      SECTOR: 'Setor',
+      SHIFT: 'Turno',
+      ACTIVE: 'Situação',
+      ACTIVE_PLACEHOLDER: 'Filtrar por situação',
+      ACTIVE_TRUE: 'Ativos',
+      ACTIVE_FALSE: 'Inativos',
+      ACTIVE_ALL: 'Todos',
+      CLEAR: 'Limpar filtros',
+    },
+    LABELS: {
+      NAME: 'Nome',
+      LOGIN: 'Login',
+      EMAIL: 'E-mail',
+      ROLE: 'Perfil',
+      SECTOR: 'Setor',
+      SHIFT: 'Turno',
+      ACTIVE: 'Ativo',
+      ACTIONS: 'Ações',
+    },
+    KEYS: {
+      NAME: 'name',
+      LOGIN: 'login',
+      EMAIL: 'email',
+      ROLE: 'role',
+      SECTOR: 'sector',
+      SHIFT: 'shift',
+      ACTIVE: 'active',
+      ACTIONS: 'actions',
+    },
+    EMPTY_TITLE: 'Nenhum usuário cadastrado',
+    EMPTY_DESCRIPTION: 'Use o botão "Novo usuário" para cadastrar o primeiro acesso.',
+  },
+  FORM_DRAWER: {
+    TITLE_CREATE: 'Cadastrar usuário',
+    TITLE_EDIT: 'Editar usuário',
+    LABELS: {
+      NAME: 'Nome',
+      LOGIN: 'Login (imutável após cadastro)',
+      EMAIL: 'E-mail',
+      PASSWORD: 'Senha (mínimo 12 caracteres)',
+      ROLE: 'Perfil',
+      SECTOR: 'Setor',
+      SHIFT: 'Turno',
+      ACTIVE: 'Ativo',
+    },
+    PLACEHOLDERS: {
+      NAME: 'Ex: Maria Silva',
+      LOGIN: 'Ex: maria.silva',
+      EMAIL: 'Ex: maria@empresa.com',
+      PASSWORD: 'Defina uma senha forte (>= 12 caracteres)',
+      ROLE: 'Selecione o perfil',
+      SECTOR: 'Ex: INJEÇÃO',
+      SHIFT: 'Ex: A',
+    },
+    BUTTONS: {
+      SAVE: 'Salvar',
+      CANCEL: 'Cancelar',
+    },
+    VALIDATION_MESSAGES: {
+      NAME_REQUIRED: 'Informe o nome.',
+      LOGIN_REQUIRED: 'Informe o login.',
+      EMAIL_REQUIRED: 'Informe o e-mail.',
+      EMAIL_INVALID: 'E-mail inválido.',
+      PASSWORD_REQUIRED: 'Informe a senha.',
+      PASSWORD_MIN_LENGTH: (min: number) => `A senha deve ter pelo menos ${min} caracteres.`,
+      ROLE_REQUIRED: 'Selecione o perfil.',
+    },
+  },
+  DEACTIVATE_CONFIRM: {
+    TITLE: 'Desativar usuário?',
+    DESCRIPTION:
+      'O usuário perde acesso ao sistema mas o histórico de auditoria é preservado. Você pode reativá-lo editando o cadastro.',
+    OK_TEXT: 'Desativar',
+    CANCEL_TEXT: 'Cancelar',
+  },
+  NOTIFICATIONS: {
+    WARNING: { KEYS: {}, TITLES: {}, MESSAGES: {} },
+    ERROR: {
+      KEYS: {
+        LIST_FAILED: 'users-list-failed',
+        CREATE_FAILED: 'users-create-failed',
+        UPDATE_FAILED: 'users-update-failed',
+        DEACTIVATE_FAILED: 'users-deactivate-failed',
+        ALREADY_EXISTS: 'users-already-exists',
+      },
+      TITLES: {
+        LIST_FAILED: 'Falha ao listar usuários',
+        CREATE_FAILED: 'Falha ao cadastrar usuário',
+        UPDATE_FAILED: 'Falha ao atualizar usuário',
+        DEACTIVATE_FAILED: 'Falha ao desativar usuário',
+        ALREADY_EXISTS: 'Login ou e-mail já em uso',
+      },
+      MESSAGES: {
+        LIST_FAILED: 'Não foi possível carregar os usuários.',
+        CREATE_FAILED: 'Verifique os campos e tente novamente.',
+        UPDATE_FAILED: 'Não foi possível atualizar o usuário.',
+        DEACTIVATE_FAILED: 'Não foi possível desativar o usuário.',
+        ALREADY_EXISTS: 'Escolha outro login ou e-mail e tente novamente.',
+      },
+    },
+    SUCCESS: {
+      KEYS: {
+        CREATED: 'users-created',
+        UPDATED: 'users-updated',
+        DEACTIVATED: 'users-deactivated',
+      },
+      TITLES: {
+        CREATED: 'Usuário cadastrado',
+        UPDATED: 'Usuário atualizado',
+        DEACTIVATED: 'Usuário desativado',
+      },
+      MESSAGES: {
+        CREATED: 'O novo acesso já foi liberado.',
+        UPDATED: 'Os dados do usuário foram salvos.',
+        DEACTIVATED: 'O usuário perdeu acesso ao sistema.',
+      },
+    },
+  },
+} as const;
+
+export const MACHINE_REGISTER = {
+  KEY: 'machine-register',
+  DRAWER: {
+    TITLE_CREATE: 'Cadastrar máquina',
+    TITLE_EDIT: 'Editar máquina',
+    TABS: {
+      IDENTIFICATION: 'Identificação',
+      CAPTURE: 'Captura IoT · MQTT',
+      CYCLE: 'Parâmetros de ciclo',
+      ESCALATION: 'Escalonamento de PARADA',
+      SECTOR_SHIFT: 'Setor e Turnos',
+    },
+    LABELS: {
+      CODE: 'Código curto',
+      DESCRIPTION: 'Descrição',
+      SECTOR: 'Setor',
+      MQTT_TOPIC: 'Tópico MQTT (gerado automaticamente)',
+      STANDARD_CYCLE_MS: 'Ciclo padrão (ms)',
+      TOLERANCE_FACTOR: 'Fator de tolerância (> 1.0)',
+      CONSECUTIVE_PAUSES_TO_STOP: 'Pausas consecutivas para PARADA',
+      OFFLINE_WINDOW_MS: 'Janela offline (ms)',
+      ACTIVE: 'Máquina ativa',
+      SHIFTS: 'Turnos atendidos',
+      PREVIEW_TITLE: 'Pré-visualização',
+      PREVIEW_FALLBACK: 'Preencha o código para visualizar.',
+    },
+    PLACEHOLDERS: {
+      CODE: 'Ex: MAQ-01',
+      DESCRIPTION: 'Ex: Injetora 80t linha A',
+      SECTOR: 'Ex: INJEÇÃO',
+      STANDARD_CYCLE_MS: 'Ex: 2000',
+      TOLERANCE_FACTOR: 'Ex: 1.5',
+      CONSECUTIVE_PAUSES_TO_STOP: 'Ex: 3',
+      OFFLINE_WINDOW_MS: 'Ex: 60000',
+    },
+    BUTTONS: {
+      SAVE: 'Salvar',
+      CANCEL: 'Cancelar',
+    },
+    HINTS: {
+      CODE_IMMUTABLE: 'O código não pode ser alterado depois de cadastrado.',
+      TOPIC_AUTO: 'Tópico derivado do código curto. Configure o microcontrolador para publicar nele.',
+    },
+    SHIFT_OPTIONS: [
+      { value: 'A', label: 'Turno A' },
+      { value: 'B', label: 'Turno B' },
+      { value: 'C', label: 'Turno C' },
+    ],
+    VALIDATION_MESSAGES: {
+      CODE_REQUIRED: 'Informe o código curto.',
+      DESCRIPTION_REQUIRED: 'Informe a descrição.',
+      STANDARD_CYCLE_REQUIRED: 'Informe o ciclo padrão em ms.',
+      STANDARD_CYCLE_MIN: 'O ciclo padrão deve ser maior que zero.',
+      TOLERANCE_REQUIRED: 'Informe o fator de tolerância.',
+      TOLERANCE_MIN: 'O fator de tolerância deve ser maior que 1.0.',
+      CONSECUTIVE_REQUIRED: 'Informe quantas pausas escalam para PARADA.',
+      CONSECUTIVE_MIN: 'Mínimo de 1 pausa consecutiva.',
+      OFFLINE_REQUIRED: 'Informe a janela offline em ms.',
+      OFFLINE_MIN: 'A janela offline deve ser maior que zero.',
+    },
+  },
+} as const;
+
+export const ERP_MAPPING = {
+  KEY: 'erp-mapping',
+  KPIS: {
+    TITLE: 'Indicadores ERP',
+    TOTAL_ORDERS: 'OS sincronizadas',
+    SYNCED: 'OS sincronizadas (< 1h)',
+    PENDING: 'OS pendentes (>= 1h)',
+    LAST_SYNC: 'Última sincronização',
+    LAST_SYNC_FALLBACK: 'Sem registros',
+  },
+  PAGE: {
+    TITLE: 'Integração ERP',
+    SUBTITLE: 'Status da sincronização de ordens de produção e mapeamento de campos.',
+    BUTTONS: {
+      EDIT_MAPPING: 'Editar mapeamento',
+      REFRESH: 'Atualizar',
+    },
+    TABLE_TITLE: 'Ordens recentes',
+  },
+  DRAWER: {
+    TITLE: 'Mapeamento de campos ERP',
+    SUBTITLE: 'Defina como cada campo de Ordem de Produção do NJPlastic é lido do ERP.',
+    ENTITY_TYPE: 'PRODUCTION_ORDER',
+    LABELS: {
+      NJ_FIELD: 'Campo NJPlastic',
+      ERP_COLUMN: 'Coluna no ERP',
+      DESCRIPTION: 'Descrição',
+    },
+    KEYS: {
+      NJ_FIELD: 'njField',
+      ERP_COLUMN: 'erpColumn',
+      DESCRIPTION: 'description',
+    },
+    PLACEHOLDERS: {
+      ERP_COLUMN: 'Ex: ord_codigo',
+    },
+    BUTTONS: {
+      SAVE: 'Salvar mapeamento',
+      CANCEL: 'Cancelar',
+    },
+    VALIDATION_MESSAGES: {
+      COLUMN_REQUIRED: 'Informe a coluna do ERP.',
+    },
+  },
+  NOTIFICATIONS: {
+    WARNING: { KEYS: {}, TITLES: {}, MESSAGES: {} },
+    ERROR: {
+      KEYS: {
+        LOAD_FAILED: 'erp-mapping-load-failed',
+        UPDATE_FAILED: 'erp-mapping-update-failed',
+        KPIS_FAILED: 'erp-mapping-kpis-failed',
+      },
+      TITLES: {
+        LOAD_FAILED: 'Falha ao carregar mapeamento',
+        UPDATE_FAILED: 'Falha ao salvar mapeamento',
+        KPIS_FAILED: 'Falha ao carregar indicadores ERP',
+      },
+      MESSAGES: {
+        LOAD_FAILED: 'Não foi possível carregar o mapeamento de campos ERP.',
+        UPDATE_FAILED: 'Não foi possível salvar o mapeamento. Tente novamente.',
+        KPIS_FAILED: 'Não foi possível carregar os indicadores. Tente novamente.',
+      },
+    },
+    SUCCESS: {
+      KEYS: {
+        UPDATED: 'erp-mapping-updated',
+      },
+      TITLES: {
+        UPDATED: 'Mapeamento atualizado',
+      },
+      MESSAGES: {
+        UPDATED: 'A alteração foi registrada em auditoria (RF20).',
+      },
+    },
+  },
+} as const;
+
+export const AUDIT = {
+  KEY: 'audit',
+  PAGE: {
+    TITLE: 'Auditoria',
+    SUBTITLE: 'Trilha de auditoria do sistema (RF20 / RN12). Payloads já são sanitizados.',
+  },
+  LIST: {
+    LABELS: {
+      TIMESTAMP: 'Quando',
+      USER: 'Usuário',
+      METHOD: 'Método',
+      ENDPOINT: 'Endpoint',
+      STATUS: 'Status',
+      DURATION_MS: 'Duração (ms)',
+      SOURCE_IP: 'IP de origem',
+      ACTIONS: 'Detalhes',
+    },
+    KEYS: {
+      TIMESTAMP: 'timestamp',
+      USER: 'userId',
+      METHOD: 'httpMethod',
+      ENDPOINT: 'endpoint',
+      STATUS: 'httpStatus',
+      DURATION_MS: 'durationMs',
+      SOURCE_IP: 'sourceIp',
+      ACTIONS: 'actions',
+    },
+    EMPTY_TITLE: 'Sem registros para os filtros aplicados',
+    EMPTY_DESCRIPTION: 'Ajuste os filtros para visualizar a trilha de auditoria.',
+  },
+  FILTERS: {
+    USER_ID: 'UUID do usuário',
+    USER_ID_PLACEHOLDER: 'Cole o UUID exato do usuário',
+    ENDPOINT: 'Endpoint (contém)',
+    ENDPOINT_PLACEHOLDER: 'Ex: /users',
+    METHOD: 'Método HTTP',
+    METHOD_PLACEHOLDER: 'Selecione o método',
+    STATUS_CODE: 'Status HTTP',
+    STATUS_CODE_PLACEHOLDER: 'Selecione o status',
+    PERIOD: 'Período',
+    APPLY: 'Aplicar',
+    CLEAR: 'Limpar',
+    METHOD_OPTIONS: [
+      { value: 'GET', label: 'GET' },
+      { value: 'POST', label: 'POST' },
+      { value: 'PUT', label: 'PUT' },
+      { value: 'PATCH', label: 'PATCH' },
+      { value: 'DELETE', label: 'DELETE' },
+    ],
+    STATUS_OPTIONS: [
+      { value: 200, label: '200 — OK' },
+      { value: 201, label: '201 — Created' },
+      { value: 204, label: '204 — No Content' },
+      { value: 400, label: '400 — Bad Request' },
+      { value: 401, label: '401 — Unauthorized' },
+      { value: 403, label: '403 — Forbidden' },
+      { value: 404, label: '404 — Not Found' },
+      { value: 409, label: '409 — Conflict' },
+      { value: 422, label: '422 — Unprocessable Entity' },
+      { value: 500, label: '500 — Internal Server Error' },
+    ],
+  },
+  DETAIL_MODAL: {
+    TITLE: 'Detalhe da entrada de auditoria',
+    LABELS: {
+      REQUEST_PAYLOAD: 'Request payload',
+      RESPONSE_PAYLOAD: 'Response payload',
+      EMPTY: 'Sem corpo registrado.',
+    },
+    BUTTONS: {
+      CLOSE: 'Fechar',
+    },
+  },
+  NOTIFICATIONS: {
+    WARNING: {
+      KEYS: {
+        INVALID_UUID: 'audit-invalid-uuid',
+      },
+      TITLES: {
+        INVALID_UUID: 'UUID inválido',
+      },
+      MESSAGES: {
+        INVALID_UUID:
+          'Cole um UUID completo (formato 8-4-4-4-12) ou deixe o campo vazio para buscar todos os usuários.',
+      },
+    },
+    ERROR: {
+      KEYS: {
+        LIST_FAILED: 'audit-list-failed',
+      },
+      TITLES: {
+        LIST_FAILED: 'Falha ao carregar a auditoria',
+      },
+      MESSAGES: {
+        LIST_FAILED: 'Não foi possível carregar os registros de auditoria.',
+      },
+    },
+    SUCCESS: { KEYS: {}, TITLES: {}, MESSAGES: {} },
   },
 } as const;
 

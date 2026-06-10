@@ -162,4 +162,44 @@ export interface IMachineService {
     stopId: string,
     suppressError?: boolean,
   ): Promise<Page<Schemas['StopEditDTO']>>;
+
+  /**
+   * Registers a new machine (EP-BE-08 sub-task 2). The backend
+   * validates uniqueness of the short code; on conflict it returns
+   * 409. The machine is created active.
+   *
+   * @param payload - Create payload (code, description, sector, cycle params).
+   * @param suppressError - Optional. If set to `true`, suppresses errors that may occur during the request.
+   * @returns A promise resolving to the created machine projection.
+   */
+  createMachine(
+    payload: Schemas['MachineRequestDTO'],
+    suppressError?: boolean,
+  ): Promise<Schemas['MachineDetailResponseDTO']>;
+
+  /**
+   * Updates an existing machine. The short code is immutable on this
+   * endpoint - it identifies the machine on the MQTT payload
+   * (RFC §5.3) and on historical cycles.
+   *
+   * @param machineId - The machine UUID.
+   * @param payload - Update payload (description, sector, cycle params, active).
+   * @param suppressError - Optional. If set to `true`, suppresses errors that may occur during the request.
+   * @returns A promise resolving to the updated machine projection.
+   */
+  updateMachine(
+    machineId: string,
+    payload: Schemas['MachineUpdateRequestDTO'],
+    suppressError?: boolean,
+  ): Promise<Schemas['MachineDetailResponseDTO']>;
+
+  /**
+   * Soft-deletes a machine. Flips the `active` flag to `false` while
+   * preserving cycle history and audit traceability.
+   *
+   * @param machineId - The machine UUID.
+   * @param suppressError - Optional. If set to `true`, suppresses errors that may occur during the request.
+   * @returns A promise resolving once the request is acknowledged.
+   */
+  softDeleteMachine(machineId: string, suppressError?: boolean): Promise<void>;
 }

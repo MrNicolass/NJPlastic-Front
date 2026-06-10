@@ -10,11 +10,14 @@ import { Empty, List, Skeleton, Space, Typography } from 'antd';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/pt-br';
-import { useImperativeHandle, useMemo, type Ref } from 'react';
+import { useImperativeHandle, useMemo } from 'react';
 import { EVENTS } from '@/constants/ConstantsAndParams';
 import { usePolling } from '@/hooks/usePolling';
+import type { RecentEventsPanelHandle, RecentEventsPanelProps } from '@/models/interfaces/components/RecentEventsPanelProps';
 import type { RecentEventResponse, RecentEventType } from '@/models/types/RecentEvent';
 import ProductionEventService from '@/services/ProductionEventService';
+
+export type { RecentEventsPanelHandle } from '@/models/interfaces/components/RecentEventsPanelProps';
 
 dayjs.extend(relativeTime);
 try {
@@ -42,14 +45,6 @@ const fetchRecent = async (): Promise<RecentEventResponse[]> => {
   return ProductionEventService.findRecent(RECENT_LIMIT, from.toISOString(), to.toISOString(), true);
 };
 
-export type RecentEventsPanelHandle = {
-  refetch: () => Promise<void>;
-};
-
-type RecentEventsPanelProps = {
-  panelRef?: Ref<RecentEventsPanelHandle>;
-  onItemClick?: (event: RecentEventResponse) => void;
-};
 
 /**
  * Right-column panel of the Leader dashboard (EP-FE-05 item 6, mockup

@@ -1,12 +1,7 @@
 import { create } from 'zustand';
+import type { Role, SessionUser } from '@/models/types/Session';
 
-export type Role = 'OPERATOR' | 'LEADER' | 'MANAGER' | 'ADMIN';
-
-export type SessionUser = {
-  id: string;
-  name: string;
-  login: string;
-};
+export type { Role, SessionUser } from '@/models/types/Session';
 
 type SessionPayload = {
   user: SessionUser;

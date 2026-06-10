@@ -4,26 +4,14 @@ import { Button, DatePicker, Form, InputNumber, Modal, Space, Typography } from 
 import dayjs, { type Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
 import { MACHINES } from '@/constants/ConstantsAndParams';
+import type { RegisterQualityModalProps } from '@/models/interfaces/components/ModalProps';
+import type { RegisterQualityFormValues as FormValues } from '@/models/types/RegisterQualityFormValues';
 import MachineService from '@/services/MachineService';
 import { NotificationUtils } from '@/utils/NotificationUtils';
 
+export type { RegisterQualityModalProps } from '@/models/interfaces/components/ModalProps';
+
 const { Paragraph, Text } = Typography;
-
-export type RegisterQualityModalProps = {
-  open: boolean;
-  onClose(): void;
-  machineId: string;
-  machineCode: string;
-  defaultFrom?: string;
-  defaultTo?: string;
-  onRegistered?(): void;
-};
-
-type FormValues = {
-  goodCount: number;
-  totalCount: number;
-  range: [Dayjs, Dayjs];
-};
 
 const DEFAULT_WINDOW_HOURS = 8;
 

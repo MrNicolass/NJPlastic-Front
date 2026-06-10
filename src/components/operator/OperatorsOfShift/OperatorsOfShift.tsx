@@ -2,18 +2,13 @@
 
 import { Card, Empty, List, Tag, Typography } from 'antd';
 import { MACHINES } from '@/constants/ConstantsAndParams';
+import type { OperatorsOfShiftProps } from '@/models/interfaces/components/MachineProps';
+import type { OperatorOfShift } from '@/models/types/OperatorsOfShift';
+
+export type { OperatorOfShift } from '@/models/types/OperatorsOfShift';
+export type { OperatorsOfShiftProps } from '@/models/interfaces/components/MachineProps';
 
 const { Text } = Typography;
-
-export type OperatorOfShift = {
-  id: string;
-  name: string;
-  shift?: string;
-};
-
-export type OperatorsOfShiftProps = {
-  operators: OperatorOfShift[];
-};
 
 /**
  * Lists the operators currently associated with this machine in the

@@ -3,21 +3,14 @@
 import { Empty, Segmented, Space, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { MACHINES } from '@/constants/ConstantsAndParams';
+import type { CycleTimeChartProps } from '@/models/interfaces/components/MachineProps';
+import type { CyclePoint } from '@/models/types/CycleTimeChart';
 import { njPalette } from '@/theme/njTheme';
 
+export type { CyclePoint } from '@/models/types/CycleTimeChart';
+export type { CycleTimeChartProps } from '@/models/interfaces/components/MachineProps';
+
 const { Text } = Typography;
-
-export type CyclePoint = {
-  timestamp: string;
-  intervalMs: number;
-};
-
-export type CycleTimeChartProps = {
-  cycles: CyclePoint[];
-  standardCycleMs: number;
-  toleranceFactor: number;
-  aggregationWindowMs?: number;
-};
 
 type RangeKey = '4H' | 'SHIFT' | '24H' | '7D';
 

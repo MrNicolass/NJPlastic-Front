@@ -5,11 +5,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { AUTH } from '@/constants/ConstantsAndParams';
+import type { RequestFormValues } from '@/models/types/AuthFormValues';
 import AuthService from '@/services/AuthService';
-
-type RequestFormValues = {
-  login: string;
-};
 
 export default function ForgotPasswordPage() {
   const router = useRouter();

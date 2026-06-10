@@ -4,8 +4,11 @@ import axios, {
   type InternalAxiosRequestConfig,
 } from 'axios';
 import { GENERIC_NOTIFICATIONS } from '@/constants/ConstantsAndParams';
+import type { NotificationConfig } from '@/models/types/NotificationConfig';
 import { readAccessTokenExpSeconds } from '@/utils/CookieUtils';
 import { NotificationUtils } from '@/utils/NotificationUtils';
+
+export type { NotificationConfig } from '@/models/types/NotificationConfig';
 
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8111';
 
@@ -16,16 +19,6 @@ const REFRESH_BYPASS_PATHS = [
   '/auth/password-reset',
   '/auth/password-reset/confirm',
 ];
-
-export type NotificationConfig = {
-  key?: string;
-  successMessage?: string;
-  successDescription?: string;
-  errorMessage?: string;
-  errorDescription?: string;
-  suppressErrorNotification?: boolean;
-  suppressSuccessNotification?: boolean;
-};
 
 declare module 'axios' {
   export interface AxiosRequestConfig {

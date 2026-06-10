@@ -4,24 +4,15 @@ import { Table, Tag, Typography } from 'antd';
 import type { TablePaginationConfig } from 'antd';
 import dayjs from 'dayjs';
 import { ORDERS, UTILS } from '@/constants/ConstantsAndParams';
+import type { OrdersTableProps } from '@/models/interfaces/components/OrderProps';
 import type { ProductionOrderResponse } from '@/models/types/ProductionOrderResponse';
 import { resolveSyncStatus, SyncStatusBadge } from '@/components/orders/SyncStatusBadge';
+
+export type { OrdersTableProps } from '@/models/interfaces/components/OrderProps';
 
 const { Text } = Typography;
 
 type OrderRow = ProductionOrderResponse;
-
-type OrdersTableProps = {
-  rows: OrderRow[];
-  loading: boolean;
-  pagination: {
-    page: number;
-    size: number;
-    totalElements: number;
-  };
-  onPageChange: (page: number, size: number) => void;
-  machineCodeById: Map<string, string>;
-};
 
 const columns = (machineCodeById: Map<string, string>) => [
   {

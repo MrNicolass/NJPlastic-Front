@@ -5,34 +5,19 @@ import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
 import type { Schemas } from '@/api/types';
 import { MACHINES, UTILS } from '@/constants/ConstantsAndParams';
+import type { StopMessageEditModalProps } from '@/models/interfaces/components/ModalProps';
 import MachineService from '@/services/MachineService';
 import type { Role } from '@/stores/useSessionStore';
 import { njPalette } from '@/theme/njTheme';
 import { NotificationUtils } from '@/utils/NotificationUtils';
 import { categoriesForRole } from './categories';
 
+export type { StopMessageEditModalProps } from '@/models/interfaces/components/ModalProps';
+
 const { Paragraph, Text } = Typography;
 
 const MESSAGE_MIN_LENGTH = 8;
 const MESSAGE_MAX_LENGTH = 500;
-
-export type StopMessageEditModalProps = {
-  open: boolean;
-  onClose(): void;
-  machineId: string;
-  machineCode: string;
-  stopId: string;
-  userRole: Role;
-  currentMessage: string;
-  currentMessageAuthor?: { name: string; editedAt: string } | null;
-  detectedAt: string;
-  scopeSectorLabel?: string;
-  scopeShiftLabel?: string;
-  editHistory?: Schemas['StopEditDTO'][];
-  editHistoryLoading?: boolean;
-  editHistoryError?: unknown;
-  onSaved?(): void;
-};
 
 const formatDateTime = (iso: string): string => dayjs(iso).format(UTILS.DATE_FORMATS.DISPLAY);
 

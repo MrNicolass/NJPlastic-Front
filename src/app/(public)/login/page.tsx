@@ -6,15 +6,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useState } from 'react';
 import { AUTH } from '@/constants/ConstantsAndParams';
 import { DEFAULT_AUTHENTICATED_ROUTE } from '@/constants/Routes';
+import type { LoginFormValues } from '@/models/types/AuthFormValues';
 import AuthService from '@/services/AuthService';
 import { useSessionStore } from '@/stores/useSessionStore';
 import { njPalette } from '@/theme/njTheme';
-
-type LoginFormValues = {
-  login: string;
-  password: string;
-  remember?: boolean;
-};
 
 const PASSWORD_MIN_LENGTH = 12;
 

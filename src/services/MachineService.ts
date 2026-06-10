@@ -209,6 +209,62 @@ const MachineService: IMachineService = {
       throw error;
     }
   },
+
+  async createMachine(
+    payload: Schemas['MachineRequestDTO'],
+    suppressError?: boolean,
+  ): Promise<Schemas['MachineDetailResponseDTO']> {
+    try {
+      const response: AxiosResponse<Schemas['MachineDetailResponseDTO']> = await http.post(
+        '/machines',
+        payload,
+        {
+          notificationConfig: buildNotificationConfig(MACHINES.KEY, suppressError, {
+            successMessage: MACHINES.NOTIFICATIONS.SUCCESS.TITLES.MACHINE_CREATED,
+            successDescription: MACHINES.NOTIFICATIONS.SUCCESS.MESSAGES.MACHINE_CREATED,
+          }),
+        },
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async updateMachine(
+    machineId: string,
+    payload: Schemas['MachineUpdateRequestDTO'],
+    suppressError?: boolean,
+  ): Promise<Schemas['MachineDetailResponseDTO']> {
+    try {
+      const response: AxiosResponse<Schemas['MachineDetailResponseDTO']> = await http.put(
+        `/machines/${machineId}`,
+        payload,
+        {
+          notificationConfig: buildNotificationConfig(MACHINES.KEY, suppressError, {
+            successMessage: MACHINES.NOTIFICATIONS.SUCCESS.TITLES.MACHINE_UPDATED,
+            successDescription: MACHINES.NOTIFICATIONS.SUCCESS.MESSAGES.MACHINE_UPDATED,
+          }),
+        },
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async softDeleteMachine(machineId: string, suppressError?: boolean): Promise<void> {
+    try {
+      await http.delete(`/machines/${machineId}`, {
+        notificationConfig: buildNotificationConfig(MACHINES.KEY, suppressError, {
+          successMessage: MACHINES.NOTIFICATIONS.SUCCESS.TITLES.MACHINE_DEACTIVATED,
+          successDescription: MACHINES.NOTIFICATIONS.SUCCESS.MESSAGES.MACHINE_DEACTIVATED,
+        }),
+      });
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default MachineService;

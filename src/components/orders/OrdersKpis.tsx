@@ -3,10 +3,9 @@
 import { Col, Row, Statistic } from 'antd';
 import type { Schemas } from '@/api/types';
 import { ORDERS } from '@/constants/ConstantsAndParams';
+import type { OrdersKpisProps } from '@/models/interfaces/components/OrderProps';
 
-type OrdersKpisProps = {
-  summary: Schemas['ProductionOrderSummaryDTO'] | null;
-};
+export type { OrdersKpisProps } from '@/models/interfaces/components/OrderProps';
 
 /**
  * Top strip of {@code /ordens} (mockup OS_Part1_V1). Renders the four

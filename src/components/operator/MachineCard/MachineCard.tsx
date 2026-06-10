@@ -3,21 +3,14 @@
 import { Badge, Button, Card, Space, Tag, Typography } from 'antd';
 import type { Schemas } from '@/api/types';
 import { MACHINES } from '@/constants/ConstantsAndParams';
+import type { MachineCardProps } from '@/models/interfaces/components/MachineProps';
 import { njPalette } from '@/theme/njTheme';
+
+export type { MachineCardProps } from '@/models/interfaces/components/MachineProps';
 
 const { Text } = Typography;
 
 type MachineState = Schemas['MachineStatusEntryDTO']['state'];
-
-export type MachineCardProps = {
-  machine: Schemas['MachineSummaryDTO'];
-  currentState: MachineState | null;
-  currentStop: Schemas['MachineStatusEntryDTO'] | null;
-  cyclesInShift?: number;
-  onRegisterPause?(): void;
-  onEditStopMessage?(): void;
-  onViewDetail(): void;
-};
 
 const STATE_BADGE_COLOR: Record<MachineState | 'UNKNOWN', string> = {
   RUNNING: njPalette.cobalt,

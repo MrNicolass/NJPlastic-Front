@@ -6,7 +6,9 @@ import dayjs from 'dayjs';
 import { useParams, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Schemas } from '@/api/types';
-import { CycleTimeChart, type CyclePoint } from '@/components/operator/CycleTimeChart';
+import { CycleTimeChart } from '@/components/operator/CycleTimeChart';
+import type { CyclePoint } from '@/models/types/CycleTimeChart';
+import type { MachineSnapshot } from '@/models/types/MachineDetail';
 import { MachineKpis } from '@/components/operator/MachineKpis';
 import { MachineStatusTimeline } from '@/components/operator/MachineStatusTimeline';
 import { MachineStopsTable } from '@/components/operator/MachineStopsTable';
@@ -29,15 +31,6 @@ const { Text, Title } = Typography;
 const DETAIL_POLL_INTERVAL_MS = 5000;
 const STATUS_LOOKBACK_HOURS = 8;
 const CYCLES_PAGE_SIZE = 200;
-
-type MachineSnapshot = {
-  detail: Schemas['MachineDetailResponseDTO'];
-  status: Schemas['MachineStatusResponseDTO'];
-  cycles: CyclePoint[];
-  oee: Schemas['OeeResultDTO'] | null;
-  windowStartIso: string;
-  windowEndIso: string;
-};
 
 type Entry = Schemas['MachineStatusEntryDTO'];
 

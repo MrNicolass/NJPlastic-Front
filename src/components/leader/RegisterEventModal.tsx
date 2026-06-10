@@ -5,26 +5,14 @@ import dayjs, { type Dayjs } from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 import type { Schemas } from '@/api/types';
 import { EVENTS } from '@/constants/ConstantsAndParams';
+import type { RegisterEventModalProps } from '@/models/interfaces/components/ModalProps';
+import type { EventTypeKey, RegisterEventFormValues } from '@/models/types/RegisterEventFormValues';
 import MachineService from '@/services/MachineService';
 import ProductionEventService from '@/services/ProductionEventService';
 
+export type { RegisterEventModalProps } from '@/models/interfaces/components/ModalProps';
+
 const { Text } = Typography;
-
-type EventTypeKey = keyof typeof EVENTS.TYPES;
-
-type RegisterEventFormValues = {
-  machineId: string;
-  type: EventTypeKey;
-  description?: string;
-  startedAt: Dayjs;
-  endedAt?: Dayjs | null;
-};
-
-type RegisterEventModalProps = {
-  open: boolean;
-  onClose: () => void;
-  onRegistered?: () => void;
-};
 
 const DESCRIPTION_MAX = 500;
 

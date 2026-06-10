@@ -4,13 +4,14 @@ import { Col, Empty, Row, Skeleton, Space, Statistic, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
-import type { Schemas } from '@/api/types';
-import { AttentionBanner, type UnreviewedAutoStop } from '@/components/operator/AttentionBanner';
+import { AttentionBanner } from '@/components/operator/AttentionBanner';
 import { MachineCard } from '@/components/operator/MachineCard';
 import { RegisterPauseModal } from '@/components/operator/RegisterPauseModal';
 import { StopMessageEditModal } from '@/components/shared/StopMessageEditModal';
 import { MACHINES, UTILS } from '@/constants/ConstantsAndParams';
 import { usePolling } from '@/hooks/usePolling';
+import type { OperatorDashboardEntry as DashboardEntry, OperatorDashboardSnapshot as DashboardSnapshot, OperatorActiveStopModal as ActiveStopModal, ActivePauseModal } from '@/models/types/OperatorDashboard';
+import type { UnreviewedAutoStop } from '@/models/types/UnreviewedAutoStop';
 import MachineService from '@/services/MachineService';
 import { useSessionStore } from '@/stores/useSessionStore';
 import { NotificationUtils } from '@/utils/NotificationUtils';
@@ -19,15 +20,6 @@ const { Title, Text } = Typography;
 
 const DASHBOARD_POLL_INTERVAL_MS = 5000;
 const STATUS_LOOKBACK_HOURS = 2;
-
-type DashboardEntry = {
-  machine: Schemas['MachineSummaryDTO'];
-  status: Schemas['MachineStatusResponseDTO'] | null;
-};
-
-type DashboardSnapshot = {
-  entries: DashboardEntry[];
-};
 
 const fetchDashboardSnapshot = async (): Promise<DashboardSnapshot> => {
   const machines = await MachineService.listMachines(true);
@@ -68,18 +60,6 @@ const collectUnreviewedAutoStops = (entries: DashboardEntry[]): UnreviewedAutoSt
     });
   }
   return items;
-};
-
-type ActiveStopModal = {
-  machineId: string;
-  machineCode: string;
-  stop: Schemas['MachineStatusEntryDTO'];
-};
-
-type ActivePauseModal = {
-  machineId: string;
-  machineCode: string;
-  pauseStartedAt: string;
 };
 
 /**

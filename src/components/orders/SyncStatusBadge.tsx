@@ -2,8 +2,11 @@
 
 import { Tag } from 'antd';
 import { ORDERS } from '@/constants/ConstantsAndParams';
+import type { SyncStatusBadgeProps } from '@/models/interfaces/components/OrderProps';
+import type { SyncStatus } from '@/models/types/SyncStatus';
 
-export type SyncStatus = 'SYNCED' | 'PENDING' | 'ERROR_RETRY' | 'UNKNOWN';
+export type { SyncStatus } from '@/models/types/SyncStatus';
+export type { SyncStatusBadgeProps } from '@/models/interfaces/components/OrderProps';
 
 const COLOR_BY_STATUS: Record<SyncStatus, string> = {
   SYNCED: 'green',
@@ -34,10 +37,6 @@ export function resolveSyncStatus(lastSyncAt: string | undefined): SyncStatus {
   }
   return 'PENDING';
 }
-
-type SyncStatusBadgeProps = {
-  status: SyncStatus;
-};
 
 export function SyncStatusBadge({ status }: SyncStatusBadgeProps) {
   return <Tag color={COLOR_BY_STATUS[status]}>{ORDERS.SYNC_STATUS_LABELS[status]}</Tag>;

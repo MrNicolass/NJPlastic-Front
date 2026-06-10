@@ -1,10 +1,8 @@
 import { MACHINES } from '@/constants/ConstantsAndParams';
+import type { StopMessageCategory } from '@/models/types/StopMessageCategory';
 import type { Role } from '@/stores/useSessionStore';
 
-export type StopMessageCategory = {
-  value: string;
-  label: string;
-};
+export type { StopMessageCategory } from '@/models/types/StopMessageCategory';
 
 /**
  * Returns the category list rendered by the variant of {@link

@@ -36,21 +36,17 @@ export function NotificationUtils(args: NotificationUtilsArgs): void {
   if (typeof window === 'undefined') {
     return;
   }
+
   const fallback = args.defaultType ? GENERIC_NOTIFICATIONS : null;
-  const kind: NotificationKind =
-    args.type ?? (args.defaultType ? DEFAULT_TYPE_TO_KIND[args.defaultType] : 'info');
-  const key =
-    args.key ??
-    (args.defaultType ? GENERIC_NOTIFICATIONS.KEYS[args.defaultType] : undefined);
-  const title =
-    args.message ?? (args.defaultType && fallback ? fallback.TITLES[args.defaultType] : '');
-  const description =
-    args.description ??
-    (args.defaultType && fallback ? fallback.MESSAGES[args.defaultType] : undefined);
+  const kind: NotificationKind = args.type ?? (args.defaultType ? DEFAULT_TYPE_TO_KIND[args.defaultType] : 'info');
+  const key = args.key ?? (args.defaultType ? GENERIC_NOTIFICATIONS.KEYS[args.defaultType] : undefined);
+  const title = args.message ?? (args.defaultType && fallback ? fallback.TITLES[args.defaultType] : '');
+  const description = args.description ?? (args.defaultType && fallback ? fallback.MESSAGES[args.defaultType] : undefined);
 
   if (key) {
     notification.destroy(key);
   }
+
   notification[kind]({
     key,
     title,

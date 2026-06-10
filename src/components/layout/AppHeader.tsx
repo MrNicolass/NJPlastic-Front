@@ -4,17 +4,15 @@ import { LogoutOutlined } from '@ant-design/icons';
 import { Avatar, Button, Layout, Tag, Typography } from 'antd';
 import { LAYOUT } from '@/constants/ConstantsAndParams';
 import { useLogout } from '@/hooks/useLogout';
-import type { Role, SessionUser } from '@/stores/useSessionStore';
+import type { AppHeaderProps } from '@/models/interfaces/components/LayoutProps';
+import type { Role } from '@/stores/useSessionStore';
 import { njPalette } from '@/theme/njTheme';
+
+export type { AppHeaderProps } from '@/models/interfaces/components/LayoutProps';
 
 const { Header } = Layout;
 const { Text } = Typography;
 const { LABELS } = LAYOUT.HEADER;
-
-type AppHeaderProps = {
-  user: SessionUser;
-  role: Role;
-};
 
 const ROLE_LABELS: Record<Role, string> = {
   OPERATOR: LABELS.ROLE_OPERATOR,

@@ -1,14 +1,5 @@
-import type { Role } from '@/stores/useSessionStore';
-
-export type JwtPayload = {
-  sub?: string;
-  exp?: number;
-  iat?: number;
-  iss?: string;
-  role?: Role;
-  sector?: string;
-  shift?: string;
-};
+export type { JwtPayload } from '@/models/types/JwtPayload';
+import type { JwtPayload } from '@/models/types/JwtPayload';
 
 /**
  * Decodes the payload section of a compact JWT without verifying the

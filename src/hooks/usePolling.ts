@@ -1,19 +1,9 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import type { UsePollingOptions, UsePollingResult } from '@/models/types/UsePolling';
 
-export type UsePollingOptions = {
-  enabled?: boolean;
-  pauseInBackground?: boolean;
-};
-
-export type UsePollingResult<T> = {
-  data: T | null;
-  loading: boolean;
-  error: unknown;
-  lastUpdatedAt: Date | null;
-  refetch: () => Promise<void>;
-};
+export type { UsePollingOptions, UsePollingResult } from '@/models/types/UsePolling';
 
 /**
  * Polls {@link fetcher} every {@link intervalMs} milliseconds, preserving

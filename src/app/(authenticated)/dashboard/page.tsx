@@ -3,12 +3,12 @@
 import { Skeleton } from 'antd';
 import { useCallback, useRef, useState } from 'react';
 import { LeaderDashboardPage } from '@/components/leader/LeaderDashboardPage';
-import { ManagerDashboardPlaceholder } from '@/components/leader/ManagerDashboardPlaceholder';
 import {
   RecentEventsPanel,
   type RecentEventsPanelHandle,
 } from '@/components/leader/RecentEventsPanel';
 import { RegisterEventModal } from '@/components/leader/RegisterEventModal';
+import { ManagerDashboardPage } from '@/components/manager/ManagerDashboardPage';
 import { OperatorDashboardPage } from '@/components/operator/OperatorDashboardPage';
 import { useSessionStore } from '@/stores/useSessionStore';
 
@@ -17,11 +17,15 @@ import { useSessionStore } from '@/stores/useSessionStore';
  * guarantees the principal is authenticated, but role is hydrated from the
  * client-side session store, so the very first render before hydration may
  * see role=null and falls back to a Skeleton. Operator keeps its existing
- * experience (EP-FE-04); Leader gets the consolidated dashboard (EP-FE-05)
- * wired to the Recent Events panel and the manual-event modal; Manager/Admin
- * reach a placeholder until EP-FE-06 ships.
+ * experience (EP-FE-04); Leader gets the consolidated dashboard (EP-FE-05);
+ * Manager/Admin get the EP-FE-06 manager dashboard with sector/shift
+ * filters and the full-scope StopMessageEditModal variation (RN04).
  */
-function LeaderDashboardWithSlots() {
+function DashboardWithSlots({
+  variant,
+}: {
+  variant: 'LEADER' | 'MANAGER';
+}) {
   const panelRef = useRef<RecentEventsPanelHandle>(null);
   const [registerOpen, setRegisterOpen] = useState(false);
 
@@ -31,12 +35,21 @@ function LeaderDashboardWithSlots() {
     panelRef.current?.refetch();
   }, []);
 
+  const slot = <RecentEventsPanel panelRef={panelRef} />;
+
   return (
     <>
-      <LeaderDashboardPage
-        recentEventsSlot={<RecentEventsPanel panelRef={panelRef} />}
-        onRegisterEventClick={handleOpenRegister}
-      />
+      {variant === 'LEADER' ? (
+        <LeaderDashboardPage
+          recentEventsSlot={slot}
+          onRegisterEventClick={handleOpenRegister}
+        />
+      ) : (
+        <ManagerDashboardPage
+          recentEventsSlot={slot}
+          onRegisterEventClick={handleOpenRegister}
+        />
+      )}
       <RegisterEventModal
         open={registerOpen}
         onClose={handleCloseRegister}
@@ -53,10 +66,10 @@ export default function DashboardPage() {
     return <OperatorDashboardPage />;
   }
   if (role === 'LEADER') {
-    return <LeaderDashboardWithSlots />;
+    return <DashboardWithSlots variant="LEADER" />;
   }
   if (role === 'MANAGER' || role === 'ADMIN') {
-    return <ManagerDashboardPlaceholder />;
+    return <DashboardWithSlots variant="MANAGER" />;
   }
   return <Skeleton active paragraph={{ rows: 6 }} />;
 }

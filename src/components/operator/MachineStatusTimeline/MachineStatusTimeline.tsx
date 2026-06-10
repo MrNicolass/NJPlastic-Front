@@ -4,17 +4,14 @@ import { Empty, Space, Tooltip, Typography } from 'antd';
 import { useMemo } from 'react';
 import type { Schemas } from '@/api/types';
 import { MACHINES } from '@/constants/ConstantsAndParams';
+import type { MachineStatusTimelineProps } from '@/models/interfaces/components/MachineProps';
 import { njPalette } from '@/theme/njTheme';
+
+export type { MachineStatusTimelineProps } from '@/models/interfaces/components/MachineProps';
 
 const { Text } = Typography;
 
 type State = NonNullable<Schemas['MachineStatusEntryDTO']['state']>;
-
-export type MachineStatusTimelineProps = {
-  windowStartIso: string;
-  windowEndIso: string;
-  entries: Schemas['MachineStatusEntryDTO'][];
-};
 
 const STATE_COLOR: Record<State | 'UNKNOWN', string> = {
   RUNNING: njPalette.cobalt,

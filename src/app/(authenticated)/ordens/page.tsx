@@ -3,12 +3,11 @@
 import { Button, Col, Row, Skeleton, Space, Tooltip, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { Schemas } from '@/api/types';
 import { OrdersKpis } from '@/components/orders/OrdersKpis';
 import { OrdersTable } from '@/components/orders/OrdersTable';
 import { ORDERS, UTILS } from '@/constants/ConstantsAndParams';
 import { usePolling } from '@/hooks/usePolling';
-import type { ProductionOrderResponse } from '@/models/types/ProductionOrderResponse';
+import type { OrdersSnapshot } from '@/models/types/OrdersSnapshot';
 import MachineService from '@/services/MachineService';
 import ProductionOrderService from '@/services/ProductionOrderService';
 import { NotificationUtils } from '@/utils/NotificationUtils';
@@ -17,17 +16,6 @@ const { Title, Text } = Typography;
 
 const ORDERS_POLL_INTERVAL_MS = 30_000;
 const PAGE_SIZE_DEFAULT = 20;
-
-type OrdersSnapshot = {
-  summary: Schemas['ProductionOrderSummaryDTO'] | null;
-  page: {
-    rows: ProductionOrderResponse[];
-    page: number;
-    size: number;
-    totalElements: number;
-  };
-  machines: Schemas['MachineSummaryDTO'][];
-};
 
 /**
  * Production Orders screen (EP-FE-05 item 5, UC05 + UC11). Owner is the

@@ -6,17 +6,14 @@ import dayjs from 'dayjs';
 import { useMemo } from 'react';
 import type { Schemas } from '@/api/types';
 import { MACHINES, UTILS } from '@/constants/ConstantsAndParams';
+import type { MachineStopsTableProps } from '@/models/interfaces/components/MachineProps';
 import { njPalette } from '@/theme/njTheme';
+
+export type { MachineStopsTableProps } from '@/models/interfaces/components/MachineProps';
 
 const { Text } = Typography;
 
 type Entry = Schemas['MachineStatusEntryDTO'];
-
-export type MachineStopsTableProps = {
-  entries: Entry[];
-  onEditAutoStop(entry: Entry): void;
-  onRegisterPause(entry: Entry): void;
-};
 
 const formatDateTime = (iso: string | undefined): string =>
   iso ? dayjs(iso).format(UTILS.DATE_FORMATS.DISPLAY) : '-';

@@ -3,13 +3,11 @@
 import { Card, Descriptions, Typography } from 'antd';
 import type { Schemas } from '@/api/types';
 import { MACHINES } from '@/constants/ConstantsAndParams';
+import type { MoldInfoCardProps } from '@/models/interfaces/components/MachineProps';
+
+export type { MoldInfoCardProps } from '@/models/interfaces/components/MachineProps';
 
 const { Text } = Typography;
-
-export type MoldInfoCardProps = {
-  detail: Schemas['MachineDetailResponseDTO'] | null;
-  activeCavities?: number;
-};
 
 /**
  * Read-only summary of the detection parameters bound to the machine.

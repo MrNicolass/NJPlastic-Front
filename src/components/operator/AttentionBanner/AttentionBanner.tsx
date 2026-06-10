@@ -2,20 +2,14 @@
 
 import { Alert, Button, Space, Typography } from 'antd';
 import { MACHINES } from '@/constants/ConstantsAndParams';
+import type { AttentionBannerProps } from '@/models/interfaces/components/AttentionBannerProps';
+import type { UnreviewedAutoStop } from '@/models/types/UnreviewedAutoStop';
 import { njPalette } from '@/theme/njTheme';
 
+export type { UnreviewedAutoStop } from '@/models/types/UnreviewedAutoStop';
+export type { AttentionBannerProps } from '@/models/interfaces/components/AttentionBannerProps';
+
 const { Text } = Typography;
-
-export type UnreviewedAutoStop = {
-  machineId: string;
-  machineCode: string;
-  stopId: string;
-};
-
-export type AttentionBannerProps = {
-  items: UnreviewedAutoStop[];
-  onSelect(item: UnreviewedAutoStop): void;
-};
 
 /**
  * Persistent warning shown at the top of the operator dashboard while
