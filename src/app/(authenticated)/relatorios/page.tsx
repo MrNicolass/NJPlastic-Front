@@ -8,13 +8,11 @@ import {
   Empty,
   Input,
   Row,
-  Skeleton,
   Space,
   Statistic,
   Table,
   Tabs,
   Tag,
-  Tooltip,
   Typography,
 } from 'antd';
 import type { TabsProps } from 'antd';
@@ -22,9 +20,26 @@ import dayjs, { type Dayjs } from 'dayjs';
 import { useCallback, useMemo, useState } from 'react';
 import type { Schemas } from '@/api/types';
 import { AuditLogsTab } from '@/components/manager/AuditLogsTab';
-import { AUDIT, REPORTS_SCREEN, UTILS } from '@/constants/ConstantsAndParams';
+import { ReportLibraryTab } from '@/components/reports/ReportLibraryTab';
+import { ScheduleListTab } from '@/components/reports/ScheduleListTab';
+import { ExportButton, type ExportFormat } from '@/components/shared/ExportButton';
+import { TableSkeleton } from '@/components/shared/Skeletons';
+import {
+  AUDIT,
+  EXPORT,
+  REPORTS_LIBRARY,
+  REPORTS_SCHEDULE,
+  REPORTS_SCREEN,
+  UTILS,
+} from '@/constants/ConstantsAndParams';
 import MachineService from '@/services/MachineService';
 import { useSessionStore } from '@/stores/useSessionStore';
+import {
+  buildExportFilename,
+  exportToCsv,
+  exportToPdf,
+  type ExportColumn,
+} from '@/utils/ExportUtils';
 import { NotificationUtils } from '@/utils/NotificationUtils';
 
 const { Title, Text } = Typography;
@@ -92,7 +107,72 @@ function ShiftReportTab() {
     }
   }, [range, sector, shift]);
 
-  const sections = report?.machines ?? [];
+  const sections = useMemo(() => report?.machines ?? [], [report]);
+
+  const handleExport = useCallback(
+    (format: ExportFormat) => {
+      if (!report || sections.length === 0) {
+        NotificationUtils({
+          key: EXPORT.NOTIFICATIONS.ERROR.KEYS.EXPORT_FAILED,
+          type: 'warning',
+          message: EXPORT.NOTIFICATIONS.ERROR.TITLES.EXPORT_FAILED,
+          description: EXPORT.NOTIFICATIONS.ERROR.MESSAGES.EMPTY_DATASET,
+        });
+        return;
+      }
+      const columns: ExportColumn<Record<string, unknown>>[] = [
+        { key: 'machine_code', label: 'Máquina' },
+        { key: 'sector', label: 'Setor' },
+        { key: 'confirmed_cycles', label: 'Ciclos' },
+        { key: 'availability', label: 'Disponibilidade' },
+        { key: 'performance', label: 'Performance' },
+        { key: 'quality', label: 'Qualidade' },
+        { key: 'oee', label: 'OEE' },
+        { key: 'manual_pauses_count', label: 'Pausas manuais' },
+        { key: 'auto_stops_count', label: 'Paradas auto.' },
+      ];
+      const rows: Record<string, unknown>[] = sections.map((section) => ({
+        machine_code: section.machine?.code ?? '-',
+        sector: section.machine?.sector ?? '-',
+        confirmed_cycles: section.confirmedCycles ?? 0,
+        availability: section.oee?.availability ?? '',
+        performance: section.oee?.performance ?? '',
+        quality: section.oee?.quality ?? '',
+        oee: section.oee?.oee ?? '',
+        manual_pauses_count: section.manualPauses?.length ?? 0,
+        auto_stops_count: section.autoStops?.length ?? 0,
+      }));
+      const filename = buildExportFilename(EXPORT.FILENAMES.SHIFT_REPORT, format);
+      try {
+        if (format === 'csv') {
+          exportToCsv(rows, columns, filename);
+        } else {
+          exportToPdf(rows, columns, filename, {
+            title: REPORTS_SCREEN.LABELS.TITLE,
+            subtitle: `Período ${range[0].format(UTILS.DATE_FORMATS.DISPLAY)} - ${range[1].format(UTILS.DATE_FORMATS.DISPLAY)}`,
+            filters: { Setor: sector || undefined, Turno: shift || undefined },
+          });
+        }
+        NotificationUtils({
+          key: EXPORT.NOTIFICATIONS.SUCCESS.KEYS.EXPORTED,
+          type: 'success',
+          message: EXPORT.NOTIFICATIONS.SUCCESS.TITLES.EXPORTED,
+          description: EXPORT.NOTIFICATIONS.SUCCESS.MESSAGES.EXPORTED(
+            format.toUpperCase() as 'CSV' | 'PDF',
+            rows.length,
+          ),
+        });
+      } catch {
+        NotificationUtils({
+          key: EXPORT.NOTIFICATIONS.ERROR.KEYS.EXPORT_FAILED,
+          type: 'error',
+          message: EXPORT.NOTIFICATIONS.ERROR.TITLES.EXPORT_FAILED,
+          description: EXPORT.NOTIFICATIONS.ERROR.MESSAGES.EXPORT_FAILED,
+        });
+      }
+    },
+    [range, report, sections, sector, shift],
+  );
 
   return (
     <Space orientation="vertical" size={24} style={{ width: '100%' }}>
@@ -132,16 +212,18 @@ function ShiftReportTab() {
               <Button type="primary" loading={loading} onClick={() => void loadReport()}>
                 {REPORTS_SCREEN.LABELS.GENERATE}
               </Button>
-              <Tooltip title={REPORTS_SCREEN.LABELS.EXPORT_TOOLTIP}>
-                <Button disabled>{REPORTS_SCREEN.LABELS.EXPORT_BUTTON}</Button>
-              </Tooltip>
+              <ExportButton
+                onExport={handleExport}
+                disabled={!report || sections.length === 0}
+                tooltip={!report ? EXPORT.TOOLTIP_DISABLED : undefined}
+              />
             </Space>
           </Col>
         </Row>
       </Card>
 
       {loading && !report ? (
-        <Skeleton active paragraph={{ rows: 8 }} />
+        <TableSkeleton rowCount={6} />
       ) : sections.length === 0 ? (
         <Empty
           description={
@@ -268,6 +350,8 @@ function ShiftReportTab() {
  */
 export default function RelatoriosPage() {
   const role = useSessionStore((state) => state.role);
+  const canSeeLibrary = role === 'LEADER' || role === 'MANAGER' || role === 'ADMIN';
+  const canManageSchedules = role === 'MANAGER' || role === 'ADMIN';
   const canSeeAudit = role === 'MANAGER' || role === 'ADMIN';
 
   const items: NonNullable<TabsProps['items']> = [
@@ -277,6 +361,20 @@ export default function RelatoriosPage() {
       children: <ShiftReportTab />,
     },
   ];
+  if (canSeeLibrary) {
+    items.push({
+      key: 'library',
+      label: REPORTS_LIBRARY.TAB_LABEL,
+      children: <ReportLibraryTab />,
+    });
+  }
+  if (canManageSchedules) {
+    items.push({
+      key: 'schedules',
+      label: REPORTS_SCHEDULE.TAB_LABEL,
+      children: <ScheduleListTab />,
+    });
+  }
   if (canSeeAudit) {
     items.push({
       key: 'audit',

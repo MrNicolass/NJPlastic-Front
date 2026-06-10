@@ -6,4 +6,6 @@ export type NotificationConfig = {
   errorDescription?: string;
   suppressErrorNotification?: boolean;
   suppressSuccessNotification?: boolean;
+  retry?: boolean;
+  maxRetryAttempts?: number;
 };

@@ -1,7 +1,7 @@
 'use client';
 
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { Badge, Button, Card, Col, Empty, Row, Skeleton, Space, Typography } from 'antd';
+import { Badge, Button, Card, Col, Empty, Row, Space, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useParams, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -15,15 +15,23 @@ import { MachineStopsTable } from '@/components/operator/MachineStopsTable';
 import { MoldInfoCard } from '@/components/operator/MoldInfoCard';
 import { OperatorsOfShift } from '@/components/operator/OperatorsOfShift';
 import { RegisterPauseModal } from '@/components/operator/RegisterPauseModal';
+import { ExportButton, type ExportFormat } from '@/components/shared/ExportButton';
 import { RegisterQualityModal } from '@/components/shared/RegisterQualityModal';
+import { DashboardSkeleton } from '@/components/shared/Skeletons';
 import { StopMessageEditModal } from '@/components/shared/StopMessageEditModal';
-import { MACHINES } from '@/constants/ConstantsAndParams';
+import { EXPORT, MACHINES, UTILS } from '@/constants/ConstantsAndParams';
 import { usePolling } from '@/hooks/usePolling';
 import { useStopEditHistory } from '@/hooks/useStopEditHistory';
 import { createPageParams } from '@/models/types/PageParams';
 import MachineService from '@/services/MachineService';
 import { useSessionStore, type Role } from '@/stores/useSessionStore';
 import { njPalette } from '@/theme/njTheme';
+import {
+  buildExportFilename,
+  exportToCsv,
+  exportToPdf,
+  type ExportColumn,
+} from '@/utils/ExportUtils';
 import { NotificationUtils } from '@/utils/NotificationUtils';
 
 const { Text, Title } = Typography;
@@ -111,21 +119,6 @@ const computeMtbfMinutes = (entries: Entry[]): number | null => {
   return totalRunMs / 60_000 / breaks.length;
 };
 
-const downloadCsv = (filename: string, header: string[], rows: string[][]) => {
-  const escape = (cell: string) =>
-    /[",\n]/.test(cell) ? `"${cell.replace(/"/g, '""')}"` : cell;
-  const csv = [header, ...rows].map((row) => row.map(escape).join(',')).join('\n');
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-};
-
 /**
  * Detail screen of a single machine (RFC §4.2.4). Pulls the machine
  * projection, the status timeline, the cycle series and the OEE in
@@ -176,23 +169,68 @@ export default function MachineDetailPage() {
     await refetch();
   }, [refetch]);
 
-  const handleExport = useCallback(() => {
-    if (!data) {
-      return;
-    }
-    const header = ['state', 'reason', 'message', 'startTime', 'endTime'];
-    const rows = data.status.timeline.map((entry) => [
-      entry.state ?? '',
-      entry.reason ?? '',
-      entry.message ?? '',
-      entry.startTime ?? '',
-      entry.endTime ?? '',
-    ]);
-    downloadCsv(`${data.detail.code}-turno.csv`, header, rows);
-  }, [data]);
+  const handleExport = useCallback(
+    (format: ExportFormat) => {
+      if (!data) {
+        return;
+      }
+      const columns: ExportColumn<Record<string, unknown>>[] = [
+        { key: 'state', label: 'Estado' },
+        { key: 'reason', label: 'Motivo' },
+        { key: 'message', label: 'Mensagem' },
+        { key: 'startTime', label: 'Início' },
+        { key: 'endTime', label: 'Fim' },
+      ];
+      const rows: Record<string, unknown>[] = data.status.timeline.map((entry) => ({
+        state: entry.state ?? '',
+        reason: entry.reason ?? '',
+        message: entry.message ?? '',
+        startTime: entry.startTime ? dayjs(entry.startTime).format(UTILS.DATE_FORMATS.DISPLAY) : '',
+        endTime: entry.endTime ? dayjs(entry.endTime).format(UTILS.DATE_FORMATS.DISPLAY) : '',
+      }));
+      if (rows.length === 0) {
+        NotificationUtils({
+          key: EXPORT.NOTIFICATIONS.ERROR.KEYS.EXPORT_FAILED,
+          type: 'warning',
+          message: EXPORT.NOTIFICATIONS.ERROR.TITLES.EXPORT_FAILED,
+          description: EXPORT.NOTIFICATIONS.ERROR.MESSAGES.EMPTY_DATASET,
+        });
+        return;
+      }
+      const pattern = EXPORT.FILENAMES.MACHINE_CYCLES.replace('{code}', data.detail.code);
+      const filename = buildExportFilename(pattern, format);
+      try {
+        if (format === 'csv') {
+          exportToCsv(rows, columns, filename);
+        } else {
+          exportToPdf(rows, columns, filename, {
+            title: `Máquina ${data.detail.code}`,
+            subtitle: data.detail.description ?? '',
+          });
+        }
+        NotificationUtils({
+          key: EXPORT.NOTIFICATIONS.SUCCESS.KEYS.EXPORTED,
+          type: 'success',
+          message: EXPORT.NOTIFICATIONS.SUCCESS.TITLES.EXPORTED,
+          description: EXPORT.NOTIFICATIONS.SUCCESS.MESSAGES.EXPORTED(
+            format.toUpperCase() as 'CSV' | 'PDF',
+            rows.length,
+          ),
+        });
+      } catch {
+        NotificationUtils({
+          key: EXPORT.NOTIFICATIONS.ERROR.KEYS.EXPORT_FAILED,
+          type: 'error',
+          message: EXPORT.NOTIFICATIONS.ERROR.TITLES.EXPORT_FAILED,
+          description: EXPORT.NOTIFICATIONS.ERROR.MESSAGES.EXPORT_FAILED,
+        });
+      }
+    },
+    [data],
+  );
 
   if (loading && !data && !error) {
-    return <Skeleton active paragraph={{ rows: 8 }} />;
+    return <DashboardSkeleton />;
   }
 
   if (!data) {
@@ -236,7 +274,7 @@ export default function MachineDetailPage() {
           />
         </Space>
         <Space>
-          <Button onClick={handleExport}>{MACHINES.DETAIL.LABELS.EXPORT_BUTTON}</Button>
+          <ExportButton onExport={handleExport} />
           <Button type="primary" onClick={() => setQualityOpen(true)}>
             {MACHINES.DETAIL.BUTTONS.REGISTER_QUALITY}
           </Button>

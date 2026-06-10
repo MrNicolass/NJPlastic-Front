@@ -41,7 +41,7 @@ describe('NotificationUtils', () => {
     expect(mockedNotification.destroy).toHaveBeenCalledWith('auth-login-success');
     expect(mockedNotification.success).toHaveBeenCalledWith({
       key: 'auth-login-success',
-      message: 'Sessao iniciada',
+      title: 'Sessao iniciada',
       description: 'Bem-vindo de volta.',
       placement,
       duration,
@@ -54,7 +54,7 @@ describe('NotificationUtils', () => {
     expect(mockedNotification.destroy).not.toHaveBeenCalled();
     expect(mockedNotification.info).toHaveBeenCalledWith({
       key: undefined,
-      message: 'Hello',
+      title: 'Hello',
       description: undefined,
       placement,
       duration,
@@ -69,7 +69,7 @@ describe('NotificationUtils', () => {
     );
     expect(mockedNotification.warning).toHaveBeenCalledWith({
       key: GENERIC_NOTIFICATIONS.KEYS.SESSION_EXPIRED,
-      message: GENERIC_NOTIFICATIONS.TITLES.SESSION_EXPIRED,
+      title: GENERIC_NOTIFICATIONS.TITLES.SESSION_EXPIRED,
       description: GENERIC_NOTIFICATIONS.MESSAGES.SESSION_EXPIRED,
       placement,
       duration,
@@ -85,7 +85,7 @@ describe('NotificationUtils', () => {
 
     expect(mockedNotification[kind]).toHaveBeenCalledWith({
       key: GENERIC_NOTIFICATIONS.KEYS[defaultType],
-      message: GENERIC_NOTIFICATIONS.TITLES[defaultType],
+      title: GENERIC_NOTIFICATIONS.TITLES[defaultType],
       description: GENERIC_NOTIFICATIONS.MESSAGES[defaultType],
       placement,
       duration,
@@ -105,7 +105,7 @@ describe('NotificationUtils', () => {
     expect(mockedNotification.warning).not.toHaveBeenCalled();
     expect(mockedNotification.info).toHaveBeenCalledWith({
       key: 'custom-key',
-      message: 'Custom title',
+      title: 'Custom title',
       description: 'Custom description',
       placement,
       duration,
@@ -118,7 +118,7 @@ describe('NotificationUtils', () => {
     expect(mockedNotification.destroy).not.toHaveBeenCalled();
     expect(mockedNotification.info).toHaveBeenCalledWith({
       key: undefined,
-      message: '',
+      title: '',
       description: undefined,
       placement,
       duration,
