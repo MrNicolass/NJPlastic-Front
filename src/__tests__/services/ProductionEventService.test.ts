@@ -44,13 +44,13 @@ describe('ProductionEventService', () => {
     });
   });
 
-  it('findRecent_GETsTheRecentEventsEndpoint', async () => {
-    mocked.get.mockReturnValueOnce(resolved([]));
+  it('findRecent_GETsTheRecentEventsEndpointWithPageable', async () => {
+    mocked.get.mockReturnValueOnce(resolved({ content: [], totalElements: 0 }));
 
-    await ProductionEventService.findRecent(7, undefined, undefined);
+    await ProductionEventService.findRecent({ page: 0, size: 6 }, undefined, undefined);
 
     expect(mocked.get).toHaveBeenCalledWith('/events/recent', {
-      params: { limit: 7, from: undefined, to: undefined },
+      params: { page: 0, size: 6, from: undefined, to: undefined },
       notificationConfig: { key: EVENTS.KEY, suppressErrorNotification: false },
     });
   });

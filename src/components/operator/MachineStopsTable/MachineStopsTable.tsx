@@ -21,8 +21,8 @@ const formatDateTime = (iso: string | undefined): string =>
 /**
  * Lists pauses and auto-stops that overlap the timeline window. Each
  * AUTO_STOPPED row exposes an action to edit the audit-logged message
- * (UC12); rows still missing a `reason` expose an action to classify
- * the pause manually (UC03). Other rows are read-only.
+ *; rows still missing a `reason` expose an action to classify
+ * the pause manually. Other rows are read-only.
  */
 export function MachineStopsTable(props: MachineStopsTableProps): React.ReactNode {
   const { entries, onEditAutoStop, onRegisterPause } = props;

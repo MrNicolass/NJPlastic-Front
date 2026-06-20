@@ -42,7 +42,7 @@ const ADMIN_ITEMS: NavigationMenuItem[] = [
 
 /**
  * Builds the sider menu items visible to the given role. OPERATOR returns
- * an empty array because §4.2.2 of the RFC explicitly states the operator
+ * an empty array because explicitly states the operator
  * layout has no sider — the AppSider component already skips rendering
  * for that role, and this empty array is a defense-in-depth safeguard.
  */

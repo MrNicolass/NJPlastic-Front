@@ -70,17 +70,11 @@ export function MachineStatusTimeline(props: MachineStatusTimelineProps): React.
   }, [entries, startMs, endMs, span]);
 
   if (segments.length === 0) {
-    return (
-      <Space orientation="vertical" size={8} style={{ width: '100%' }}>
-        <Text strong>{MACHINES.DETAIL.LABELS.TIMELINE_TITLE}</Text>
-        <Empty description="Sem transicoes no periodo" />
-      </Space>
-    );
+    return <Empty description="Sem transições no período" />;
   }
 
   return (
     <Space orientation="vertical" size={8} style={{ width: '100%' }}>
-      <Text strong>{MACHINES.DETAIL.LABELS.TIMELINE_TITLE}</Text>
       <div
         style={{
           position: 'relative',
@@ -122,22 +116,6 @@ export function MachineStatusTimeline(props: MachineStatusTimelineProps): React.
           );
         })}
       </div>
-      <Space size={16} wrap>
-        {(['RUNNING', 'PAUSED', 'AUTO_STOPPED', 'OFFLINE'] as State[]).map((state) => (
-          <Space key={state} size={6}>
-            <span
-              style={{
-                display: 'inline-block',
-                width: 12,
-                height: 12,
-                background: STATE_COLOR[state],
-                borderRadius: 2,
-              }}
-            />
-            <Text type="secondary">{STATE_LABEL[state]}</Text>
-          </Space>
-        ))}
-      </Space>
       <Space style={{ width: '100%', justifyContent: 'space-between' }}>
         <Text type="secondary">{formatHour(windowStartIso)}</Text>
         <Text type="secondary">{formatHour(windowEndIso)}</Text>

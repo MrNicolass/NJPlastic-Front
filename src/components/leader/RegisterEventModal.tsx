@@ -22,11 +22,11 @@ const TYPE_OPTIONS = (Object.keys(EVENTS.TYPES) as EventTypeKey[]).map((key) => 
 }));
 
 /**
- * Header CTA modal of the Leader dashboard (EP-FE-05 item 7). Backed by
+ * Header CTA modal of the Leader dashboard (item 7). Backed by
  * {@code POST /events}; the success callback chains into
  * {@code RecentEventsPanel.refetch} so the new entry surfaces immediately
  * without a 15s wait. Machines are pulled from {@code GET /machines}, which
- * is already sector-scoped server-side (RN02-RN04).
+ * is already sector-scoped server-side.
  */
 export function RegisterEventModal({ open, onClose, onRegistered }: RegisterEventModalProps) {
   const [form] = Form.useForm<RegisterEventFormValues>();
@@ -86,8 +86,8 @@ export function RegisterEventModal({ open, onClose, onRegistered }: RegisterEven
       onClose();
       onRegistered?.();
     } catch (error) {
-      // Validation errors are surfaced inline by AntD; HTTP errors come through
-      // the Axios interceptor as a notification. No extra handling needed here.
+ // Validation errors are surfaced inline by AntD; HTTP errors come through
+ // the Axios interceptor as a notification. No extra handling needed here.
       if (error && typeof error === 'object' && 'errorFields' in error) {
         return;
       }

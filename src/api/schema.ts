@@ -1678,6 +1678,12 @@ export interface components {
             readonly to: string;
             /** @description Status records overlapping the window ordered by start time */
             readonly timeline: components["schemas"]["MachineStatusEntryDTO"][];
+            /**
+             * Format: int64
+             * @description Confirmed cycle count of the machine within [from, to]; powers the shift-cycle counter on dashboard cards
+             * @example 412
+             */
+            readonly cyclesInWindow: number;
         };
         /** @description ERP sync execution entry */
         ErpSyncRunDTO: {

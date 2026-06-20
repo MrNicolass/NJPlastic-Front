@@ -13,11 +13,10 @@ const { Sider } = Layout;
 const { LABELS } = LAYOUT.SIDER;
 
 /**
- * Side navigation rendered for every role except OPERATOR. RFC §4.2.2
- * mandates the operator dashboard has no sider — a simplified view aligned
- * with RNF09. Items per role come from buildMenuItemsForRole; the active
- * key derives from the current pathname so refreshes and deep-links keep
- * the correct selection.
+ * Side navigation rendered for every role except OPERATOR (the operator
+ * dashboard is a simplified view with no sider). Items per role come
+ * from buildMenuItemsForRole; the active key derives from the current
+ * pathname so refreshes and deep-links keep the correct selection.
  */
 export function AppSider({ role }: AppSiderProps) {
   const pathname = usePathname();

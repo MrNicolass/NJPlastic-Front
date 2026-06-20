@@ -7,7 +7,7 @@ import { useSessionStore } from '@/stores/useSessionStore';
 
 /**
  * Encapsulates the logout flow shared by the authenticated layout's header
- * (EP-FE-03 consumer) and any contextual control that ends the session.
+ * (consumer) and any contextual control that ends the session.
  * Always clears the Zustand session and redirects to `/login`, even if the
  * backend logout call fails — cookies expire at exp anyway and the UX gain
  * of always reaching the login page outweighs the residual server-side

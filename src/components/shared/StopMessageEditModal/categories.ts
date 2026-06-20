@@ -7,8 +7,8 @@ export type { StopMessageCategory } from '@/models/types/StopMessageCategory';
 /**
  * Returns the category list rendered by the variant of {@link
  * StopMessageEditModal} matching {@link userRole}. The Operator view
- * (RN02) keeps five categories; Leader (RN03) and Manager (RN04) add
- * "Falta de operador" per RFC §4.2.10.
+ * keeps five categories; Leader and Manager add a sixth
+ * "Falta de operador" category.
  */
 export function categoriesForRole(userRole: Role): StopMessageCategory[] {
   if (userRole === 'LEADER' || userRole === 'MANAGER' || userRole === 'ADMIN') {

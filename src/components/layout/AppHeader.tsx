@@ -1,7 +1,9 @@
 'use client';
 
 import { LogoutOutlined } from '@ant-design/icons';
-import { Avatar, Button, Layout, Tag, Typography } from 'antd';
+import { Button, Layout, Tag, Typography } from 'antd';
+import Image from 'next/image';
+import njLogo from '@/assets/logo/NJPlastic-logo-a-128px.png';
 import { LAYOUT } from '@/constants/ConstantsAndParams';
 import { useLogout } from '@/hooks/useLogout';
 import type { AppHeaderProps } from '@/models/interfaces/components/LayoutProps';
@@ -45,13 +47,14 @@ export function AppHeader({ user, role }: AppHeaderProps) {
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <Avatar
-          shape="square"
-          size={40}
-          style={{ backgroundColor: njPalette.cobalt, color: '#fff', fontWeight: 600 }}
-        >
-          NJ
-        </Avatar>
+        <Image
+          src={njLogo}
+          alt={LABELS.LOGO_TITLE}
+          width={40}
+          height={40}
+          priority
+          style={{ borderRadius: 8 }}
+        />
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <Text style={{ color: '#fff', fontWeight: 600, fontSize: 16, lineHeight: 1.2 }}>
             {LABELS.LOGO_TITLE}

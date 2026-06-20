@@ -33,7 +33,7 @@ const formatDate = (value?: string | null) =>
 const tableLocale = { emptyText: HISTORY.LABELS.EMPTY };
 
 /**
- * Shift Leader history screen (EP-FE-05 item 2). Aggregates four read views
+ * Shift Leader history screen (item 2). Aggregates four read views
  * over the same `machineId` + period filter: production cycles
  * (paginated via Spring Data), manual pauses and auto stops (derived from
  * the machine status timeline since there is no dedicated paginated

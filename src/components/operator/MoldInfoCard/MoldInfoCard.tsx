@@ -11,7 +11,7 @@ const { Text } = Typography;
 
 /**
  * Read-only summary of the detection parameters bound to the machine.
- * The mold projection itself is not exposed by EP-BE-05 yet (the ERP
+ * The mold projection itself is not exposed by yet (the ERP
  * mock does not seed cavity counts); for now the card shows the
  * cycle/tolerance/pause-threshold trio plus the cavity count when the
  * caller supplies one.

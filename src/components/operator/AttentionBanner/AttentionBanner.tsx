@@ -14,8 +14,7 @@ const { Text } = Typography;
 /**
  * Persistent warning shown at the top of the operator dashboard while
  * one or more machines under the user's shift carry an AUTO_STOPPED
- * record whose default system message has not been replaced (RF11,
- * UC12). The component disappears as soon as the last unreviewed stop
+ * record whose default system message has not been replaced (*). The component disappears as soon as the last unreviewed stop
  * is reclassified through `<StopMessageEditModal>` — the parent
  * recomputes `items` on every polling tick.
  */

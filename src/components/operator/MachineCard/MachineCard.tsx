@@ -31,8 +31,8 @@ const STATE_LABEL: Record<MachineState | 'UNKNOWN', string> = {
 /**
  * Single machine tile rendered in the operator dashboard grid. The
  * badge colour, the bottom progress strip and the highlighted action
- * follow RFC §4.5: Cobalt for production, Cerulean for an isolated
- * pause, Cinnabar for AUTO_STOPPED (RF11, RN09).
+ * follow : Cobalt for production, Cerulean for an isolated
+ * pause, Cinnabar for AUTO_STOPPED.
  */
 export function MachineCard(props: MachineCardProps): React.ReactNode {
   const { machine, currentState, currentStop, cyclesInShift, onRegisterPause, onEditStopMessage, onViewDetail } =

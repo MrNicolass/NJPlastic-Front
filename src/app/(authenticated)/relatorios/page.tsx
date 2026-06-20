@@ -54,7 +54,7 @@ const formatPercent = (value: number | null | undefined) =>
   value === null || value === undefined ? '-' : `${(value * 100).toFixed(1)}%`;
 
 /**
- * Shift Report tab content (EP-FE-05 item 3). Consumes
+ * Shift Report tab content (item 3). Consumes
  * {@code GET /reports/shift}: full snapshot for the chosen window grouped by
  * machine, with confirmed cycles, OEE, manual pauses and auto stops. The
  * fetch only fires on user action - the initial empty state explicitly
@@ -342,8 +342,8 @@ function ShiftReportTab() {
 
 /**
  * /relatorios route. Composes two tabs:
- * - "Relatorio de Turno" (EP-FE-05 item 3, available to LEADER/MANAGER/ADMIN)
- * - "Auditoria" (EP-FE-06 sub-task 7, visible only to MANAGER/ADMIN)
+ * - "Relatorio de Turno" (item 3, available to LEADER/MANAGER/ADMIN)
+ * - "Auditoria" (sub-task 7, visible only to MANAGER/ADMIN)
  *
  * The audit tab renders the shared AuditLogsTab component, which is also
  * mounted by the standalone /auditoria route.

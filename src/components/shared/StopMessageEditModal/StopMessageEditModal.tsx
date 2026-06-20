@@ -50,14 +50,14 @@ const resolveScopeLabel = (
 
 /**
  * Shared editor for the message that travels with an AUTO_STOPPED record
- * (UC12, RF19). Renders three variants depending on `userRole`:
+ *. Renders three variants depending on `userRole`:
  *
- * - OPERATOR (RN02): 5 categories, no edition history, concise footer;
- * - LEADER (RN03): 6 categories, edition history, sector/shift scope;
- * - MANAGER (RN04): 6 categories, edition history, full-view scope.
+ * - OPERATOR : 5 categories, no edition history, concise footer;
+ * - LEADER : 6 categories, edition history, sector/shift scope;
+ * - MANAGER : 6 categories, edition history, full-view scope.
  *
  * Each successful save triggers an immutable audit_log entry on the
- * backend (RN12); the modal warns the user via the yellow callout
+ * backend; the modal warns the user via the yellow callout
  * before the request is sent.
  */
 export function StopMessageEditModal(props: StopMessageEditModalProps): React.ReactNode {
@@ -106,7 +106,7 @@ export function StopMessageEditModal(props: StopMessageEditModalProps): React.Re
       onClose();
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
-        // eslint-disable-next-line no-console
+ // eslint-disable-next-line no-console
         console.error('Failed to edit stop message', error);
       }
     } finally {
@@ -130,8 +130,8 @@ export function StopMessageEditModal(props: StopMessageEditModalProps): React.Re
     if (open && editHistoryError && showHistory) {
       handleHistoryErrorNotice();
     }
-    // We want to react only when the error changes, not on every render.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+ // We want to react only when the error changes, not on every render.
+ // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editHistoryError, open, showHistory]);
 
   return (

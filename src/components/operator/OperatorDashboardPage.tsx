@@ -21,6 +21,14 @@ const { Title, Text } = Typography;
 const DASHBOARD_POLL_INTERVAL_MS = 5000;
 const STATUS_LOOKBACK_HOURS = 2;
 
+const STATE_SORT_ORDER: Record<string, number> = {
+  RUNNING: 0,
+  PAUSED: 1,
+  AUTO_STOPPED: 2,
+  OFFLINE: 3,
+  UNKNOWN: 4,
+};
+
 const fetchDashboardSnapshot = async (): Promise<DashboardSnapshot> => {
   const machines = await MachineService.listMachines(true);
   if (machines.length === 0) {
@@ -67,7 +75,7 @@ const collectUnreviewedAutoStops = (entries: DashboardEntry[]): UnreviewedAutoSt
  * their current status every 5 seconds with Page Visibility-aware
  * pause. Renders the AUTO_STOPPED attention banner, the shift summary
  * counters and a grid of per-machine cards with inline actions. Acts
- * as the entry point for UC02, UC03 and UC12 from the floor level.
+ * as the entry point for, and from the floor level.
  */
 export function OperatorDashboardPage() {
   const router = useRouter();
@@ -81,7 +89,18 @@ export function OperatorDashboardPage() {
   const [activeStopModal, setActiveStopModal] = useState<ActiveStopModal | null>(null);
   const [activePauseModal, setActivePauseModal] = useState<ActivePauseModal | null>(null);
 
-  const entries = data?.entries ?? [];
+  const rawEntries = data?.entries ?? [];
+
+  const entries = useMemo(() => {
+    const stateOf = (entry: DashboardEntry) =>
+      entry.status?.current?.state ?? entry.machine.currentState ?? 'UNKNOWN';
+    return [...rawEntries].sort((a, b) => {
+      const sa = STATE_SORT_ORDER[stateOf(a)] ?? 5;
+      const sb = STATE_SORT_ORDER[stateOf(b)] ?? 5;
+      if (sa !== sb) return sa - sb;
+      return a.machine.code.localeCompare(b.machine.code);
+    });
+  }, [rawEntries]);
 
   const counters = useMemo(() => {
     const accumulator = { running: 0, paused: 0, autoStopped: 0, offline: 0 };
@@ -219,7 +238,7 @@ export function OperatorDashboardPage() {
 
       <section aria-labelledby="machines-grid">
         <Title level={5} id="machines-grid" style={{ marginBottom: 12 }}>
-          Maquinas atribuidas
+          {MACHINES.DASHBOARD.LABELS.MACHINES_TITLE}
         </Title>
         {entries.length === 0 ? (
           <Empty
@@ -240,6 +259,7 @@ export function OperatorDashboardPage() {
                     machine={entry.machine}
                     currentState={currentState}
                     currentStop={entry.status?.current ?? null}
+                    cyclesInShift={entry.status?.cyclesInWindow ?? 0}
                     onRegisterPause={() => handleRegisterPauseForMachine(entry)}
                     onEditStopMessage={() => handleEditStopForMachine(entry)}
                     onViewDetail={() => handleViewDetail(entry)}

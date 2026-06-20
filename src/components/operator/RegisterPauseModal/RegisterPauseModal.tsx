@@ -33,12 +33,12 @@ const buildSubmittedReason = (values: FormValues): string => {
 };
 
 /**
- * Classifies the last open isolated pause of a machine (UC03, RF09).
+ * Classifies the last open isolated pause of a machine.
  * The 4-option selector matches the Operator mockup
  * `Modal_Register_Pause_Operator_V1`; "OUTRO" reveals a free text field.
  * If the backend answers 409 the modal exposes the warning copy through
  * {@link NotificationUtils} — the pause stays open and the operator can
- * cancel safely (§3.2.3 of the RFC).
+ * cancel safely.
  */
 export function RegisterPauseModal(props: RegisterPauseModalProps): React.ReactNode {
   const { open, onClose, machineId, machineCode, productionOrderCode, pauseStartedAt, onRegistered } =

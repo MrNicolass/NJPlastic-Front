@@ -12,7 +12,7 @@ const DEFAULT_PAGE_SIZE = 20;
 
 /**
  * Loads the audit-log-backed edition history of an AUTO_STOPPED message
- * (UC12, RN12, RF20). Disabled by default so the Operator variant of
+ *. Disabled by default so the Operator variant of
  * `<StopMessageEditModal>` — which does not render the timeline — does
  * not pay the cost of a fetch. Líder/Gestor variants pass
  * `enabled: true` and receive the result through the `editHistory` prop
@@ -27,7 +27,7 @@ const DEFAULT_PAGE_SIZE = 20;
  * @param stopId - The stop record UUID.
  * @param options - `pageSize` (default 20) and `enabled` (default false).
  * @returns Latest edition list, loading and error state, instant of the
- *   last successful fetch, and an imperative refetch handle.
+ * last successful fetch, and an imperative refetch handle.
  */
 export function useStopEditHistory(
   machineId: string,

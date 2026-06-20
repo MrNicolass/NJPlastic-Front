@@ -30,8 +30,7 @@ type FormValues = {
 };
 
 /**
- * Manager-only drawer used to create a new report schedule (EP-FE-07
- * sub-task 6, mockup Reports_Part2_V1). Client-side validation covers cron
+ * Manager-only drawer used to create a new report schedule (* sub-task 6, mockup Reports_Part2_V1). Client-side validation covers cron
  * shape and JSON parsing of the params field; the backend remains the
  * source of truth for cron correctness.
  */

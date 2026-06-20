@@ -1,9 +1,11 @@
 'use client';
 
 import { Button, Checkbox, Form, Input, Tooltip, Typography } from 'antd';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useState } from 'react';
+import njLogo from '@/assets/logo/NJPlastic-logo-a-256px.png';
 import { AUTH } from '@/constants/ConstantsAndParams';
 import { DEFAULT_AUTHENTICATED_ROUTE } from '@/constants/Routes';
 import type { LoginFormValues } from '@/models/types/AuthFormValues';
@@ -38,7 +40,7 @@ function LoginForm() {
       const redirectTarget = searchParams.get('redirect') ?? DEFAULT_AUTHENTICATED_ROUTE;
       router.replace(redirectTarget);
     } catch {
-      // Notifications are handled by the axios interceptor.
+ // Notifications are handled by the axios interceptor.
     } finally {
       setSubmitting(false);
     }
@@ -58,9 +60,19 @@ function LoginForm() {
           justifyContent: 'space-between',
         }}
       >
-        <Typography.Title level={2} style={{ color: '#ffffff', margin: 0 }}>
-          NJPlastic
-        </Typography.Title>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <Image
+            src={njLogo}
+            alt="NJPlastic"
+            width={64}
+            height={64}
+            priority
+            style={{ borderRadius: 12 }}
+          />
+          <Typography.Title level={2} style={{ color: '#ffffff', margin: 0 }}>
+            NJPlastic
+          </Typography.Title>
+        </div>
         <div>
           <Typography.Title level={3} style={{ color: '#ffffff' }}>
             Monitoramento em tempo real

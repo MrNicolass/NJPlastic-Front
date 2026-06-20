@@ -1,7 +1,7 @@
 /**
- * Manual mirror of the backend {@code RecentEventDTO} (EP-FE-05, Fase A).
+ * Manual mirror of the backend {@code RecentEventDTO} (Fase A).
  * Replace with {@code Schemas['RecentEventDTO']} once `npm run api:generate`
- * regenerates {@link ../../api/schema.ts}.
+ * regenerates {@link../../api/schema.ts}.
  */
 export type RecentEventType =
   | 'MANUAL_EVENT'

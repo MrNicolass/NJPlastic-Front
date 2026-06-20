@@ -48,7 +48,7 @@ const methodTagColor = (method: string): string => {
 };
 
 /**
- * Audit log viewer for Manager (EP-FE-06 sub-task 7). Used by the
+ * Audit log viewer for Manager (sub-task 7). Used by the
  * Auditoria tab inside /relatorios and by the standalone /auditoria
  * route - the two surfaces share this single component to avoid
  * duplicating logic. Filters compose with AND semantics on the

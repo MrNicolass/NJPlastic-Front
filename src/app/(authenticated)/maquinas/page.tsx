@@ -77,7 +77,7 @@ export default function MachinesPage() {
       setDrawerMode('edit');
       setDrawerOpen(true);
     } catch {
-      // notification already fired by the service layer
+ // notification already fired by the service layer
     }
   };
 

@@ -77,6 +77,14 @@ const fetchSnapshot = async (): Promise<DashboardSnapshot> => {
 
 export type { ConsolidatedDashboardPageProps } from '@/models/types/Dashboard';
 
+const STATE_SORT_ORDER: Record<string, number> = {
+  RUNNING: 0,
+  PAUSED: 1,
+  AUTO_STOPPED: 2,
+  OFFLINE: 3,
+  UNKNOWN: 4,
+};
+
 const STATE_FILTER_OPTIONS = [
   {
     value: DASHBOARD_SHARED.STATE_FILTER.VALUES.ALL,
@@ -101,7 +109,7 @@ const STATE_FILTER_OPTIONS = [
 ];
 
 /**
- * Single dashboard component for Leader (RN03) and Manager/Admin (RN04).
+ * Single dashboard component for Leader and Manager/Admin.
  * The backend already scopes the machine list by role; this component only
  * adds client-side filtering (sector for Manager, state chips for all roles).
  * OEE average is shown as a progress bar card rather than a plain statistic.
@@ -143,10 +151,20 @@ export function ConsolidatedDashboardPage({
   }, [allEntries, isManager, sectorFilter]);
 
   const entries = useMemo(() => {
-    if (stateFilter === DASHBOARD_SHARED.STATE_FILTER.VALUES.ALL) return sectorFiltered;
-    return sectorFiltered.filter((entry) => {
-      const state = entry.status?.current?.state ?? entry.machine.currentState;
-      return state === stateFilter;
+    const filtered =
+      stateFilter === DASHBOARD_SHARED.STATE_FILTER.VALUES.ALL
+        ? sectorFiltered
+        : sectorFiltered.filter((entry) => {
+            const state = entry.status?.current?.state ?? entry.machine.currentState;
+            return state === stateFilter;
+          });
+    const stateOf = (entry: DashboardEntry) =>
+      entry.status?.current?.state ?? entry.machine.currentState ?? 'UNKNOWN';
+    return [...filtered].sort((a, b) => {
+      const sa = STATE_SORT_ORDER[stateOf(a)] ?? 5;
+      const sb = STATE_SORT_ORDER[stateOf(b)] ?? 5;
+      if (sa !== sb) return sa - sb;
+      return a.machine.code.localeCompare(b.machine.code);
     });
   }, [sectorFiltered, stateFilter]);
 
@@ -298,23 +316,33 @@ export function ConsolidatedDashboardPage({
           </Col>
           {isManager ? (
             <Col xs={12} sm={6} md={4} xl={3}>
-              <Statistic
-                title={MANAGER_DASHBOARD.LABELS.KPI_TOTAL_MACHINES}
-                value={sectorFiltered.length}
-              />
+              <Card size="small">
+                <Statistic
+                  title={MANAGER_DASHBOARD.LABELS.KPI_TOTAL_MACHINES}
+                  value={sectorFiltered.length}
+                />
+              </Card>
             </Col>
           ) : null}
           <Col xs={12} sm={6} md={4} xl={3}>
-            <Statistic title={constants.LABELS.KPI_RUNNING} value={counters.running} />
+            <Card size="small">
+              <Statistic title={constants.LABELS.KPI_RUNNING} value={counters.running} />
+            </Card>
           </Col>
           <Col xs={12} sm={6} md={4} xl={3}>
-            <Statistic title={constants.LABELS.KPI_PAUSED} value={counters.paused} />
+            <Card size="small">
+              <Statistic title={constants.LABELS.KPI_PAUSED} value={counters.paused} />
+            </Card>
           </Col>
           <Col xs={12} sm={6} md={4} xl={3}>
-            <Statistic title={constants.LABELS.KPI_AUTO_STOPPED} value={counters.autoStopped} />
+            <Card size="small">
+              <Statistic title={constants.LABELS.KPI_AUTO_STOPPED} value={counters.autoStopped} />
+            </Card>
           </Col>
           <Col xs={12} sm={6} md={4} xl={3}>
-            <Statistic title={constants.LABELS.KPI_OFFLINE} value={counters.offline} />
+            <Card size="small">
+              <Statistic title={constants.LABELS.KPI_OFFLINE} value={counters.offline} />
+            </Card>
           </Col>
         </Row>
       </section>
@@ -388,6 +416,7 @@ export function ConsolidatedDashboardPage({
                         machine={entry.machine}
                         currentState={currentState}
                         currentStop={entry.status?.current ?? null}
+                        cyclesInShift={entry.status?.cyclesInWindow ?? 0}
                         onEditStopMessage={() => handleEditStopForMachine(entry)}
                         onViewDetail={() => handleViewDetail(entry)}
                       />
@@ -403,7 +432,7 @@ export function ConsolidatedDashboardPage({
             <Title level={5} id="dashboard-events" style={{ marginBottom: 12 }}>
               {constants.LABELS.RECENT_EVENTS_TITLE}
             </Title>
-            {recentEventsSlot}
+            <Card size="small">{recentEventsSlot}</Card>
           </section>
         </Col>
       </Row>

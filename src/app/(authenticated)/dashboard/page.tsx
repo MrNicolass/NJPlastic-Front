@@ -17,9 +17,9 @@ import { useSessionStore } from '@/stores/useSessionStore';
  * guarantees the principal is authenticated, but role is hydrated from the
  * client-side session store, so the very first render before hydration may
  * see role=null and falls back to a Skeleton. Operator keeps its existing
- * experience (EP-FE-04); Leader gets the consolidated dashboard (EP-FE-05);
- * Manager/Admin get the EP-FE-06 manager dashboard with sector/shift
- * filters and the full-scope StopMessageEditModal variation (RN04).
+ * experience; Leader gets the consolidated dashboard;
+ * Manager/Admin get the manager dashboard with sector/shift
+ * filters and the full-scope StopMessageEditModal variation.
  */
 function DashboardWithSlots({
   variant,

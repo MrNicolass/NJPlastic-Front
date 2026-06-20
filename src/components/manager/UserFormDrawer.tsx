@@ -19,8 +19,7 @@ const ROLE_OPTIONS: { value: Schemas['UserResponseDTO']['role']; label: string }
 ];
 
 /**
- * Side drawer used for both creating and editing users (EP-FE-06
- * sub-task 3). The mode prop drives which fields are editable - login
+ * Side drawer used for both creating and editing users (* sub-task 3). The mode prop drives which fields are editable - login
  * and password are immutable in edit mode. On submit the drawer calls
  * UserService directly and reports back via onSaved so the parent
  * page can refetch.

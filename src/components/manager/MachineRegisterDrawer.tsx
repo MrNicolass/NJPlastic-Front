@@ -42,14 +42,13 @@ const buildTopic = (code?: string): string => {
 };
 
 /**
- * Multi-tab drawer that registers or edits a machine (EP-FE-06
- * sub-task 6). The 5 mockup sections (Identification, MQTT capture,
+ * Multi-tab drawer that registers or edits a machine (* sub-task 6). The 5 mockup sections (Identification, MQTT capture,
  * Cycle parameters, Stop escalation, Sector + shifts) are rendered as
  * tabs. The footer holds a live preview card so the user reviews the
  * configuration before confirming. The MQTT topic is read-only and
  * derived from the short code - the backend listens on a single
  * shared topic and identifies the source via the machineCode field of
- * the PulsePayload (RFC §5.3).
+ * the PulsePayload.
  */
 export function MachineRegisterDrawer({
   open,

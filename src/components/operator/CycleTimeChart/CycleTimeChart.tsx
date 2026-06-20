@@ -61,7 +61,7 @@ const formatTime = (epoch: number): string => {
 /**
  * Time-series view of the cycle interval aggregated in 30-second
  * buckets, overlaid with the tolerance band derived from the machine
- * detection parameters (`standardCycleMs * toleranceFactor`, RN06).
+ * detection parameters (`standardCycleMs * toleranceFactor`).
  * Rendered as a self-contained SVG to avoid pulling a chart runtime
  * for a single view; the SVG is responsive via `preserveAspectRatio`.
  */
@@ -126,7 +126,7 @@ export function CycleTimeChart(props: CycleTimeChartProps): React.ReactNode {
       </Space>
 
       {aggregated.length === 0 ? (
-        <Empty description="Sem ciclos no periodo selecionado" />
+        <Empty description="Sem ciclos no período selecionado" />
       ) : (
         <svg
           role="img"

@@ -34,9 +34,9 @@ type EditableMapping = {
 /**
  * Side drawer that loads the current ERP field mapping for the
  * PRODUCTION_ORDER entity type and lets the Manager rewrite the
- * ERP-side column names atomically (EP-FE-06 sub-task 9). The save
+ * ERP-side column names atomically (sub-task 9). The save
  * goes through PUT /erp/field-mapping; the backend AuditFilter
- * captures the diff (RN12, RF20). Adding/removing mapping rows is
+ * captures the diff. Adding/removing mapping rows is
  * out of scope for the MVP - this drawer only edits the ERP column
  * binding of the existing rows shipped via V9.
  */

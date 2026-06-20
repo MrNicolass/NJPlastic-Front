@@ -1,5 +1,5 @@
 /**
- * Manual mirror of the backend AuditLogResponseDTO (EP-BE-08 sub-task 4).
+ * Manual mirror of the backend AuditLogResponseDTO (sub-task 4).
  * The OpenAPI snapshot committed in `src/api/openapi.json` predates the
  * audit-log controller, so the row shape is reconstructed here for typed
  * consumption by the Auditoria tab/page. Payloads are surfaced verbatim
