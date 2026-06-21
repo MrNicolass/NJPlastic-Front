@@ -48,12 +48,12 @@ const methodTagColor = (method: string): string => {
 };
 
 /**
- * Audit log viewer for Manager (sub-task 7). Used by the
- * Auditoria tab inside /relatorios and by the standalone /auditoria
- * route - the two surfaces share this single component to avoid
- * duplicating logic. Filters compose with AND semantics on the
- * backend; the table forces the natural sort (timestamp DESC) and
- * exposes a detail modal with the sanitized request/response payloads.
+ * Audit log viewer for Manager. Used by the Auditoria tab inside
+ * /relatorios and by the standalone /auditoria route - the two surfaces
+ * share this single component to avoid duplicating logic. Filters compose
+ * with AND semantics on the backend; the table forces the natural sort
+ * (timestamp DESC) and exposes a detail modal with the sanitized
+ * request/response payloads.
  *
  * Filter UX: form inputs feed a transient state. The fetch only fires
  * when the user clicks "Aplicar" (or paginates) - this prevents the

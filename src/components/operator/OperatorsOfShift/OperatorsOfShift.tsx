@@ -3,7 +3,6 @@
 import { Card, Empty, List, Tag, Typography } from 'antd';
 import { MACHINES } from '@/constants/ConstantsAndParams';
 import type { OperatorsOfShiftProps } from '@/models/interfaces/components/MachineProps';
-import type { OperatorOfShift } from '@/models/types/OperatorsOfShift';
 
 export type { OperatorOfShift } from '@/models/types/OperatorsOfShift';
 export type { OperatorsOfShiftProps } from '@/models/interfaces/components/MachineProps';
@@ -12,16 +11,14 @@ const { Text } = Typography;
 
 /**
  * Lists the operators currently associated with this machine in the
- * active shift. The data source for this view is not exposed by the
- * MVP backend (no dedicated endpoint yet); the component renders the
- * data the caller supplies and gracefully shows an empty state when
- * the list is unknown.
+ * active shift. Data is fetched by the caller and supplied via props; an
+ * empty state is shown when the list is unknown or contains no entries.
  */
 export function OperatorsOfShift({ operators }: OperatorsOfShiftProps): React.ReactNode {
   return (
     <Card title={MACHINES.DETAIL.LABELS.OPERATORS_TITLE}>
       {operators.length === 0 ? (
-        <Empty description="Sem operadores registrados no turno" />
+        <Empty description={MACHINES.DETAIL.LABELS.OPERATORS_EMPTY} />
       ) : (
         <List
           dataSource={operators}

@@ -30,7 +30,7 @@ export interface IProductionOrderService {
   ): Promise<Page<ProductionOrderResponse>>;
 
  /**
- * Aggregated counters for the orders KPIs (mockup OS_Part1_V1).
+ * Aggregated counters for the production-order KPIs.
  *
  * @param suppressError - If true, suppress the global error notification.
  * @returns The summary counters.

@@ -44,6 +44,7 @@ describe('IMachineService', () => {
     createMachine: jest.fn(async () => ({}) as Schemas['MachineDetailResponseDTO']),
     updateMachine: jest.fn(async () => ({}) as Schemas['MachineDetailResponseDTO']),
     softDeleteMachine: jest.fn(async () => undefined),
+    listOperatorsOfShift: jest.fn(async () => []),
   };
 
   it('declares every machine-bound method', () => {

@@ -342,17 +342,17 @@ function ShiftReportTab() {
 
 /**
  * /relatorios route. Composes two tabs:
- * - "Relatorio de Turno" (item 3, available to LEADER/MANAGER/ADMIN)
- * - "Auditoria" (sub-task 7, visible only to MANAGER/ADMIN)
+ * - "Relatorio de Turno" (available to LEADER/MANAGER)
+ * - "Auditoria" (visible only to MANAGER)
  *
  * The audit tab renders the shared AuditLogsTab component, which is also
  * mounted by the standalone /auditoria route.
  */
 export default function RelatoriosPage() {
   const role = useSessionStore((state) => state.role);
-  const canSeeLibrary = role === 'LEADER' || role === 'MANAGER' || role === 'ADMIN';
-  const canManageSchedules = role === 'MANAGER' || role === 'ADMIN';
-  const canSeeAudit = role === 'MANAGER' || role === 'ADMIN';
+  const canSeeLibrary = role === 'LEADER' || role === 'MANAGER';
+  const canManageSchedules = role === 'MANAGER';
+  const canSeeAudit = role === 'MANAGER';
 
   const items: NonNullable<TabsProps['items']> = [
     {

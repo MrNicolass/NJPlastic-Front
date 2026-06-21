@@ -8,10 +8,10 @@ import type {
 } from '@/models/types/ReportTypes';
 
 /**
- * Contract of the report library and scheduling endpoints delivered by
- * sub-task 5 (history + schedule CRUD) and (download).
- * Suppression rules and notification keys follow the same pattern as the
- * other services - see {@link IAuditLogService}.
+ * Contract of the report library and scheduling endpoints (history and
+ * schedule CRUD plus download). Suppression rules and notification keys
+ * follow the same pattern as the other services - see
+ * {@link IAuditLogService}.
  */
 export interface IReportsService {
  /**

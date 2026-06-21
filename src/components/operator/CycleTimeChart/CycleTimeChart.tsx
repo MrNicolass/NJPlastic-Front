@@ -126,7 +126,7 @@ export function CycleTimeChart(props: CycleTimeChartProps): React.ReactNode {
       </Space>
 
       {aggregated.length === 0 ? (
-        <Empty description="Sem ciclos no período selecionado" />
+        <Empty description={MACHINES.DETAIL.LABELS.CYCLE_CHART_EMPTY} />
       ) : (
         <svg
           role="img"

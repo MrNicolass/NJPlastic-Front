@@ -13,9 +13,10 @@ import {
   Space,
   Statistic,
   Tag,
+  Tooltip,
   Typography,
 } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
@@ -121,7 +122,7 @@ export function ConsolidatedDashboardPage({
 }: ConsolidatedDashboardPageProps) {
   const router = useRouter();
   const user = useSessionStore((state) => state.user);
-  const isManager = userRole === 'MANAGER' || userRole === 'ADMIN';
+  const isManager = userRole === 'MANAGER';
   const constants = isManager ? MANAGER_DASHBOARD : LEADER_DASHBOARD;
   const pollInterval = isManager ? MANAGER_POLL_MS : LEADER_POLL_MS;
 
@@ -188,12 +189,10 @@ export function ConsolidatedDashboardPage({
     return values.reduce((acc, v) => acc + v, 0) / values.length;
   }, [sectorFiltered]);
 
-  const hasPartialOee = useMemo(() => {
-    const withOee = sectorFiltered.filter(
-      (e) => typeof e.oee?.oee === 'number' && Number.isFinite(e.oee.oee),
-    ).length;
-    return withOee > 0 && withOee < sectorFiltered.length;
-  }, [sectorFiltered]);
+  const hasPartialOee = useMemo(
+    () => sectorFiltered.some((e) => e.oee?.partial === true),
+    [sectorFiltered],
+  );
 
   const oeeBySector = useMemo(() => {
     if (!isManager) return [];
@@ -292,17 +291,43 @@ export function ConsolidatedDashboardPage({
         <Title level={5} id="dashboard-kpis" style={{ marginBottom: 12 }}>
           {MACHINES.DASHBOARD.LABELS.SHIFT_COUNTERS_TITLE}
         </Title>
-        <Row gutter={[16, 16]} align="middle">
+        <Row gutter={[16, 16]} align="stretch">
           <Col xs={24} sm={12} md={8} xl={6}>
-            <Card size="small">
-              <Text strong style={{ display: 'block', marginBottom: 8 }}>
-                {DASHBOARD_SHARED.OEE_CARD.TITLE}
-              </Text>
+            <Card size="small" style={{ height: '100%' }}>
+              <Space align="center" size={4} style={{ marginBottom: 8 }}>
+                <Text strong>{DASHBOARD_SHARED.OEE_CARD.TITLE}</Text>
+                <Tooltip
+                  title={
+                    <Space direction="vertical" size={4}>
+                      <Text strong style={{ color: '#fff' }}>
+                        {DASHBOARD_SHARED.OEE_CARD.TOOLTIP_TITLE}
+                      </Text>
+                      {(Object.keys(DASHBOARD_SHARED.OEE_CARD.STATE_LABELS) as Array<
+                        keyof typeof DASHBOARD_SHARED.OEE_CARD.STATE_LABELS
+                      >).map((key) => (
+                        <div key={key}>
+                          <Text strong style={{ color: '#fff' }}>
+                            {DASHBOARD_SHARED.OEE_CARD.STATE_LABELS[key]}
+                          </Text>
+                          {': '}
+                          <Text style={{ color: '#fff' }}>
+                            {DASHBOARD_SHARED.OEE_CARD.STATE_DESCRIPTIONS[key]}
+                          </Text>
+                        </div>
+                      ))}
+                    </Space>
+                  }
+                >
+                  <InfoCircleOutlined aria-label={DASHBOARD_SHARED.OEE_CARD.TOOLTIP_TITLE} />
+                </Tooltip>
+              </Space>
               {oeePct !== null ? (
                 <Space direction="vertical" size={4} style={{ width: '100%' }}>
+                  <Statistic value={oeePct} precision={1} suffix="%" />
                   <Progress
                     percent={oeePct}
                     type="line"
+                    showInfo={false}
                     status={oeePct >= 85 ? 'success' : oeePct >= 65 ? 'normal' : 'exception'}
                   />
                   {hasPartialOee ? (
@@ -316,7 +341,7 @@ export function ConsolidatedDashboardPage({
           </Col>
           {isManager ? (
             <Col xs={12} sm={6} md={4} xl={3}>
-              <Card size="small">
+              <Card size="small" style={{ height: '100%' }}>
                 <Statistic
                   title={MANAGER_DASHBOARD.LABELS.KPI_TOTAL_MACHINES}
                   value={sectorFiltered.length}
@@ -325,22 +350,22 @@ export function ConsolidatedDashboardPage({
             </Col>
           ) : null}
           <Col xs={12} sm={6} md={4} xl={3}>
-            <Card size="small">
+            <Card size="small" style={{ height: '100%' }}>
               <Statistic title={constants.LABELS.KPI_RUNNING} value={counters.running} />
             </Card>
           </Col>
           <Col xs={12} sm={6} md={4} xl={3}>
-            <Card size="small">
+            <Card size="small" style={{ height: '100%' }}>
               <Statistic title={constants.LABELS.KPI_PAUSED} value={counters.paused} />
             </Card>
           </Col>
           <Col xs={12} sm={6} md={4} xl={3}>
-            <Card size="small">
+            <Card size="small" style={{ height: '100%' }}>
               <Statistic title={constants.LABELS.KPI_AUTO_STOPPED} value={counters.autoStopped} />
             </Card>
           </Col>
           <Col xs={12} sm={6} md={4} xl={3}>
-            <Card size="small">
+            <Card size="small" style={{ height: '100%' }}>
               <Statistic title={constants.LABELS.KPI_OFFLINE} value={counters.offline} />
             </Card>
           </Col>

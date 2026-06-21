@@ -18,9 +18,9 @@ export type AuditLogFilters = {
 };
 
 /**
- * Contract of the audit-log read endpoint delivered by 
- * sub-task 4. MANAGER-only. The backend forces the natural sort
- * (`timestamp DESC`) so the page never needs to pass `sort`.
+ * Contract of the audit-log read endpoint. MANAGER-only. The backend forces
+ * the natural sort (`timestamp DESC`) so the page never needs to pass
+ * `sort`.
  */
 export interface IAuditLogService {
  /**

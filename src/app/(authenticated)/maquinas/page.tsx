@@ -33,7 +33,7 @@ const stateTagColor = (state: string | null | undefined): string => {
 export default function MachinesPage() {
   const router = useRouter();
   const role = useSessionStore((state) => state.role);
-  const canManage = role === 'MANAGER' || role === 'ADMIN';
+  const canManage = role === 'MANAGER';
 
   const [machines, setMachines] = useState<Schemas['MachineSummaryDTO'][]>([]);
   const [loading, setLoading] = useState(false);

@@ -11,7 +11,7 @@ export type { StopMessageCategory } from '@/models/types/StopMessageCategory';
  * "Falta de operador" category.
  */
 export function categoriesForRole(userRole: Role): StopMessageCategory[] {
-  if (userRole === 'LEADER' || userRole === 'MANAGER' || userRole === 'ADMIN') {
+  if (userRole === 'LEADER' || userRole === 'MANAGER') {
     return [...MACHINES.STOPS.CATEGORIES.LEADER_MANAGER];
   }
   return [...MACHINES.STOPS.CATEGORIES.OPERATOR];

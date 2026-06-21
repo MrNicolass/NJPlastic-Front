@@ -1,6 +1,7 @@
 import type { Role } from '@/stores/useSessionStore';
 
 export const PUBLIC_ROUTES = [
+  '/',
   '/login',
   '/esqueci-senha',
   '/redefinir-senha',
@@ -32,7 +33,6 @@ const ALLOWED_PREFIXES_BY_ROLE: Record<Role, readonly string[]> = {
   OPERATOR: OPERATOR_ROUTES,
   LEADER: LEADER_ROUTES,
   MANAGER: MANAGER_ROUTES,
-  ADMIN: MANAGER_ROUTES,
 };
 
 /**
@@ -50,4 +50,6 @@ export const isRouteAllowedForRole = (role: Role, pathname: string): boolean => 
  * valid JWT.
  */
 export const isPublicRoute = (pathname: string): boolean =>
-  PUBLIC_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`));
+  PUBLIC_ROUTES.some((route) =>
+    route === '/' ? pathname === '/' : pathname === route || pathname.startsWith(`${route}/`),
+  );

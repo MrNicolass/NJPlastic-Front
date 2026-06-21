@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react';
 import type { Schemas } from '@/api/types';
 import { ERP_MAPPING } from '@/constants/ConstantsAndParams';
 import type { ErpFieldMappingDrawerProps } from '@/models/interfaces/components/DrawerProps';
+import type { EditableErpFieldMapping } from '@/models/types/EditableErpFieldMapping';
 import ErpFieldMappingService from '@/services/ErpFieldMappingService';
 import { NotificationUtils } from '@/utils/NotificationUtils';
 
@@ -23,25 +24,16 @@ export type { ErpFieldMappingDrawerProps } from '@/models/interfaces/components/
 
 const { Text } = Typography;
 
-type EditableMapping = {
-  key: string;
-  njField: string;
-  erpField: string;
-  dataType: string;
-  required: boolean;
-};
-
 /**
  * Side drawer that loads the current ERP field mapping for the
- * PRODUCTION_ORDER entity type and lets the Manager rewrite the
- * ERP-side column names atomically (sub-task 9). The save
- * goes through PUT /erp/field-mapping; the backend AuditFilter
- * captures the diff. Adding/removing mapping rows is
- * out of scope for the MVP - this drawer only edits the ERP column
- * binding of the existing rows shipped via V9.
+ * PRODUCTION_ORDER entity type and lets the Manager rewrite the ERP-side
+ * column names atomically. The save goes through PUT /erp/field-mapping;
+ * the backend AuditFilter captures the diff. Adding/removing mapping rows
+ * is out of scope for the MVP - this drawer only edits the ERP column
+ * binding of the existing rows.
  */
 export function ErpFieldMappingDrawer({ open, onClose, onSaved }: ErpFieldMappingDrawerProps) {
-  const [rows, setRows] = useState<EditableMapping[]>([]);
+  const [rows, setRows] = useState<EditableErpFieldMapping[]>([]);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -73,7 +65,7 @@ export function ErpFieldMappingDrawer({ open, onClose, onSaved }: ErpFieldMappin
       .finally(() => setLoading(false));
   }, [open]);
 
-  const updateRow = (key: string, patch: Partial<EditableMapping>) => {
+  const updateRow = (key: string, patch: Partial<EditableErpFieldMapping>) => {
     setRows((current) =>
       current.map((row) => (row.key === key ? { ...row, ...patch } : row)),
     );
@@ -109,7 +101,7 @@ export function ErpFieldMappingDrawer({ open, onClose, onSaved }: ErpFieldMappin
     }
   };
 
-  const columns: ColumnsType<EditableMapping> = [
+  const columns: ColumnsType<EditableErpFieldMapping> = [
     {
       title: ERP_MAPPING.DRAWER.LABELS.NJ_FIELD,
       dataIndex: ERP_MAPPING.DRAWER.KEYS.NJ_FIELD,
@@ -167,7 +159,7 @@ export function ErpFieldMappingDrawer({ open, onClose, onSaved }: ErpFieldMappin
           title={ERP_MAPPING.DRAWER.SUBTITLE}
           style={{ marginBottom: 16 }}
         />
-        <Table<EditableMapping>
+        <Table<EditableErpFieldMapping>
           rowKey={(record) => record.key}
           dataSource={rows}
           columns={columns}

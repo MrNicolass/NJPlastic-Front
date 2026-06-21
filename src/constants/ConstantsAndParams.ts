@@ -455,6 +455,10 @@ export const MACHINES = {
       MOLD_TOLERANCE: 'Fator de tolerância',
       MOLD_CONSECUTIVE_PAUSES: 'Pausas consecutivas para parada',
       OPERATORS_TITLE: 'Operadores no turno',
+      OPERATORS_EMPTY: 'Sem operadores registrados no turno',
+      TIMELINE_EMPTY: 'Sem transições no período',
+      CYCLE_CHART_EMPTY: 'Sem ciclos no período selecionado',
+      LOAD_FAILED: 'Não foi possível carregar os dados da máquina.',
       EXPORT_BUTTON: 'Exportar dados',
       BACK_BUTTON: 'Voltar ao dashboard',
     },
@@ -1015,6 +1019,21 @@ export const DASHBOARD_SHARED = {
     TITLE: 'OEE médio',
     PARTIAL_TAG: 'parcial',
     UNAVAILABLE: 'OEE indisponível',
+    TOOLTIP_TITLE: 'Estados do OEE',
+    STATE_LABELS: {
+      EXCELLENT: 'Excelente',
+      GOOD: 'Bom',
+      POOR: 'Ruim',
+      PARTIAL: 'Parcial',
+      UNAVAILABLE: 'Indisponível',
+    },
+    STATE_DESCRIPTIONS: {
+      EXCELLENT: 'OEE ≥ 85% — operação dentro da meta.',
+      GOOD: 'OEE entre 65% e 85% — operação aceitável, monitorar.',
+      POOR: 'OEE < 65% — perdas significativas, investigar.',
+      PARTIAL: 'Algumas máquinas ainda sem registro de qualidade no período.',
+      UNAVAILABLE: 'Sem dados suficientes para calcular o OEE.',
+    },
   },
 } as const;
 
@@ -1069,13 +1088,11 @@ export const USERS = {
     OPERATOR: 'OPERATOR',
     LEADER: 'LEADER',
     MANAGER: 'MANAGER',
-    ADMIN: 'ADMIN',
   },
   ROLE_LABELS: {
     OPERATOR: 'Operador',
     LEADER: 'Líder de turno',
     MANAGER: 'Gestor',
-    ADMIN: 'Administrador',
   },
   LIST: {
     TITLE: 'Usuários',
@@ -1522,7 +1539,6 @@ export const LAYOUT = {
       ROLE_OPERATOR: 'Operador',
       ROLE_LEADER: 'Líder de turno',
       ROLE_MANAGER: 'Gestor',
-      ROLE_ADMIN: 'Administrador',
     },
   },
   SIDER: {
@@ -1545,5 +1561,99 @@ export const LAYOUT = {
     WARNING: { KEYS: {}, TITLES: {}, MESSAGES: {} },
     ERROR: { KEYS: {}, TITLES: {}, MESSAGES: {} },
     SUCCESS: { KEYS: {}, TITLES: {}, MESSAGES: {} },
+  },
+} as const;
+
+export const NOT_FOUND = {
+  KEY: 'not-found',
+  TITLE: '404',
+  SUBTITLE: 'Página não encontrada',
+  DESCRIPTION: 'A rota que você acessou não existe ou foi movida.',
+  BACK_TO_DASHBOARD: 'Voltar para o início',
+} as const;
+
+export const LANDING = {
+  TOPBAR: {
+    BRAND: 'NJPlastic',
+    BRAND_TAGLINE: 'Monitoramento de injetoras',
+    NAV: {
+      ABOUT: 'Sobre',
+      VIDEO: 'Demonstração',
+      DEMO_ACCESS: 'Acesso de teste',
+      REPO: 'Repositório',
+    },
+    CTA_LOGIN: 'Entrar',
+  },
+  HERO: {
+    EYEBROW: 'Plataforma Web-IoT',
+    TITLE: 'Da injetora ao ERP, sem planilhas no meio do caminho',
+    TAGLINE:
+      'A NJPlastic captura os ciclos das máquinas via Arduino e MQTT, calcula OEE em tempo real e integra os dados diretamente ao ERP corporativo — sem dependência de middleware proprietário e com custo acessível para pequenas e médias indústrias brasileiras de injeção plástica.',
+    PRIMARY_CTA: 'Entrar no sistema',
+    SECONDARY_CTA: 'Ver no GitHub',
+  },
+  ABOUT: {
+    TITLE: 'Sobre o sistema',
+    INTRO:
+      'A NJPlastic foi projetada para resolver três problemas reais do chão de fábrica: a falta de visibilidade da produção em tempo real, o retrabalho manual dos líderes de turno na consolidação de relatórios e a ausência de integração nativa entre o MES e o ERP corporativo. O MVP foi construído com rigor arquitetural (modelagem C4, separação de camadas, protocolo aberto) e cobre os perfis Operador, Líder de Turno e Gestor.',
+    PILLARS: [
+      {
+        TITLE: 'Integração ERP real e bidirecional',
+        DESCRIPTION:
+          'Conexão JDBC direta com SQL Server, Oracle e PostgreSQL — leitura de ordens de produção e gravação de apontamentos, sem middleware proprietário ou conectores sob demanda.',
+      },
+      {
+        TITLE: 'Especialização em injeção plástica',
+        DESCRIPTION:
+          'Captura de ciclos, detecção automática de pausas, classificação manual de paradas, OEE consolidado por máquina/setor/turno e ficha de molde com cavidades e tolerância — calibrado para a realidade brasileira.',
+      },
+      {
+        TITLE: 'Hardware aberto e acessível',
+        DESCRIPTION:
+          'Captura dos pulsos elétricos via Arduino (MVP) e ESP32 (próxima versão) publicando em MQTT. Sem sensores proprietários, sem vendor lock-in, com custo de implementação compatível com PMEs.',
+      },
+    ],
+  },
+  VIDEO: {
+    TITLE: 'Demonstração em vídeo',
+    DESCRIPTION:
+      'Visão guiada do sistema: dashboard do Operador, consolidado do Líder, indicadores do Gestor e a integração com o ERP.',
+    IFRAME_TITLE: 'Apresentação NJPlastic',
+    EMBED_URL: 'https://www.youtube.com/embed/Vh2OwoyZ-Sk',
+  },
+  DEMO_ACCESS: {
+    TITLE: 'Acesso de demonstração',
+    DESCRIPTION:
+      'Use as credenciais abaixo para entrar no ambiente de demonstração. Os dados são sintéticos e regenerados periodicamente — fique à vontade para explorar.',
+    WARNING:
+      'Ambiente público de demonstração — dados sintéticos, sem informação real de cliente.',
+    LOGIN_LABEL: 'Login',
+    PASSWORD_LABEL: 'Senha',
+    PROFILES: {
+      OPERATOR: {
+        TITLE: 'Perfil Operador',
+        SUBTITLE: 'Acompanha as máquinas do próprio turno e classifica pausas.',
+        LOGIN: 'operator',
+        PASSWORD: 'operator-dev-123',
+      },
+      MANAGER: {
+        TITLE: 'Perfil Gestor',
+        SUBTITLE: 'Visão completa: dashboard consolidado, usuários, ERP e auditoria.',
+        LOGIN: 'manager',
+        PASSWORD: 'manager-dev-123',
+      },
+    },
+  },
+  REPO: {
+    TITLE: 'Código-fonte',
+    DESCRIPTION:
+      'O repositório agrega backend (Spring Boot 4 + PostgreSQL + MQTT), frontend (Next.js 16 + Ant Design) e a documentação do RFC com os diagramas C4.',
+    URL: 'https://github.com/MrNicolass/NJPlastic',
+    BUTTON: 'Abrir no GitHub',
+  },
+  FOOTER: {
+    PROJECT: 'NJPlastic 1.0 MVP',
+    AUTHOR: 'Nicolas Gustavo Conte',
+    COURSE: 'Engenharia de Software · Católica',
   },
 } as const;

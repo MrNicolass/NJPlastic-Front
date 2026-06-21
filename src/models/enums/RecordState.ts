@@ -1,0 +1,6 @@
+export enum RecordState {
+  PENDING = 'PENDING',
+  CONFIRMED = 'CONFIRMED',
+  SYNCED = 'SYNCED',
+  DISCARDED = 'DISCARDED',
+}

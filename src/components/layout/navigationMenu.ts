@@ -50,7 +50,7 @@ export const buildMenuItemsForRole = (role: Role): NavigationMenuItem[] => {
   if (role === 'OPERATOR') {
     return [];
   }
-  if (role === 'MANAGER' || role === 'ADMIN') {
+  if (role === 'MANAGER') {
     return [...SHARED_ITEMS, ...ADMIN_ITEMS];
   }
   return SHARED_ITEMS;

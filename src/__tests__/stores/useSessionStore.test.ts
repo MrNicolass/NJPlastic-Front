@@ -48,7 +48,7 @@ describe('useSessionStore', () => {
     expect(state.expiresAt).toBeNull();
   });
 
-  it.each<Role>(['OPERATOR', 'LEADER', 'MANAGER', 'ADMIN'])(
+  it.each<Role>(['OPERATOR', 'LEADER', 'MANAGER'])(
     'accepts the %s role on setSession',
     (role) => {
       useSessionStore.getState().setSession({

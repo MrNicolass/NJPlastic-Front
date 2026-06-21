@@ -2,6 +2,7 @@ import type { AxiosResponse } from 'axios';
 import type { Schemas } from '@/api/types';
 import { MACHINES, REPORTS } from '@/constants/ConstantsAndParams';
 import type { IMachineService } from '@/models/interfaces/services/IMachineService';
+import type { OperatorOfShift } from '@/models/types/OperatorsOfShift';
 import type { Page } from '@/models/types/Page';
 import type { PageParams } from '@/models/types/PageParams';
 import type { ProductionCycleResponse } from '@/models/types/ProductionCycleResponse';
@@ -261,6 +262,25 @@ const MachineService: IMachineService = {
           successDescription: MACHINES.NOTIFICATIONS.SUCCESS.MESSAGES.MACHINE_DEACTIVATED,
         }),
       });
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async listOperatorsOfShift(
+    machineId: string,
+    shift?: string,
+    suppressError?: boolean,
+  ): Promise<OperatorOfShift[]> {
+    try {
+      const response: AxiosResponse<OperatorOfShift[]> = await http.get(
+        `/machines/${machineId}/operators`,
+        {
+          params: shift ? { shift } : undefined,
+          notificationConfig: buildNotificationConfig(MACHINES.KEY, suppressError),
+        },
+      );
+      return response.data;
     } catch (error) {
       throw error;
     }

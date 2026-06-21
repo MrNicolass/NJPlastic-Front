@@ -30,7 +30,7 @@ const DEFAULT_PAGE_SIZE = 20;
 
 export default function ErpPage() {
   const role = useSessionStore((state) => state.role);
-  const canManage = role === 'MANAGER' || role === 'ADMIN';
+  const canManage = role === 'MANAGER';
 
   const [orders, setOrders] = useState<ProductionOrderResponse[]>([]);
   const [totalElements, setTotalElements] = useState(0);

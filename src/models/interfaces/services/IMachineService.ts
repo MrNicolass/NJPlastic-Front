@@ -1,4 +1,5 @@
 import type { Schemas } from '@/api/types';
+import type { OperatorOfShift } from '@/models/types/OperatorsOfShift';
 import type { Page } from '@/models/types/Page';
 import type { PageParams } from '@/models/types/PageParams';
 import type { ProductionCycleResponse } from '@/models/types/ProductionCycleResponse';
@@ -164,9 +165,8 @@ export interface IMachineService {
   ): Promise<Page<Schemas['StopEditDTO']>>;
 
  /**
- * Registers a new machine (sub-task 2). The backend
- * validates uniqueness of the short code; on conflict it returns
- * 409. The machine is created active.
+ * Registers a new machine. The backend validates uniqueness of the short
+ * code; on conflict it returns 409. The machine is created active.
  *
  * @param payload - Create payload (code, description, sector, cycle params).
  * @param suppressError - Optional. If set to `true`, suppresses errors that may occur during the request.
@@ -202,4 +202,20 @@ export interface IMachineService {
  * @returns A promise resolving once the request is acknowledged.
  */
   softDeleteMachine(machineId: string, suppressError?: boolean): Promise<void>;
+
+ /**
+ * Lists active operators currently assigned to a machine based on the
+ * machine's sector and the requested (or current) shift.
+ *
+ * @param machineId - The machine UUID.
+ * @param shift - Optional shift override (e.g. "TURNO_A"). Defaults to the
+ *   server-resolved current shift.
+ * @param suppressError - Optional. If set to `true`, suppresses errors that may occur during the request.
+ * @returns A promise resolving to the list of operators.
+ */
+  listOperatorsOfShift(
+    machineId: string,
+    shift?: string,
+    suppressError?: boolean,
+  ): Promise<OperatorOfShift[]>;
 }

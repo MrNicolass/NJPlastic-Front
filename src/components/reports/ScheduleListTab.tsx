@@ -13,9 +13,9 @@ const { Text } = Typography;
 
 /**
  * Manager-only tab listing every active report schedule plus the CTA to
- * create a new one (sub-task 6, mockup Reports_Part2_V1). The
- * schedule row carries cron, e-mail and format; deletion runs through a
- * confirm popover so an accidental click does not yank a recurring job.
+ * create a new one. The schedule row carries cron, e-mail and format;
+ * deletion runs through a confirm popover so an accidental click does not
+ * yank a recurring job.
  */
 export function ScheduleListTab() {
   const [rows, setRows] = useState<ReportScheduleResponse[]>([]);

@@ -9,6 +9,7 @@ import type { Schemas } from '@/api/types';
 import { CycleTimeChart } from '@/components/operator/CycleTimeChart';
 import type { CyclePoint } from '@/models/types/CycleTimeChart';
 import type { MachineSnapshot } from '@/models/types/MachineDetail';
+import type { OperatorOfShift } from '@/models/types/OperatorsOfShift';
 import { MachineKpis } from '@/components/operator/MachineKpis';
 import { MachineStatusTimeline } from '@/components/operator/MachineStatusTimeline';
 import { MachineStopsTable } from '@/components/operator/MachineStopsTable';
@@ -142,6 +143,7 @@ export default function MachineDetailPage() {
   const [stopModalEntry, setStopModalEntry] = useState<Entry | null>(null);
   const [pauseModalEntry, setPauseModalEntry] = useState<Entry | null>(null);
   const [qualityOpen, setQualityOpen] = useState(false);
+  const [operators, setOperators] = useState<OperatorOfShift[]>([]);
 
   useEffect(() => {
     if (error && !data) {
@@ -153,6 +155,24 @@ export default function MachineDetailPage() {
       });
     }
   }, [error, data]);
+
+  useEffect(() => {
+    let cancelled = false;
+    MachineService.listOperatorsOfShift(machineId, undefined, true)
+      .then((rows) => {
+        if (!cancelled) {
+          setOperators(rows);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setOperators([]);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [machineId]);
 
   const editHistoryEnabled =
     !!stopModalEntry && role !== null && role !== 'OPERATOR';
@@ -235,7 +255,7 @@ export default function MachineDetailPage() {
 
   if (!data) {
     return (
-      <Empty description="Não foi possível carregar os dados da máquina.">
+      <Empty description={MACHINES.DETAIL.LABELS.LOAD_FAILED}>
         <Button onClick={() => router.push('/dashboard')}>
           {MACHINES.DETAIL.LABELS.BACK_BUTTON}
         </Button>
@@ -433,7 +453,7 @@ export default function MachineDetailPage() {
           <MoldInfoCard detail={data.detail} />
         </Col>
         <Col xs={24} md={12}>
-          <OperatorsOfShift operators={[]} />
+          <OperatorsOfShift operators={operators} />
         </Col>
       </Row>
 

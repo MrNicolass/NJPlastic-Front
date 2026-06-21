@@ -68,7 +68,7 @@ export default function DashboardPage() {
   if (role === 'LEADER') {
     return <DashboardWithSlots variant="LEADER" />;
   }
-  if (role === 'MANAGER' || role === 'ADMIN') {
+  if (role === 'MANAGER') {
     return <DashboardWithSlots variant="MANAGER" />;
   }
   return <Skeleton active paragraph={{ rows: 6 }} />;

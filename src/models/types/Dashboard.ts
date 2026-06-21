@@ -15,7 +15,7 @@ export type ActiveStopModal = {
 };
 
 export type ConsolidatedDashboardPageProps = {
-  userRole: 'LEADER' | 'MANAGER' | 'ADMIN';
+  userRole: 'LEADER' | 'MANAGER';
   recentEventsSlot?: React.ReactNode;
   onRegisterEventClick?: () => void;
 };

@@ -1,13 +1,6 @@
-/**
- * Manual mirror of the backend {@code RecentEventDTO} (Fase A).
- * Replace with {@code Schemas['RecentEventDTO']} once `npm run api:generate`
- * regenerates {@link../../api/schema.ts}.
- */
-export type RecentEventType =
-  | 'MANUAL_EVENT'
-  | 'MANUAL_PAUSE'
-  | 'AUTO_STOP'
-  | 'STOP_MESSAGE_EDIT';
+import { RecentEventType } from '@/models/enums/RecentEventType';
+
+export { RecentEventType };
 
 export type RecentEventResponse = {
   type: RecentEventType;

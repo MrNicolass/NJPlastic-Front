@@ -15,12 +15,11 @@ export type UserListFilters = {
 };
 
 /**
- * Contract of every user-administration REST call delivered by
- * sub-task 1. All methods accept an optional
- * {@link suppressError} flag as the last parameter; when true, the
- * global Axios interceptor skips the error notification. Paginated
- * methods take {@link PageParams} as the first parameter, mirroring
- * the project service convention.
+ * Contract of every user-administration REST call. All methods accept an
+ * optional {@link suppressError} flag as the last parameter; when true,
+ * the global Axios interceptor skips the error notification. Paginated
+ * methods take {@link PageParams} as the first parameter, mirroring the
+ * project service convention.
  */
 export interface IUserService {
  /**

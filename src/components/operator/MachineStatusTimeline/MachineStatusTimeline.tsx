@@ -70,7 +70,7 @@ export function MachineStatusTimeline(props: MachineStatusTimelineProps): React.
   }, [entries, startMs, endMs, span]);
 
   if (segments.length === 0) {
-    return <Empty description="Sem transições no período" />;
+    return <Empty description={MACHINES.DETAIL.LABELS.TIMELINE_EMPTY} />;
   }
 
   return (
