@@ -1,9 +1,10 @@
 'use client';
 
-import { Layout, Menu } from 'antd';
+import { Drawer, Layout, Menu } from 'antd';
 import { usePathname, useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { LAYOUT } from '@/constants/ConstantsAndParams';
+import { useResponsive } from '@/hooks/useResponsive';
 import type { AppSiderProps } from '@/models/interfaces/components/LayoutProps';
 import { buildMenuItemsForRole, resolveActiveMenuKey } from './navigationMenu';
 
@@ -17,10 +18,14 @@ const { LABELS } = LAYOUT.SIDER;
  * dashboard is a simplified view with no sider). Items per role come
  * from buildMenuItemsForRole; the active key derives from the current
  * pathname so refreshes and deep-links keep the correct selection.
+ * On mobile (`< md`) the sider is replaced by a left Drawer triggered
+ * by the hamburger button in AppHeader, so the navigation does not
+ * steal screen real estate from content but stays one tap away.
  */
-export function AppSider({ role }: AppSiderProps) {
+export function AppSider({ role, mobileNavOpen, onMobileNavOpenChange }: AppSiderProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const { isMobile } = useResponsive();
   const [collapsed, setCollapsed] = useState(false);
 
   const items = useMemo(() => buildMenuItemsForRole(role), [role]);
@@ -33,6 +38,40 @@ export function AppSider({ role }: AppSiderProps) {
     return null;
   }
 
+  const handleNavigate = (key: string) => {
+    if (key.startsWith('/')) {
+      router.push(key);
+      onMobileNavOpenChange?.(false);
+    }
+  };
+
+  if (isMobile) {
+    return (
+      <Drawer
+        placement="left"
+        open={mobileNavOpen ?? false}
+        onClose={() => onMobileNavOpenChange?.(false)}
+        width={LAYOUT.RESPONSIVE_WIDTHS.MOBILE_NAV_DRAWER}
+        closable
+        styles={{ body: { padding: 0, background: '#001529' }, header: { display: 'none' } }}
+        aria-label={LABELS.EXPAND}
+      >
+        <Menu
+          mode="inline"
+          theme="dark"
+          selectedKeys={activeKey ? [activeKey] : []}
+          items={items}
+          onClick={({ key }) => {
+            if (typeof key === 'string') {
+              handleNavigate(key);
+            }
+          }}
+          style={{ borderInlineEnd: 0, paddingBlock: 8 }}
+        />
+      </Drawer>
+    );
+  }
+
   return (
     <Sider
       width={240}
@@ -40,7 +79,6 @@ export function AppSider({ role }: AppSiderProps) {
       collapsible
       collapsed={collapsed}
       onCollapse={setCollapsed}
-      breakpoint="lg"
       aria-label={collapsed ? LABELS.EXPAND : LABELS.COLLAPSE}
       className="app-sider"
     >
@@ -50,8 +88,8 @@ export function AppSider({ role }: AppSiderProps) {
         selectedKeys={activeKey ? [activeKey] : []}
         items={items}
         onClick={({ key }) => {
-          if (typeof key === 'string' && key.startsWith('/')) {
-            router.push(key);
+          if (typeof key === 'string') {
+            handleNavigate(key);
           }
         }}
         style={{ borderInlineEnd: 0, paddingBlock: 8 }}

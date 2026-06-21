@@ -1,11 +1,13 @@
 'use client';
 
 import { Layout } from 'antd';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { AppHeader } from '@/components/layout/AppHeader';
 import { AppSider } from '@/components/layout/AppSider';
 import { GlobalErrorBoundary } from '@/components/shared/GlobalErrorBoundary';
 import { DashboardSkeleton } from '@/components/shared/Skeletons';
+import { LAYOUT } from '@/constants/ConstantsAndParams';
+import { useResponsive } from '@/hooks/useResponsive';
 import { useSessionStore } from '@/stores/useSessionStore';
 import { njPalette } from '@/theme/njTheme';
 
@@ -24,11 +26,17 @@ const { Content } = Layout;
 export default function AuthenticatedLayout({ children }: { children: ReactNode }) {
   const user = useSessionStore((state) => state.user);
   const role = useSessionStore((state) => state.role);
+  const { isMobile } = useResponsive();
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+  const contentPadding = isMobile
+    ? LAYOUT.RESPONSIVE_WIDTHS.CONTENT_PADDING_MOBILE
+    : LAYOUT.RESPONSIVE_WIDTHS.CONTENT_PADDING_DESKTOP;
 
   if (!user || !role) {
     return (
       <Layout style={{ minHeight: '100vh' }}>
-        <Content style={{ padding: 24 }}>
+        <Content style={{ padding: contentPadding }}>
           <DashboardSkeleton />
         </Content>
       </Layout>
@@ -37,10 +45,19 @@ export default function AuthenticatedLayout({ children }: { children: ReactNode 
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <AppHeader user={user} role={role} />
+      <AppHeader
+        user={user}
+        role={role}
+        mobileNavOpen={mobileNavOpen}
+        onMobileNavOpenChange={setMobileNavOpen}
+      />
       <Layout>
-        <AppSider role={role} />
-        <Content style={{ padding: 24, background: njPalette.bone }}>
+        <AppSider
+          role={role}
+          mobileNavOpen={mobileNavOpen}
+          onMobileNavOpenChange={setMobileNavOpen}
+        />
+        <Content style={{ padding: contentPadding, background: njPalette.bone }}>
           <GlobalErrorBoundary>{children}</GlobalErrorBoundary>
         </Content>
       </Layout>

@@ -14,6 +14,7 @@ import Link from 'next/link';
 import type { CSSProperties } from 'react';
 import njLogo from '@/assets/logo/NJPlastic-logo-a-128px.png';
 import { LANDING } from '@/constants/ConstantsAndParams';
+import { useResponsive } from '@/hooks/useResponsive';
 import { njPalette } from '@/theme/njTheme';
 
 const { Title, Paragraph, Text } = Typography;
@@ -35,6 +36,7 @@ const CONTAINER: CSSProperties = {
 };
 
 export default function LandingPage() {
+  const { isMobile } = useResponsive();
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
       <header
@@ -53,39 +55,73 @@ export default function LandingPage() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '12px 24px',
+            padding: isMobile ? '12px 16px' : '12px 24px',
+            gap: 12,
+            flexWrap: 'nowrap',
           }}
         >
           <Link
             href="/"
-            style={{ display: 'flex', alignItems: 'center', gap: 12, color: 'inherit' }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
+              color: 'inherit',
+              minWidth: 0,
+              flexShrink: 1,
+            }}
           >
-            <Image src={njLogo} alt="NJPlastic" width={40} height={40} priority />
-            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
-              <Text strong style={{ fontSize: 18, color: njPalette.charcoal }}>
+            <Image
+              src={njLogo}
+              alt="NJPlastic"
+              width={isMobile ? 32 : 40}
+              height={isMobile ? 32 : 40}
+              priority
+              style={{ flexShrink: 0 }}
+            />
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                lineHeight: 1.1,
+                minWidth: 0,
+              }}
+            >
+              <Text
+                strong
+                style={{
+                  fontSize: isMobile ? 15 : 18,
+                  color: njPalette.charcoal,
+                  whiteSpace: 'nowrap',
+                }}
+              >
                 {LANDING.TOPBAR.BRAND}
               </Text>
-              <Text style={{ fontSize: 12, color: njPalette.warmGray }}>
-                {LANDING.TOPBAR.BRAND_TAGLINE}
-              </Text>
+              {!isMobile ? (
+                <Text style={{ fontSize: 12, color: njPalette.warmGray, whiteSpace: 'nowrap' }}>
+                  {LANDING.TOPBAR.BRAND_TAGLINE}
+                </Text>
+              ) : null}
             </div>
           </Link>
-          <Space size={24} className="landing-nav">
-            <a href="#sobre" style={{ color: njPalette.charcoal }}>
-              {LANDING.TOPBAR.NAV.ABOUT}
-            </a>
-            <a href="#video" style={{ color: njPalette.charcoal }}>
-              {LANDING.TOPBAR.NAV.VIDEO}
-            </a>
-            <a href="#acesso" style={{ color: njPalette.charcoal }}>
-              {LANDING.TOPBAR.NAV.DEMO_ACCESS}
-            </a>
-            <a href="#repositorio" style={{ color: njPalette.charcoal }}>
-              {LANDING.TOPBAR.NAV.REPO}
-            </a>
-          </Space>
-          <Link href="/login">
-            <Button type="primary" icon={<LoginOutlined />}>
+          {!isMobile ? (
+            <Space size={24} className="landing-nav">
+              <a href="#sobre" style={{ color: njPalette.charcoal }}>
+                {LANDING.TOPBAR.NAV.ABOUT}
+              </a>
+              <a href="#video" style={{ color: njPalette.charcoal }}>
+                {LANDING.TOPBAR.NAV.VIDEO}
+              </a>
+              <a href="#acesso" style={{ color: njPalette.charcoal }}>
+                {LANDING.TOPBAR.NAV.DEMO_ACCESS}
+              </a>
+              <a href="#repositorio" style={{ color: njPalette.charcoal }}>
+                {LANDING.TOPBAR.NAV.REPO}
+              </a>
+            </Space>
+          ) : null}
+          <Link href="/login" style={{ flexShrink: 0 }}>
+            <Button type="primary" icon={<LoginOutlined />} size={isMobile ? 'small' : 'middle'}>
               {LANDING.TOPBAR.CTA_LOGIN}
             </Button>
           </Link>

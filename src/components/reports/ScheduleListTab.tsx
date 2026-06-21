@@ -78,7 +78,7 @@ export function ScheduleListTab() {
 
   return (
     <Space orientation="vertical" size={16} style={{ width: '100%' }}>
-      <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+      <Space style={{ width: '100%', justifyContent: 'space-between' }} size={[12, 8]} wrap>
         <Text type="secondary">{REPORTS_SCHEDULE.DESCRIPTION}</Text>
         <Button type="primary" onClick={() => setDrawerOpen(true)}>
           {REPORTS_SCHEDULE.NEW_BUTTON}
@@ -91,6 +91,7 @@ export function ScheduleListTab() {
         pagination={false}
         dataSource={rows}
         locale={{ emptyText: REPORTS_SCHEDULE.EMPTY }}
+        scroll={{ x: 'max-content' }}
         columns={[
           {
             title: REPORTS_SCHEDULE.COLUMNS.TYPE,

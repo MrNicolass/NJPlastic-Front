@@ -3,6 +3,7 @@
 import { Badge, Button, Card, Space, Tag, Typography } from 'antd';
 import type { Schemas } from '@/api/types';
 import { MACHINES } from '@/constants/ConstantsAndParams';
+import { useResponsive } from '@/hooks/useResponsive';
 import type { MachineCardProps } from '@/models/interfaces/components/MachineProps';
 import { njPalette } from '@/theme/njTheme';
 
@@ -37,6 +38,7 @@ const STATE_LABEL: Record<MachineState | 'UNKNOWN', string> = {
 export function MachineCard(props: MachineCardProps): React.ReactNode {
   const { machine, currentState, currentStop, cyclesInShift, onRegisterPause, onEditStopMessage, onViewDetail } =
     props;
+  const { isMobile } = useResponsive();
 
   const stateKey = (currentState ?? 'UNKNOWN') as MachineState | 'UNKNOWN';
   const badgeColor = STATE_BADGE_COLOR[stateKey];
@@ -49,8 +51,8 @@ export function MachineCard(props: MachineCardProps): React.ReactNode {
       hoverable
       onClick={onViewDetail}
       title={
-        <Space>
-          <Text code style={{ fontSize: 16 }}>
+        <Space wrap size={4}>
+          <Text code style={{ fontSize: isMobile ? 14 : 16 }}>
             {machine.code}
           </Text>
           {machine.description ? <Text type="secondary">{machine.description}</Text> : null}
@@ -64,7 +66,7 @@ export function MachineCard(props: MachineCardProps): React.ReactNode {
       <Space orientation="vertical" size={12} style={{ width: '100%' }}>
         <Space orientation="vertical" size={0}>
           <Text type="secondary">Ciclos no turno</Text>
-          <Text code style={{ fontSize: 28, color: njPalette.charcoal }}>
+          <Text code style={{ fontSize: isMobile ? 22 : 28, color: njPalette.charcoal }}>
             {cyclesInShift ?? 0}
           </Text>
         </Space>

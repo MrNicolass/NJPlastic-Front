@@ -273,8 +273,13 @@ export default function MachineDetailPage() {
 
   return (
     <Space orientation="vertical" size={20} style={{ width: '100%' }}>
-      <Space style={{ width: '100%', justifyContent: 'space-between' }} align="center">
-        <Space align="center" size={12}>
+      <Space
+        style={{ width: '100%', justifyContent: 'space-between' }}
+        align="center"
+        size={[12, 8]}
+        wrap
+      >
+        <Space align="center" size={[12, 4]} wrap>
           <Button
             type="text"
             icon={<ArrowLeftOutlined />}
@@ -295,7 +300,7 @@ export default function MachineDetailPage() {
             text={`${MACHINES.DETAIL.LABELS.HEADER_BADGE_PREFIX} ${STATE_LABEL[currentState]}`}
           />
         </Space>
-        <Space>
+        <Space wrap>
           <ExportButton onExport={handleExport} />
           <Button type="primary" onClick={() => setQualityOpen(true)}>
             {MACHINES.DETAIL.BUTTONS.REGISTER_QUALITY}

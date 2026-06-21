@@ -3,11 +3,13 @@
 import { Button, DatePicker, Form, InputNumber, Modal, Space, Typography } from 'antd';
 import dayjs, { type Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
-import { MACHINES } from '@/constants/ConstantsAndParams';
+import { LAYOUT, MACHINES } from '@/constants/ConstantsAndParams';
+import { useResponsive } from '@/hooks/useResponsive';
 import type { RegisterQualityModalProps } from '@/models/interfaces/components/ModalProps';
 import type { RegisterQualityFormValues as FormValues } from '@/models/types/RegisterQualityFormValues';
 import MachineService from '@/services/MachineService';
 import { NotificationUtils } from '@/utils/NotificationUtils';
+import { getResponsiveModalWidth } from '@/utils/ResponsiveUtils';
 
 export type { RegisterQualityModalProps } from '@/models/interfaces/components/ModalProps';
 
@@ -38,6 +40,7 @@ export function RegisterQualityModal(props: RegisterQualityModalProps): React.Re
   const { open, onClose, machineId, machineCode, defaultFrom, defaultTo, onRegistered } = props;
   const [form] = Form.useForm<FormValues>();
   const [submitting, setSubmitting] = useState(false);
+  const { isMobile } = useResponsive();
 
   useEffect(() => {
     if (!open) {
@@ -101,7 +104,7 @@ export function RegisterQualityModal(props: RegisterQualityModalProps): React.Re
       open={open}
       onCancel={onClose}
       title={MACHINES.QUALITY.REGISTER_MODAL.TITLE}
-      width={520}
+      width={getResponsiveModalWidth(isMobile, LAYOUT.RESPONSIVE_WIDTHS.MODAL_MD)}
       destroyOnHidden
       footer={
         <Space>

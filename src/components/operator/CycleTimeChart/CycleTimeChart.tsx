@@ -3,6 +3,7 @@
 import { Empty, Segmented, Space, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { MACHINES } from '@/constants/ConstantsAndParams';
+import { useResponsive } from '@/hooks/useResponsive';
 import type { CycleTimeChartProps } from '@/models/interfaces/components/MachineProps';
 import type { CyclePoint } from '@/models/types/CycleTimeChart';
 import { njPalette } from '@/theme/njTheme';
@@ -68,8 +69,10 @@ const formatTime = (epoch: number): string => {
 export function CycleTimeChart(props: CycleTimeChartProps): React.ReactNode {
   const { cycles, standardCycleMs, toleranceFactor, aggregationWindowMs } = props;
   const [range, setRange] = useState<RangeKey>('SHIFT');
+  const { isMobile } = useResponsive();
 
   const windowMs = aggregationWindowMs ?? DEFAULT_AGGREGATION_MS;
+  const tickFontSize = isMobile ? 9 : 11;
 
   const filtered = useMemo(() => {
     const cutoff = Date.now() - RANGE_TO_MS[range];
@@ -86,7 +89,7 @@ export function CycleTimeChart(props: CycleTimeChartProps): React.ReactNode {
   const paddingLeft = 56;
   const paddingRight = 16;
   const paddingTop = 16;
-  const paddingBottom = 32;
+  const paddingBottom = isMobile ? 48 : 32;
   const plotWidth = innerWidth - paddingLeft - paddingRight;
   const plotHeight = innerHeight - paddingTop - paddingBottom;
 
@@ -116,7 +119,12 @@ export function CycleTimeChart(props: CycleTimeChartProps): React.ReactNode {
 
   return (
     <Space orientation="vertical" size={12} style={{ width: '100%' }}>
-      <Space style={{ justifyContent: 'space-between', width: '100%' }} align="center">
+      <Space
+        style={{ justifyContent: 'space-between', width: '100%' }}
+        align="center"
+        size={[12, 8]}
+        wrap
+      >
         <Text strong>{MACHINES.DETAIL.LABELS.CHART_TITLE}</Text>
         <Segmented
           value={range}
@@ -173,25 +181,30 @@ export function CycleTimeChart(props: CycleTimeChartProps): React.ReactNode {
                 x={paddingLeft - 8}
                 y={yScale(tick) + 4}
                 textAnchor="end"
-                fontSize="11"
+                fontSize={tickFontSize}
                 fill={njPalette.charcoal}
               >
                 {tick.toFixed(0)}
               </text>
             </g>
           ))}
-          {xTicks.map((tick) => (
-            <text
-              key={`x-${tick}`}
-              x={xScale(tick)}
-              y={innerHeight - paddingBottom + 18}
-              textAnchor="middle"
-              fontSize="11"
-              fill={njPalette.charcoal}
-            >
-              {formatTime(tick)}
-            </text>
-          ))}
+          {xTicks.map((tick) => {
+            const tx = xScale(tick);
+            const ty = innerHeight - paddingBottom + 18;
+            return (
+              <text
+                key={`x-${tick}`}
+                x={tx}
+                y={ty}
+                textAnchor={isMobile ? 'end' : 'middle'}
+                fontSize={tickFontSize}
+                fill={njPalette.charcoal}
+                transform={isMobile ? `rotate(-35 ${tx} ${ty})` : undefined}
+              >
+                {formatTime(tick)}
+              </text>
+            );
+          })}
           <polyline
             points={polyline}
             fill="none"

@@ -4,12 +4,14 @@ import { Alert, Button, Descriptions, Form, Input, Modal, Select, Space, Tag, Ty
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
 import type { Schemas } from '@/api/types';
-import { MACHINES, UTILS } from '@/constants/ConstantsAndParams';
+import { LAYOUT, MACHINES, UTILS } from '@/constants/ConstantsAndParams';
+import { useResponsive } from '@/hooks/useResponsive';
 import type { StopMessageEditModalProps } from '@/models/interfaces/components/ModalProps';
 import MachineService from '@/services/MachineService';
 import type { Role } from '@/stores/useSessionStore';
 import { njPalette } from '@/theme/njTheme';
 import { NotificationUtils } from '@/utils/NotificationUtils';
+import { getResponsiveModalWidth } from '@/utils/ResponsiveUtils';
 import { categoriesForRole } from './categories';
 
 export type { StopMessageEditModalProps } from '@/models/interfaces/components/ModalProps';
@@ -82,6 +84,7 @@ export function StopMessageEditModal(props: StopMessageEditModalProps): React.Re
   const [form] = Form.useForm<{ category: string; message: string }>();
   const [submitting, setSubmitting] = useState(false);
   const [currentLength, setCurrentLength] = useState(0);
+  const { isMobile } = useResponsive();
 
   useEffect(() => {
     if (!open) {
@@ -139,7 +142,7 @@ export function StopMessageEditModal(props: StopMessageEditModalProps): React.Re
       open={open}
       onCancel={onClose}
       title={MACHINES.STOPS.EDIT_MODAL.TITLE}
-      width={720}
+      width={getResponsiveModalWidth(isMobile, LAYOUT.RESPONSIVE_WIDTHS.MODAL_LG)}
       destroyOnHidden
       footer={
         <Space>
@@ -165,7 +168,7 @@ export function StopMessageEditModal(props: StopMessageEditModalProps): React.Re
 
         <Descriptions
           title={MACHINES.STOPS.EDIT_MODAL.READ_ONLY_TITLE}
-          column={2}
+          column={{ xs: 1, md: 2 }}
           size="small"
           bordered
         >

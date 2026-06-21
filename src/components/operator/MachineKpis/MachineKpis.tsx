@@ -41,44 +41,44 @@ export function MachineKpis(props: MachineKpisProps): React.ReactNode {
   return (
     <Card>
       <Row gutter={[16, 16]}>
-        <Col xs={12} md={8} xl={4}>
+        <Col xs={24} sm={12} md={8} xl={4}>
           <Statistic
             title={MACHINES.DETAIL.LABELS.KPI_OEE}
             value={formatPercent(oee?.oee)}
             suffix={oee?.partial ? <Text type="warning"> · parcial</Text> : null}
           />
         </Col>
-        <Col xs={12} md={8} xl={4}>
+        <Col xs={24} sm={12} md={8} xl={4}>
           <Statistic
             title={MACHINES.DETAIL.LABELS.KPI_AVAILABILITY}
             value={formatPercent(oee?.availability)}
           />
         </Col>
-        <Col xs={12} md={8} xl={4}>
+        <Col xs={24} sm={12} md={8} xl={4}>
           <Statistic
             title={MACHINES.DETAIL.LABELS.KPI_PERFORMANCE}
             value={formatPercent(oee?.performance)}
           />
         </Col>
-        <Col xs={12} md={8} xl={4}>
+        <Col xs={24} sm={12} md={8} xl={4}>
           <Statistic
             title={MACHINES.DETAIL.LABELS.KPI_QUALITY}
             value={formatPercent(oee?.quality)}
           />
         </Col>
-        <Col xs={12} md={8} xl={4}>
+        <Col xs={24} sm={12} md={8} xl={4}>
           <Statistic title={MACHINES.DETAIL.LABELS.KPI_CYCLES} value={cyclesInShift} />
         </Col>
-        <Col xs={12} md={8} xl={4}>
+        <Col xs={24} sm={12} md={8} xl={4}>
           <Statistic
             title={MACHINES.DETAIL.LABELS.KPI_AVG_CYCLE_TIME}
             value={formatMs(averageCycleMs)}
           />
         </Col>
-        <Col xs={12} md={8} xl={4}>
+        <Col xs={24} sm={12} md={8} xl={4}>
           <Statistic title={MACHINES.DETAIL.LABELS.KPI_MTBF} value={formatMinutes(mtbfMinutes)} />
         </Col>
-        <Col xs={12} md={8} xl={4}>
+        <Col xs={24} sm={12} md={8} xl={4}>
           <Statistic
             title={MACHINES.DETAIL.LABELS.KPI_SCRAP}
             value={formatPercent(scrapPercent)}

@@ -4,11 +4,13 @@ import { AxiosError } from 'axios';
 import { Button, Descriptions, Form, Input, Modal, Select, Space, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
-import { MACHINES, UTILS } from '@/constants/ConstantsAndParams';
+import { LAYOUT, MACHINES, UTILS } from '@/constants/ConstantsAndParams';
+import { useResponsive } from '@/hooks/useResponsive';
 import type { RegisterPauseModalProps } from '@/models/interfaces/components/ModalProps';
 import type { RegisterPauseFormValues as FormValues } from '@/models/types/RegisterPauseFormValues';
 import MachineService from '@/services/MachineService';
 import { NotificationUtils } from '@/utils/NotificationUtils';
+import { getResponsiveModalWidth } from '@/utils/ResponsiveUtils';
 
 export type { RegisterPauseModalProps } from '@/models/interfaces/components/ModalProps';
 
@@ -45,6 +47,7 @@ export function RegisterPauseModal(props: RegisterPauseModalProps): React.ReactN
   const [form] = Form.useForm<FormValues>();
   const [submitting, setSubmitting] = useState(false);
   const [reasonValue, setReasonValue] = useState<string | undefined>(undefined);
+  const { isMobile } = useResponsive();
 
   useEffect(() => {
     if (!open) {
@@ -88,7 +91,7 @@ export function RegisterPauseModal(props: RegisterPauseModalProps): React.ReactN
       open={open}
       onCancel={onClose}
       title={MACHINES.PAUSES.REGISTER_MODAL.TITLE}
-      width={520}
+      width={getResponsiveModalWidth(isMobile, LAYOUT.RESPONSIVE_WIDTHS.MODAL_MD)}
       destroyOnHidden
       footer={
         <Space>

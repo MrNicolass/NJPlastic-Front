@@ -18,10 +18,12 @@ import {
 } from 'antd';
 import { useEffect, useMemo } from 'react';
 import type { Schemas } from '@/api/types';
-import { MACHINE_REGISTER } from '@/constants/ConstantsAndParams';
+import { LAYOUT, MACHINE_REGISTER } from '@/constants/ConstantsAndParams';
+import { useResponsive } from '@/hooks/useResponsive';
 import type { MachineRegisterDrawerProps } from '@/models/interfaces/components/DrawerProps';
 import type { MachineFormValues as FormValues } from '@/models/types/MachineFormValues';
 import MachineService from '@/services/MachineService';
+import { getResponsiveDrawerWidth } from '@/utils/ResponsiveUtils';
 
 export type { MachineRegisterDrawerProps } from '@/models/interfaces/components/DrawerProps';
 
@@ -58,6 +60,7 @@ export function MachineRegisterDrawer({
   onSaved,
 }: MachineRegisterDrawerProps) {
   const [form] = Form.useForm<FormValues>();
+  const { isMobile } = useResponsive();
 
   useEffect(() => {
     if (!open) {
@@ -131,7 +134,7 @@ export function MachineRegisterDrawer({
       open={open}
       onClose={onClose}
       title={title}
-      size={720}
+      width={getResponsiveDrawerWidth(isMobile, LAYOUT.RESPONSIVE_WIDTHS.DRAWER_LG)}
       destroyOnHidden
       footer={
         <Row gutter={[16, 16]} align="middle" justify="space-between">

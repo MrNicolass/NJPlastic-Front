@@ -191,6 +191,7 @@ export function ReportLibraryTab() {
         pagination={pagination}
         dataSource={data?.content ?? []}
         locale={{ emptyText: REPORTS_LIBRARY.EMPTY }}
+        scroll={{ x: 'max-content' }}
         columns={[
           {
             title: REPORTS_LIBRARY.COLUMNS.TYPE,

@@ -4,11 +4,13 @@ import { DatePicker, Form, Input, Modal, Select, Typography } from 'antd';
 import dayjs, { type Dayjs } from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 import type { Schemas } from '@/api/types';
-import { EVENTS } from '@/constants/ConstantsAndParams';
+import { EVENTS, LAYOUT } from '@/constants/ConstantsAndParams';
+import { useResponsive } from '@/hooks/useResponsive';
 import type { RegisterEventModalProps } from '@/models/interfaces/components/ModalProps';
 import type { EventTypeKey, RegisterEventFormValues } from '@/models/types/RegisterEventFormValues';
 import MachineService from '@/services/MachineService';
 import ProductionEventService from '@/services/ProductionEventService';
+import { getResponsiveModalWidth } from '@/utils/ResponsiveUtils';
 
 export type { RegisterEventModalProps } from '@/models/interfaces/components/ModalProps';
 
@@ -33,6 +35,7 @@ export function RegisterEventModal({ open, onClose, onRegistered }: RegisterEven
   const [machines, setMachines] = useState<Schemas['MachineSummaryDTO'][]>([]);
   const [machinesLoading, setMachinesLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const { isMobile } = useResponsive();
 
   useEffect(() => {
     if (!open) {
@@ -106,6 +109,7 @@ export function RegisterEventModal({ open, onClose, onRegistered }: RegisterEven
       onOk={handleOk}
       confirmLoading={submitting}
       destroyOnHidden
+      width={getResponsiveModalWidth(isMobile, LAYOUT.RESPONSIVE_WIDTHS.MODAL_MD)}
     >
       <Text type="secondary">{EVENTS.REGISTER_MODAL.SUBTITLE}</Text>
       <Form

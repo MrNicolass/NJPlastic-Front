@@ -14,11 +14,13 @@ import {
 import type { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
 import type { Schemas } from '@/api/types';
-import { ERP_MAPPING } from '@/constants/ConstantsAndParams';
+import { ERP_MAPPING, LAYOUT } from '@/constants/ConstantsAndParams';
+import { useResponsive } from '@/hooks/useResponsive';
 import type { ErpFieldMappingDrawerProps } from '@/models/interfaces/components/DrawerProps';
 import type { EditableErpFieldMapping } from '@/models/types/EditableErpFieldMapping';
 import ErpFieldMappingService from '@/services/ErpFieldMappingService';
 import { NotificationUtils } from '@/utils/NotificationUtils';
+import { getResponsiveDrawerWidth } from '@/utils/ResponsiveUtils';
 
 export type { ErpFieldMappingDrawerProps } from '@/models/interfaces/components/DrawerProps';
 
@@ -36,6 +38,7 @@ export function ErpFieldMappingDrawer({ open, onClose, onSaved }: ErpFieldMappin
   const [rows, setRows] = useState<EditableErpFieldMapping[]>([]);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const { isMobile } = useResponsive();
 
   useEffect(() => {
     if (!open) {
@@ -141,7 +144,7 @@ export function ErpFieldMappingDrawer({ open, onClose, onSaved }: ErpFieldMappin
       open={open}
       onClose={onClose}
       title={ERP_MAPPING.DRAWER.TITLE}
-      size={640}
+      width={getResponsiveDrawerWidth(isMobile, LAYOUT.RESPONSIVE_WIDTHS.DRAWER_MD)}
       destroyOnHidden
       footer={
         <Space style={{ float: 'right' }}>
@@ -165,6 +168,7 @@ export function ErpFieldMappingDrawer({ open, onClose, onSaved }: ErpFieldMappin
           columns={columns}
           loading={loading}
           pagination={false}
+          scroll={{ x: 'max-content' }}
         />
       </Form>
     </Drawer>

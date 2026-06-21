@@ -383,6 +383,7 @@ export default function HistoricoPage() {
                   pagination={cyclesPager}
                   dataSource={cyclesData?.content ?? []}
                   locale={tableLocale}
+                  scroll={{ x: 'max-content' }}
                   columns={[
                     {
                       title: HISTORY.LABELS.COL_PULSE,
@@ -428,6 +429,7 @@ export default function HistoricoPage() {
                     pagination={{ pageSize: PAGE_SIZE_DEFAULT, showSizeChanger: true }}
                     dataSource={pauses}
                     locale={tableLocale}
+                    scroll={{ x: 'max-content' }}
                     columns={[
                       { title: HISTORY.LABELS.COL_START, dataIndex: 'startTime', render: formatDate },
                       { title: HISTORY.LABELS.COL_END, dataIndex: 'endTime', render: formatDate },
@@ -458,6 +460,7 @@ export default function HistoricoPage() {
                     pagination={{ pageSize: PAGE_SIZE_DEFAULT, showSizeChanger: true }}
                     dataSource={autoStops}
                     locale={tableLocale}
+                    scroll={{ x: 'max-content' }}
                     columns={[
                       { title: HISTORY.LABELS.COL_START, dataIndex: 'startTime', render: formatDate },
                       { title: HISTORY.LABELS.COL_END, dataIndex: 'endTime', render: formatDate },
@@ -486,6 +489,7 @@ export default function HistoricoPage() {
                   pagination={eventsPager}
                   dataSource={eventsData?.content ?? []}
                   locale={tableLocale}
+                  scroll={{ x: 'max-content' }}
                   columns={[
                     { title: HISTORY.LABELS.COL_START, dataIndex: 'startedAt', render: formatDate },
                     { title: HISTORY.LABELS.COL_END, dataIndex: 'endedAt', render: formatDate },

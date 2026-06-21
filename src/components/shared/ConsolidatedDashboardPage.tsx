@@ -270,7 +270,7 @@ export function ConsolidatedDashboardPage({
                 <Select
                   value={sectorFilter}
                   onChange={setSectorFilter}
-                  style={{ minWidth: 200 }}
+                  style={{ minWidth: 160, maxWidth: 280, width: '100%' }}
                   options={[
                     { value: ALL_SECTORS, label: MANAGER_DASHBOARD.LABELS.SECTOR_ALL },
                     ...sectorOptions.map((s) => ({ value: s, label: s })),

@@ -270,6 +270,7 @@ function ShiftReportTab() {
                   pagination={false}
                   dataSource={pauses}
                   locale={{ emptyText: REPORTS_SCREEN.TABLE_LABELS.EMPTY_PAUSES }}
+                  scroll={{ x: 'max-content' }}
                   columns={[
                     {
                       title: REPORTS_SCREEN.TABLE_LABELS.START,
@@ -299,6 +300,7 @@ function ShiftReportTab() {
                   pagination={false}
                   dataSource={stops}
                   locale={{ emptyText: REPORTS_SCREEN.TABLE_LABELS.EMPTY_STOPS }}
+                  scroll={{ x: 'max-content' }}
                   columns={[
                     {
                       title: REPORTS_SCREEN.TABLE_LABELS.START,

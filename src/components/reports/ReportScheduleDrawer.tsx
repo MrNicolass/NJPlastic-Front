@@ -2,7 +2,8 @@
 
 import { Button, Drawer, Form, Input, Select, Space, Typography } from 'antd';
 import { useState } from 'react';
-import { REPORTS_SCHEDULE } from '@/constants/ConstantsAndParams';
+import { LAYOUT, REPORTS_SCHEDULE } from '@/constants/ConstantsAndParams';
+import { useResponsive } from '@/hooks/useResponsive';
 import type {
   ReportFormat,
   ReportScheduleRequest,
@@ -10,6 +11,7 @@ import type {
 } from '@/models/types/ReportTypes';
 import ReportsService from '@/services/ReportsService';
 import { NotificationUtils } from '@/utils/NotificationUtils';
+import { getResponsiveDrawerWidth } from '@/utils/ResponsiveUtils';
 
 const { Text } = Typography;
 
@@ -37,6 +39,7 @@ type FormValues = {
 export function ReportScheduleDrawer({ open, onClose, onCreated }: ReportScheduleDrawerProps) {
   const [form] = Form.useForm<FormValues>();
   const [submitting, setSubmitting] = useState(false);
+  const { isMobile } = useResponsive();
 
   const handleSubmit = async (values: FormValues) => {
     setSubmitting(true);
@@ -74,7 +77,7 @@ export function ReportScheduleDrawer({ open, onClose, onCreated }: ReportSchedul
       open={open}
       onClose={onClose}
       title={REPORTS_SCHEDULE.DRAWER.TITLE}
-      width={520}
+      width={getResponsiveDrawerWidth(isMobile, LAYOUT.RESPONSIVE_WIDTHS.DRAWER_SM)}
       destroyOnClose
       footer={
         <Space style={{ width: '100%', justifyContent: 'flex-end' }}>

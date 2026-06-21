@@ -115,7 +115,7 @@ export function MachineStopsTable(props: MachineStopsTableProps): React.ReactNod
         rowKey={(entry) => entry.id}
         pagination={{ pageSize: 10 }}
         size="small"
-        scroll={{ x: true }}
+        scroll={{ x: 'max-content' }}
       />
     </Space>
   );

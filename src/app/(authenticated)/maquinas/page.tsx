@@ -176,6 +176,7 @@ export default function MachinesPage() {
         dataSource={machines}
         columns={columns}
         loading={loading}
+        scroll={{ x: 'max-content' }}
         locale={{
           emptyText: (
             <Empty
