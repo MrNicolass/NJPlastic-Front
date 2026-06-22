@@ -3,10 +3,12 @@
 import { Button, Drawer, Form, Input, Select, Space, Switch } from 'antd';
 import { useEffect } from 'react';
 import type { Schemas } from '@/api/types';
-import { USERS } from '@/constants/ConstantsAndParams';
+import { LAYOUT, USERS } from '@/constants/ConstantsAndParams';
+import { useResponsive } from '@/hooks/useResponsive';
 import type { UserFormDrawerProps } from '@/models/interfaces/components/DrawerProps';
 import type { UserFormValues as FormValues } from '@/models/types/UserFormValues';
 import UserService from '@/services/UserService';
+import { getResponsiveDrawerWidth } from '@/utils/ResponsiveUtils';
 
 export type { UserFormDrawerProps } from '@/models/interfaces/components/DrawerProps';
 
@@ -19,11 +21,10 @@ const ROLE_OPTIONS: { value: Schemas['UserResponseDTO']['role']; label: string }
 ];
 
 /**
- * Side drawer used for both creating and editing users (EP-FE-06
- * sub-task 3). The mode prop drives which fields are editable - login
- * and password are immutable in edit mode. On submit the drawer calls
- * UserService directly and reports back via onSaved so the parent
- * page can refetch.
+ * Side drawer used for both creating and editing users. The mode prop
+ * drives which fields are editable - login and password are immutable in
+ * edit mode. On submit the drawer calls UserService directly and reports
+ * back via onSaved so the parent page can refetch.
  */
 export function UserFormDrawer({
   open,
@@ -33,6 +34,7 @@ export function UserFormDrawer({
   onSaved,
 }: UserFormDrawerProps) {
   const [form] = Form.useForm<FormValues>();
+  const { isMobile } = useResponsive();
 
   useEffect(() => {
     if (!open) {
@@ -89,7 +91,7 @@ export function UserFormDrawer({
       open={open}
       onClose={onClose}
       title={title}
-      size={520}
+      width={getResponsiveDrawerWidth(isMobile, LAYOUT.RESPONSIVE_WIDTHS.DRAWER_SM)}
       destroyOnHidden
       footer={
         <Space style={{ float: 'right' }}>

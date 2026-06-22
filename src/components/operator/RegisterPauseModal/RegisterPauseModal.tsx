@@ -4,11 +4,13 @@ import { AxiosError } from 'axios';
 import { Button, Descriptions, Form, Input, Modal, Select, Space, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
-import { MACHINES, UTILS } from '@/constants/ConstantsAndParams';
+import { LAYOUT, MACHINES, UTILS } from '@/constants/ConstantsAndParams';
+import { useResponsive } from '@/hooks/useResponsive';
 import type { RegisterPauseModalProps } from '@/models/interfaces/components/ModalProps';
 import type { RegisterPauseFormValues as FormValues } from '@/models/types/RegisterPauseFormValues';
 import MachineService from '@/services/MachineService';
 import { NotificationUtils } from '@/utils/NotificationUtils';
+import { getResponsiveModalWidth } from '@/utils/ResponsiveUtils';
 
 export type { RegisterPauseModalProps } from '@/models/interfaces/components/ModalProps';
 
@@ -33,12 +35,11 @@ const buildSubmittedReason = (values: FormValues): string => {
 };
 
 /**
- * Classifies the last open isolated pause of a machine (UC03, RF09).
- * The 4-option selector matches the Operator mockup
- * `Modal_Register_Pause_Operator_V1`; "OUTRO" reveals a free text field.
+ * Classifies the last open isolated pause of a machine. The 4-option
+ * selector targets the Operator flow; "OUTRO" reveals a free text field.
  * If the backend answers 409 the modal exposes the warning copy through
  * {@link NotificationUtils} — the pause stays open and the operator can
- * cancel safely (§3.2.3 of the RFC).
+ * cancel safely.
  */
 export function RegisterPauseModal(props: RegisterPauseModalProps): React.ReactNode {
   const { open, onClose, machineId, machineCode, productionOrderCode, pauseStartedAt, onRegistered } =
@@ -46,6 +47,7 @@ export function RegisterPauseModal(props: RegisterPauseModalProps): React.ReactN
   const [form] = Form.useForm<FormValues>();
   const [submitting, setSubmitting] = useState(false);
   const [reasonValue, setReasonValue] = useState<string | undefined>(undefined);
+  const { isMobile } = useResponsive();
 
   useEffect(() => {
     if (!open) {
@@ -89,7 +91,7 @@ export function RegisterPauseModal(props: RegisterPauseModalProps): React.ReactN
       open={open}
       onCancel={onClose}
       title={MACHINES.PAUSES.REGISTER_MODAL.TITLE}
-      width={520}
+      width={getResponsiveModalWidth(isMobile, LAYOUT.RESPONSIVE_WIDTHS.MODAL_MD)}
       destroyOnHidden
       footer={
         <Space>

@@ -70,10 +70,10 @@ describe('ConstantsAndParams', () => {
       expect(MACHINES.STATUS.KEYS.STATE).toBe('state');
       expect(MACHINES.CYCLES.KEYS.PULSE_TIMESTAMP).toBe('pulseTimestamp');
       expect(MACHINES.STOPS.EDIT_MODAL.VALIDATION_MESSAGES.MESSAGE_MAX_LENGTH(140)).toBe(
-        'Maximo de 140 caracteres.',
+        'Máximo de 140 caracteres.',
       );
       expect(MACHINES.PAUSES.REGISTER_MODAL.VALIDATION_MESSAGES.REASON_MAX_LENGTH(80)).toBe(
-        'Maximo de 80 caracteres.',
+        'Máximo de 80 caracteres.',
       );
     });
 

@@ -33,7 +33,7 @@ const stateTagColor = (state: string | null | undefined): string => {
 export default function MachinesPage() {
   const router = useRouter();
   const role = useSessionStore((state) => state.role);
-  const canManage = role === 'MANAGER' || role === 'ADMIN';
+  const canManage = role === 'MANAGER';
 
   const [machines, setMachines] = useState<Schemas['MachineSummaryDTO'][]>([]);
   const [loading, setLoading] = useState(false);
@@ -77,7 +77,7 @@ export default function MachinesPage() {
       setDrawerMode('edit');
       setDrawerOpen(true);
     } catch {
-      // notification already fired by the service layer
+ // notification already fired by the service layer
     }
   };
 
@@ -176,6 +176,7 @@ export default function MachinesPage() {
         dataSource={machines}
         columns={columns}
         loading={loading}
+        scroll={{ x: 'max-content' }}
         locale={{
           emptyText: (
             <Empty

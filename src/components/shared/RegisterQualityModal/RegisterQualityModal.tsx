@@ -3,11 +3,13 @@
 import { Button, DatePicker, Form, InputNumber, Modal, Space, Typography } from 'antd';
 import dayjs, { type Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
-import { MACHINES } from '@/constants/ConstantsAndParams';
+import { LAYOUT, MACHINES } from '@/constants/ConstantsAndParams';
+import { useResponsive } from '@/hooks/useResponsive';
 import type { RegisterQualityModalProps } from '@/models/interfaces/components/ModalProps';
 import type { RegisterQualityFormValues as FormValues } from '@/models/types/RegisterQualityFormValues';
 import MachineService from '@/services/MachineService';
 import { NotificationUtils } from '@/utils/NotificationUtils';
+import { getResponsiveModalWidth } from '@/utils/ResponsiveUtils';
 
 export type { RegisterQualityModalProps } from '@/models/interfaces/components/ModalProps';
 
@@ -25,19 +27,20 @@ const resolveDefaultRange = (defaultFrom?: string, defaultTo?: string): [Dayjs, 
 };
 
 /**
- * Manual entry of the Quality factor that closes the OEE calculation
- * (RF10). Defaults the period to the active production order window
- * when known, or to the last 8 hours otherwise. Validates client-side
- * that `totalCount >= goodCount > 0` and that the period is well
- * ordered before the request reaches the backend.
+ * Manual entry of the Quality factor that closes the OEE calculation.
+ * Defaults the period to the active production order window when known,
+ * or to the last 8 hours otherwise. Validates client-side that
+ * `totalCount >= goodCount > 0` and that the period is well ordered
+ * before the request reaches the backend.
  *
  * Reused across roles even though it is currently triggered only from
- * the machine detail screen of EP-FE-04.
+ * the machine detail screen.
  */
 export function RegisterQualityModal(props: RegisterQualityModalProps): React.ReactNode {
   const { open, onClose, machineId, machineCode, defaultFrom, defaultTo, onRegistered } = props;
   const [form] = Form.useForm<FormValues>();
   const [submitting, setSubmitting] = useState(false);
+  const { isMobile } = useResponsive();
 
   useEffect(() => {
     if (!open) {
@@ -48,7 +51,12 @@ export function RegisterQualityModal(props: RegisterQualityModalProps): React.Re
       totalCount: undefined as unknown as number,
       range: resolveDefaultRange(defaultFrom, defaultTo),
     });
-  }, [open, machineId, defaultFrom, defaultTo, form]);
+ // The defaults are intentionally read on open/machine change only:
+ // the parent dashboard recomputes `defaultFrom`/`defaultTo` on every
+ // polling tick, so including them as dependencies would wipe the
+ // user's input whenever a poll fires.
+ // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, machineId, form]);
 
   const handleFinish = async (values: FormValues) => {
     if (!values.range || values.range.length !== 2) {
@@ -83,7 +91,7 @@ export function RegisterQualityModal(props: RegisterQualityModalProps): React.Re
         description: MACHINES.NOTIFICATIONS.ERROR.MESSAGES.QUALITY_FAILED,
       });
       if (process.env.NODE_ENV === 'development') {
-        // eslint-disable-next-line no-console
+ // eslint-disable-next-line no-console
         console.error('Failed to register quality', error);
       }
     } finally {
@@ -96,7 +104,7 @@ export function RegisterQualityModal(props: RegisterQualityModalProps): React.Re
       open={open}
       onCancel={onClose}
       title={MACHINES.QUALITY.REGISTER_MODAL.TITLE}
-      width={520}
+      width={getResponsiveModalWidth(isMobile, LAYOUT.RESPONSIVE_WIDTHS.MODAL_MD)}
       destroyOnHidden
       footer={
         <Space>

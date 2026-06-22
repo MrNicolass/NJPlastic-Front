@@ -1,7 +1,7 @@
 'use client';
 
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { Badge, Button, Card, Col, Empty, Row, Space, Typography } from 'antd';
+import { Badge, Button, Card, Col, Empty, Row, Space, Tabs, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useParams, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -9,6 +9,7 @@ import type { Schemas } from '@/api/types';
 import { CycleTimeChart } from '@/components/operator/CycleTimeChart';
 import type { CyclePoint } from '@/models/types/CycleTimeChart';
 import type { MachineSnapshot } from '@/models/types/MachineDetail';
+import type { OperatorOfShift } from '@/models/types/OperatorsOfShift';
 import { MachineKpis } from '@/components/operator/MachineKpis';
 import { MachineStatusTimeline } from '@/components/operator/MachineStatusTimeline';
 import { MachineStopsTable } from '@/components/operator/MachineStopsTable';
@@ -34,7 +35,7 @@ import {
 } from '@/utils/ExportUtils';
 import { NotificationUtils } from '@/utils/NotificationUtils';
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 const DETAIL_POLL_INTERVAL_MS = 5000;
 const STATUS_LOOKBACK_HOURS = 8;
@@ -120,12 +121,12 @@ const computeMtbfMinutes = (entries: Entry[]): number | null => {
 };
 
 /**
- * Detail screen of a single machine (RFC §4.2.4). Pulls the machine
+ * Detail screen of a single machine. Pulls the machine
  * projection, the status timeline, the cycle series and the OEE in
  * parallel every 5 seconds, sharing one polling loop across all
  * sub-components. Hosts the 3 modals that change machine data:
- * `<RegisterPauseModal>` (UC03), `<StopMessageEditModal>` (UC12) and
- * `<RegisterQualityModal>` (RF10 quality factor).
+ * `<RegisterPauseModal>`, `<StopMessageEditModal>` and
+ * `<RegisterQualityModal>` (quality factor).
  */
 export default function MachineDetailPage() {
   const params = useParams<{ machineId: string }>();
@@ -142,6 +143,7 @@ export default function MachineDetailPage() {
   const [stopModalEntry, setStopModalEntry] = useState<Entry | null>(null);
   const [pauseModalEntry, setPauseModalEntry] = useState<Entry | null>(null);
   const [qualityOpen, setQualityOpen] = useState(false);
+  const [operators, setOperators] = useState<OperatorOfShift[]>([]);
 
   useEffect(() => {
     if (error && !data) {
@@ -153,6 +155,24 @@ export default function MachineDetailPage() {
       });
     }
   }, [error, data]);
+
+  useEffect(() => {
+    let cancelled = false;
+    MachineService.listOperatorsOfShift(machineId, undefined, true)
+      .then((rows) => {
+        if (!cancelled) {
+          setOperators(rows);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setOperators([]);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [machineId]);
 
   const editHistoryEnabled =
     !!stopModalEntry && role !== null && role !== 'OPERATOR';
@@ -235,7 +255,7 @@ export default function MachineDetailPage() {
 
   if (!data) {
     return (
-      <Empty description="Nao foi possivel carregar os dados da maquina.">
+      <Empty description={MACHINES.DETAIL.LABELS.LOAD_FAILED}>
         <Button onClick={() => router.push('/dashboard')}>
           {MACHINES.DETAIL.LABELS.BACK_BUTTON}
         </Button>
@@ -253,8 +273,13 @@ export default function MachineDetailPage() {
 
   return (
     <Space orientation="vertical" size={20} style={{ width: '100%' }}>
-      <Space style={{ width: '100%', justifyContent: 'space-between' }} align="center">
-        <Space>
+      <Space
+        style={{ width: '100%', justifyContent: 'space-between' }}
+        align="center"
+        size={[12, 8]}
+        wrap
+      >
+        <Space align="center" size={[12, 4]} wrap>
           <Button
             type="text"
             icon={<ArrowLeftOutlined />}
@@ -262,18 +287,20 @@ export default function MachineDetailPage() {
           >
             {MACHINES.DETAIL.LABELS.BACK_BUTTON}
           </Button>
-          <Title level={3} style={{ marginBottom: 0 }}>
-            <Text code>{data.detail.code}</Text>
-          </Title>
+          <Text code style={{ fontSize: 16, lineHeight: 1.5 }}>
+            {data.detail.code}
+          </Text>
           {data.detail.description ? (
-            <Text type="secondary">{data.detail.description}</Text>
+            <Text type="secondary" style={{ fontSize: 14, lineHeight: 1.5 }}>
+              {data.detail.description}
+            </Text>
           ) : null}
           <Badge
             color={STATE_BADGE_COLOR[currentState]}
             text={`${MACHINES.DETAIL.LABELS.HEADER_BADGE_PREFIX} ${STATE_LABEL[currentState]}`}
           />
         </Space>
-        <Space>
+        <Space wrap>
           <ExportButton onExport={handleExport} />
           <Button type="primary" onClick={() => setQualityOpen(true)}>
             {MACHINES.DETAIL.BUTTONS.REGISTER_QUALITY}
@@ -289,20 +316,133 @@ export default function MachineDetailPage() {
         scrapPercent={scrapPercent}
       />
 
-      <Card>
-        <CycleTimeChart
-          cycles={data.cycles}
-          standardCycleMs={data.detail.standardCycleMs}
-          toleranceFactor={data.detail.toleranceFactor}
-        />
-      </Card>
-
-      <Card>
-        <MachineStatusTimeline
-          windowStartIso={data.windowStartIso}
-          windowEndIso={data.windowEndIso}
-          entries={data.status.timeline}
-        />
+      <Card title={MACHINES.DETAIL.LABELS.INSIGHTS_CARD_TITLE}>
+        <Space orientation="vertical" size={16} style={{ width: '100%' }}>
+          <Space orientation="vertical" size={6} style={{ width: '100%' }}>
+            <Text strong>{MACHINES.DETAIL.LABELS.LEGEND_TITLE}</Text>
+            <Space size={[16, 8]} wrap>
+              <Space size={6}>
+                <span
+                  aria-hidden
+                  style={{
+                    display: 'inline-block',
+                    width: 12,
+                    height: 12,
+                    background: njPalette.cobalt,
+                    borderRadius: '50%',
+                  }}
+                />
+                <Text type="secondary">{MACHINES.DETAIL.LABELS.LEGEND_CHART_POINT_IN}</Text>
+              </Space>
+              <Space size={6}>
+                <span
+                  aria-hidden
+                  style={{
+                    display: 'inline-block',
+                    width: 12,
+                    height: 12,
+                    background: njPalette.cinnabar,
+                    borderRadius: '50%',
+                  }}
+                />
+                <Text type="secondary">{MACHINES.DETAIL.LABELS.LEGEND_CHART_POINT_OUT}</Text>
+              </Space>
+              <Space size={6}>
+                <span
+                  aria-hidden
+                  style={{
+                    display: 'inline-block',
+                    width: 14,
+                    height: 12,
+                    background: njPalette.cerulean,
+                    opacity: 0.3,
+                    borderRadius: 2,
+                  }}
+                />
+                <Text type="secondary">{MACHINES.DETAIL.LABELS.LEGEND_CHART_BAND}</Text>
+              </Space>
+              <Space size={6}>
+                <span
+                  aria-hidden
+                  style={{
+                    display: 'inline-block',
+                    width: 12,
+                    height: 12,
+                    background: njPalette.cobalt,
+                    borderRadius: 2,
+                  }}
+                />
+                <Text type="secondary">{MACHINES.DETAIL.LABELS.LEGEND_STATE_RUNNING}</Text>
+              </Space>
+              <Space size={6}>
+                <span
+                  aria-hidden
+                  style={{
+                    display: 'inline-block',
+                    width: 12,
+                    height: 12,
+                    background: njPalette.cerulean,
+                    borderRadius: 2,
+                  }}
+                />
+                <Text type="secondary">{MACHINES.DETAIL.LABELS.LEGEND_STATE_PAUSED}</Text>
+              </Space>
+              <Space size={6}>
+                <span
+                  aria-hidden
+                  style={{
+                    display: 'inline-block',
+                    width: 12,
+                    height: 12,
+                    background: njPalette.cinnabar,
+                    borderRadius: 2,
+                  }}
+                />
+                <Text type="secondary">{MACHINES.DETAIL.LABELS.LEGEND_STATE_AUTO_STOPPED}</Text>
+              </Space>
+              <Space size={6}>
+                <span
+                  aria-hidden
+                  style={{
+                    display: 'inline-block',
+                    width: 12,
+                    height: 12,
+                    background: njPalette.warmGray,
+                    borderRadius: 2,
+                  }}
+                />
+                <Text type="secondary">{MACHINES.DETAIL.LABELS.LEGEND_STATE_OFFLINE}</Text>
+              </Space>
+            </Space>
+          </Space>
+          <Tabs
+            defaultActiveKey="chart"
+            items={[
+              {
+                key: 'chart',
+                label: MACHINES.DETAIL.LABELS.INSIGHTS_TAB_CHART,
+                children: (
+                  <CycleTimeChart
+                    cycles={data.cycles}
+                    standardCycleMs={data.detail.standardCycleMs}
+                    toleranceFactor={data.detail.toleranceFactor}
+                  />
+                ),
+              },
+              {
+                key: 'timeline',
+                label: MACHINES.DETAIL.LABELS.INSIGHTS_TAB_TIMELINE,
+                children: (
+                  <MachineStatusTimeline
+                    windowStartIso={data.windowStartIso}
+                    windowEndIso={data.windowEndIso}
+                    entries={data.status.timeline}
+                  />
+                ),
+              },
+            ]}
+          />
+        </Space>
       </Card>
 
       <Card>
@@ -318,7 +458,7 @@ export default function MachineDetailPage() {
           <MoldInfoCard detail={data.detail} />
         </Col>
         <Col xs={24} md={12}>
-          <OperatorsOfShift operators={[]} />
+          <OperatorsOfShift operators={operators} />
         </Col>
       </Row>
 

@@ -4,11 +4,13 @@ import { DatePicker, Form, Input, Modal, Select, Typography } from 'antd';
 import dayjs, { type Dayjs } from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 import type { Schemas } from '@/api/types';
-import { EVENTS } from '@/constants/ConstantsAndParams';
+import { EVENTS, LAYOUT } from '@/constants/ConstantsAndParams';
+import { useResponsive } from '@/hooks/useResponsive';
 import type { RegisterEventModalProps } from '@/models/interfaces/components/ModalProps';
 import type { EventTypeKey, RegisterEventFormValues } from '@/models/types/RegisterEventFormValues';
 import MachineService from '@/services/MachineService';
 import ProductionEventService from '@/services/ProductionEventService';
+import { getResponsiveModalWidth } from '@/utils/ResponsiveUtils';
 
 export type { RegisterEventModalProps } from '@/models/interfaces/components/ModalProps';
 
@@ -22,17 +24,18 @@ const TYPE_OPTIONS = (Object.keys(EVENTS.TYPES) as EventTypeKey[]).map((key) => 
 }));
 
 /**
- * Header CTA modal of the Leader dashboard (EP-FE-05 item 7). Backed by
+ * Header CTA modal of the Leader dashboard (item 7). Backed by
  * {@code POST /events}; the success callback chains into
  * {@code RecentEventsPanel.refetch} so the new entry surfaces immediately
  * without a 15s wait. Machines are pulled from {@code GET /machines}, which
- * is already sector-scoped server-side (RN02-RN04).
+ * is already sector-scoped server-side.
  */
 export function RegisterEventModal({ open, onClose, onRegistered }: RegisterEventModalProps) {
   const [form] = Form.useForm<RegisterEventFormValues>();
   const [machines, setMachines] = useState<Schemas['MachineSummaryDTO'][]>([]);
   const [machinesLoading, setMachinesLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const { isMobile } = useResponsive();
 
   useEffect(() => {
     if (!open) {
@@ -86,8 +89,8 @@ export function RegisterEventModal({ open, onClose, onRegistered }: RegisterEven
       onClose();
       onRegistered?.();
     } catch (error) {
-      // Validation errors are surfaced inline by AntD; HTTP errors come through
-      // the Axios interceptor as a notification. No extra handling needed here.
+ // Validation errors are surfaced inline by AntD; HTTP errors come through
+ // the Axios interceptor as a notification. No extra handling needed here.
       if (error && typeof error === 'object' && 'errorFields' in error) {
         return;
       }
@@ -106,6 +109,7 @@ export function RegisterEventModal({ open, onClose, onRegistered }: RegisterEven
       onOk={handleOk}
       confirmLoading={submitting}
       destroyOnHidden
+      width={getResponsiveModalWidth(isMobile, LAYOUT.RESPONSIVE_WIDTHS.MODAL_MD)}
     >
       <Text type="secondary">{EVENTS.REGISTER_MODAL.SUBTITLE}</Text>
       <Form

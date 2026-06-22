@@ -36,10 +36,10 @@ const TYPE_OPTIONS = [
 ];
 
 /**
- * Library tab of the /relatorios screen (EP-FE-07 sub-task 6, mockup
- * Reports_Part1_V1). Paginated read of report_history with type and date
- * range filters. The "Baixar" action streams the binary back as a Blob and
- * triggers a download via a hidden anchor.
+ * Library tab of the /relatorios screen. Paginated read of
+ * report_history with type and date range filters. The "Baixar" action
+ * streams the binary back as a Blob and triggers a download via a
+ * hidden anchor.
  */
 export function ReportLibraryTab() {
   const [pageIndex, setPageIndex] = useState(0);
@@ -191,6 +191,7 @@ export function ReportLibraryTab() {
         pagination={pagination}
         dataSource={data?.content ?? []}
         locale={{ emptyText: REPORTS_LIBRARY.EMPTY }}
+        scroll={{ x: 'max-content' }}
         columns={[
           {
             title: REPORTS_LIBRARY.COLUMNS.TYPE,

@@ -128,6 +128,7 @@ export function UsersTable({
       dataSource={users}
       columns={columns}
       loading={loading}
+      scroll={{ x: 'max-content' }}
       locale={{
         emptyText: (
           <Empty

@@ -15,8 +15,8 @@ export type { UsePollingOptions, UsePollingResult } from '@/models/types/UsePoll
  * the loop without clearing the last cached payload, useful when a
  * parent toggles a sub-tab on and off.
  *
- * Anchored to the EP-FE-04 dashboard real-time loop (Operator, 5s) and
- * reused by the machine detail page. Cited in RFC §7.3.2 EP-FE-07 as
+ * Anchored to the dashboard real-time loop (Operator, 5s) and
+ * reused by the machine detail page. Cited in as
  * the shared utility — delivered here ahead of schedule and referenced
  * from there.
  *
@@ -25,7 +25,7 @@ export type { UsePollingOptions, UsePollingResult } from '@/models/types/UsePoll
  * @param intervalMs Delay between ticks in milliseconds; must be > 0.
  * @param options Toggle and visibility options.
  * @returns Latest payload, loading and error state, instant of the last
- *   successful tick, and an imperative refetch handle.
+ * successful tick, and an imperative refetch handle.
  */
 export function usePolling<T>(
   fetcher: () => Promise<T>,
@@ -106,7 +106,7 @@ export function usePolling<T>(
       typeof document !== 'undefined' && document.visibilityState === 'hidden';
 
     if (pauseInBackground && isDocumentHidden()) {
-      // Skip starting until the tab becomes visible again.
+ // Skip starting until the tab becomes visible again.
     } else {
       start();
     }

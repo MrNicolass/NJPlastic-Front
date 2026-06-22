@@ -10,10 +10,12 @@ import { Empty, List, Skeleton, Space, Typography } from 'antd';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/pt-br';
-import { useImperativeHandle, useMemo } from 'react';
+import { useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { EVENTS } from '@/constants/ConstantsAndParams';
 import { usePolling } from '@/hooks/usePolling';
 import type { RecentEventsPanelHandle, RecentEventsPanelProps } from '@/models/interfaces/components/RecentEventsPanelProps';
+import type { Page } from '@/models/types/Page';
+import { createPageParams } from '@/models/types/PageParams';
 import type { RecentEventResponse, RecentEventType } from '@/models/types/RecentEvent';
 import ProductionEventService from '@/services/ProductionEventService';
 
@@ -23,14 +25,14 @@ dayjs.extend(relativeTime);
 try {
   dayjs.locale('pt-br');
 } catch {
-  // Locale package may be missing in the test environment; fall back to default.
+// Locale package may be missing in the test environment; fall back to default.
 }
 
 const { Text } = Typography;
 
 const PANEL_POLL_INTERVAL_MS = 15_000;
 const RECENT_LOOKBACK_HOURS = 4;
-const RECENT_LIMIT = 50;
+const PAGE_SIZE = 6;
 
 const ICON_BY_TYPE: Record<RecentEventType, React.ReactNode> = {
   MANUAL_EVENT: <ToolOutlined />,
@@ -39,30 +41,42 @@ const ICON_BY_TYPE: Record<RecentEventType, React.ReactNode> = {
   STOP_MESSAGE_EDIT: <EditOutlined />,
 };
 
-const fetchRecent = async (): Promise<RecentEventResponse[]> => {
-  const to = dayjs();
-  const from = to.subtract(RECENT_LOOKBACK_HOURS, 'hour');
-  return ProductionEventService.findRecent(RECENT_LIMIT, from.toISOString(), to.toISOString(), true);
-};
-
-
 /**
- * Right-column panel of the Leader dashboard (EP-FE-05 item 6, mockup
- * {@code Dashboard_Part2_V1}). Polls {@code GET /events/recent} every 15s
- * with Page-Visibility-aware pause and renders a timeline ordered by
- * timestamp DESC. The `panelRef` exposes a {@code refetch} handle so the
- * consumer (Leader dashboard) can force a refresh right after registering
- * a manual event from the header CTA.
+ * Right-column panel of the consolidated dashboard. Polls
+ * {@code GET /events/recent} every 15s with Page-Visibility-aware pause
+ * and renders a timeline ordered by timestamp DESC. Pagination is
+ * server-side so the panel stays the same height as the machines grid
+ * regardless of event volume. The `panelRef` exposes a {@code refetch}
+ * handle so the consumer can force a refresh after registering a manual
+ * event from the header CTA.
  */
 export function RecentEventsPanel({ panelRef, onItemClick }: RecentEventsPanelProps) {
-  const { data, loading, error, refetch } = usePolling<RecentEventResponse[]>(
+  const [page, setPage] = useState(0);
+
+  const fetchRecent = useCallback(async (): Promise<Page<RecentEventResponse>> => {
+    const to = dayjs();
+    const from = to.subtract(RECENT_LOOKBACK_HOURS, 'hour');
+    return ProductionEventService.findRecent(
+      createPageParams(page, PAGE_SIZE),
+      from.toISOString(),
+      to.toISOString(),
+      true,
+    );
+  }, [page]);
+
+  const { data, loading, error, refetch } = usePolling<Page<RecentEventResponse>>(
     fetchRecent,
     PANEL_POLL_INTERVAL_MS,
   );
 
+  useEffect(() => {
+    void refetch();
+  }, [page, refetch]);
+
   useImperativeHandle(panelRef, () => ({ refetch }), [refetch]);
 
-  const entries = useMemo<RecentEventResponse[]>(() => data ?? [], [data]);
+  const entries = useMemo<RecentEventResponse[]>(() => data?.content ?? [], [data]);
+  const totalElements = data?.totalElements ?? 0;
 
   if (loading && entries.length === 0 && !error) {
     return <Skeleton active paragraph={{ rows: 4 }} />;
@@ -84,6 +98,15 @@ export function RecentEventsPanel({ panelRef, onItemClick }: RecentEventsPanelPr
     <List
       itemLayout="horizontal"
       dataSource={entries}
+      pagination={{
+        current: page + 1,
+        pageSize: PAGE_SIZE,
+        total: totalElements,
+        onChange: (next) => setPage(next - 1),
+        size: 'small',
+        align: 'end',
+        showSizeChanger: false,
+      }}
       renderItem={(event) => {
         const typeLabel = EVENTS.RECENT.TYPE_LABELS[event.type];
         const description = event.description ?? typeLabel;

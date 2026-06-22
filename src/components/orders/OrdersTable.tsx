@@ -89,6 +89,7 @@ export function OrdersTable({
       loading={loading}
       pagination={pager}
       locale={{ emptyText: ORDERS.LABELS.EMPTY }}
+      scroll={{ x: 'max-content' }}
     />
   );
 }

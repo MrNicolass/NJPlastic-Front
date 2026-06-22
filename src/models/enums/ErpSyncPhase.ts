@@ -1,0 +1,5 @@
+export enum ErpSyncPhase {
+  REFRESH_ORDERS = 'REFRESH_ORDERS',
+  PUSH_CYCLES = 'PUSH_CYCLES',
+  PUSH_PAUSES = 'PUSH_PAUSES',
+}

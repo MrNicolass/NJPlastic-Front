@@ -8,8 +8,8 @@ import type { OrdersKpisProps } from '@/models/interfaces/components/OrderProps'
 export type { OrdersKpisProps } from '@/models/interfaces/components/OrderProps';
 
 /**
- * Top strip of {@code /ordens} (mockup OS_Part1_V1). Renders the four
- * production-order counters returned by {@code GET /production-orders/summary}.
+ * Top strip of {@code /ordens}. Renders the four production-order counters
+ * returned by {@code GET /production-orders/summary}.
  */
 export function OrdersKpis({ summary }: OrdersKpisProps) {
   return (

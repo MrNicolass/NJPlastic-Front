@@ -2,7 +2,8 @@
 
 import { Button, Drawer, Form, Input, Select, Space, Typography } from 'antd';
 import { useState } from 'react';
-import { REPORTS_SCHEDULE } from '@/constants/ConstantsAndParams';
+import { LAYOUT, REPORTS_SCHEDULE } from '@/constants/ConstantsAndParams';
+import { useResponsive } from '@/hooks/useResponsive';
 import type {
   ReportFormat,
   ReportScheduleRequest,
@@ -10,6 +11,7 @@ import type {
 } from '@/models/types/ReportTypes';
 import ReportsService from '@/services/ReportsService';
 import { NotificationUtils } from '@/utils/NotificationUtils';
+import { getResponsiveDrawerWidth } from '@/utils/ResponsiveUtils';
 
 const { Text } = Typography;
 
@@ -30,14 +32,14 @@ type FormValues = {
 };
 
 /**
- * Manager-only drawer used to create a new report schedule (EP-FE-07
- * sub-task 6, mockup Reports_Part2_V1). Client-side validation covers cron
- * shape and JSON parsing of the params field; the backend remains the
- * source of truth for cron correctness.
+ * Manager-only drawer used to create a new report schedule. Client-side
+ * validation covers cron shape and JSON parsing of the params field; the
+ * backend remains the source of truth for cron correctness.
  */
 export function ReportScheduleDrawer({ open, onClose, onCreated }: ReportScheduleDrawerProps) {
   const [form] = Form.useForm<FormValues>();
   const [submitting, setSubmitting] = useState(false);
+  const { isMobile } = useResponsive();
 
   const handleSubmit = async (values: FormValues) => {
     setSubmitting(true);
@@ -75,7 +77,7 @@ export function ReportScheduleDrawer({ open, onClose, onCreated }: ReportSchedul
       open={open}
       onClose={onClose}
       title={REPORTS_SCHEDULE.DRAWER.TITLE}
-      width={520}
+      width={getResponsiveDrawerWidth(isMobile, LAYOUT.RESPONSIVE_WIDTHS.DRAWER_SM)}
       destroyOnClose
       footer={
         <Space style={{ width: '100%', justifyContent: 'flex-end' }}>

@@ -24,11 +24,11 @@ const DEFAULT_TYPE_TO_KIND: Record<GenericDefaultType, NotificationKind> = {
  * Single entry point for every UI notification in the app. Wrapping `antd`
  * `notification` here guarantees a few invariants:
  * - notifications with the same key never stack (the previous one is
- *   destroyed before showing the new one);
+ * destroyed before showing the new one);
  * - placement and duration come from {@link GENERIC_NOTIFICATIONS.CONFIGS}
- *   so every screen looks the same;
+ * so every screen looks the same;
  * - the `defaultType` shortcut prefills `message` and `description` from
- *   the shared catalogue, used by the Axios interceptor.
+ * the shared catalogue, used by the Axios interceptor.
  *
  * No component should import `notification` from `antd` directly.
  */

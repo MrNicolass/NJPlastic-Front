@@ -18,19 +18,19 @@ export type AuditLogFilters = {
 };
 
 /**
- * Contract of the audit-log read endpoint delivered by EP-BE-08
- * sub-task 4. MANAGER-only. The backend forces the natural sort
- * (`timestamp DESC`) so the page never needs to pass `sort`.
+ * Contract of the audit-log read endpoint. MANAGER-only. The backend forces
+ * the natural sort (`timestamp DESC`) so the page never needs to pass
+ * `sort`.
  */
 export interface IAuditLogService {
-  /**
-   * Lists audit-log entries paginated with optional filters.
-   *
-   * @param pageable - The pagination parameters for the request.
-   * @param filters - Optional filter set (userId, endpoint, method, statusCode, from, to).
-   * @param suppressError - Optional. If set to `true`, suppresses errors that may occur during retrieval.
-   * @returns A promise resolving to a `Page` of audit-log projections.
-   */
+ /**
+ * Lists audit-log entries paginated with optional filters.
+ *
+ * @param pageable - The pagination parameters for the request.
+ * @param filters - Optional filter set (userId, endpoint, method, statusCode, from, to).
+ * @param suppressError - Optional. If set to `true`, suppresses errors that may occur during retrieval.
+ * @returns A promise resolving to a `Page` of audit-log projections.
+ */
   list(
     pageable: PageParams,
     filters?: AuditLogFilters,

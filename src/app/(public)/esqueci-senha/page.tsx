@@ -18,7 +18,7 @@ export default function ForgotPasswordPage() {
       await AuthService.requestPasswordReset({ login: values.login });
       router.replace('/login');
     } catch {
-      // Notifications are handled by the axios interceptor.
+ // Notifications are handled by the axios interceptor.
     } finally {
       setSubmitting(false);
     }

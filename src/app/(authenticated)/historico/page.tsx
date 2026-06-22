@@ -33,7 +33,7 @@ const formatDate = (value?: string | null) =>
 const tableLocale = { emptyText: HISTORY.LABELS.EMPTY };
 
 /**
- * Shift Leader history screen (EP-FE-05 item 2). Aggregates four read views
+ * Shift Leader history screen (item 2). Aggregates four read views
  * over the same `machineId` + period filter: production cycles
  * (paginated via Spring Data), manual pauses and auto stops (derived from
  * the machine status timeline since there is no dedicated paginated
@@ -383,6 +383,7 @@ export default function HistoricoPage() {
                   pagination={cyclesPager}
                   dataSource={cyclesData?.content ?? []}
                   locale={tableLocale}
+                  scroll={{ x: 'max-content' }}
                   columns={[
                     {
                       title: HISTORY.LABELS.COL_PULSE,
@@ -428,6 +429,7 @@ export default function HistoricoPage() {
                     pagination={{ pageSize: PAGE_SIZE_DEFAULT, showSizeChanger: true }}
                     dataSource={pauses}
                     locale={tableLocale}
+                    scroll={{ x: 'max-content' }}
                     columns={[
                       { title: HISTORY.LABELS.COL_START, dataIndex: 'startTime', render: formatDate },
                       { title: HISTORY.LABELS.COL_END, dataIndex: 'endTime', render: formatDate },
@@ -458,6 +460,7 @@ export default function HistoricoPage() {
                     pagination={{ pageSize: PAGE_SIZE_DEFAULT, showSizeChanger: true }}
                     dataSource={autoStops}
                     locale={tableLocale}
+                    scroll={{ x: 'max-content' }}
                     columns={[
                       { title: HISTORY.LABELS.COL_START, dataIndex: 'startTime', render: formatDate },
                       { title: HISTORY.LABELS.COL_END, dataIndex: 'endTime', render: formatDate },
@@ -486,6 +489,7 @@ export default function HistoricoPage() {
                   pagination={eventsPager}
                   dataSource={eventsData?.content ?? []}
                   locale={tableLocale}
+                  scroll={{ x: 'max-content' }}
                   columns={[
                     { title: HISTORY.LABELS.COL_START, dataIndex: 'startedAt', render: formatDate },
                     { title: HISTORY.LABELS.COL_END, dataIndex: 'endedAt', render: formatDate },

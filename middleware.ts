@@ -24,11 +24,19 @@ const buildForbiddenRewrite = (request: NextRequest): NextResponse => {
 
 export function middleware(request: NextRequest): NextResponse {
   const { pathname } = request.nextUrl;
+  const nowSeconds = Math.floor(Date.now() / 1000);
 
   if (pathname === '/') {
-    const url = request.nextUrl.clone();
-    url.pathname = DEFAULT_AUTHENTICATED_ROUTE;
-    return NextResponse.redirect(url);
+    const token = request.cookies.get('access_token')?.value;
+    if (token) {
+      const payload = decodeJwtPayload(token);
+      if (payload && !isJwtExpired(payload, nowSeconds)) {
+        const url = request.nextUrl.clone();
+        url.pathname = DEFAULT_AUTHENTICATED_ROUTE;
+        return NextResponse.redirect(url);
+      }
+    }
+    return NextResponse.next();
   }
 
   if (isPublicRoute(pathname)) {
@@ -41,7 +49,6 @@ export function middleware(request: NextRequest): NextResponse {
   }
 
   const payload = decodeJwtPayload(token);
-  const nowSeconds = Math.floor(Date.now() / 1000);
   if (isJwtExpired(payload, nowSeconds)) {
     return buildLoginRedirect(request);
   }

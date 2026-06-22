@@ -19,13 +19,15 @@ import {
 import type { ColumnsType } from 'antd/es/table';
 import dayjs, { type Dayjs } from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
-import { AUDIT, UTILS } from '@/constants/ConstantsAndParams';
+import { AUDIT, LAYOUT, UTILS } from '@/constants/ConstantsAndParams';
+import { useResponsive } from '@/hooks/useResponsive';
 import type { AuditLogFilters } from '@/models/interfaces/services/IAuditLogService';
 import type { AuditLogResponse } from '@/models/types/AuditLogResponse';
 import { createPageParams } from '@/models/types/PageParams';
 import AuditLogService from '@/services/AuditLogService';
 import { isUuid } from '@/utils/UuidUtils';
 import { NotificationUtils } from '@/utils/NotificationUtils';
+import { getResponsiveModalWidth } from '@/utils/ResponsiveUtils';
 
 const { Title, Text, Paragraph } = Typography;
 const { RangePicker } = DatePicker;
@@ -48,12 +50,12 @@ const methodTagColor = (method: string): string => {
 };
 
 /**
- * Audit log viewer for Manager (EP-FE-06 sub-task 7). Used by the
- * Auditoria tab inside /relatorios and by the standalone /auditoria
- * route - the two surfaces share this single component to avoid
- * duplicating logic. Filters compose with AND semantics on the
- * backend; the table forces the natural sort (timestamp DESC) and
- * exposes a detail modal with the sanitized request/response payloads.
+ * Audit log viewer for Manager. Used by the Auditoria tab inside
+ * /relatorios and by the standalone /auditoria route - the two surfaces
+ * share this single component to avoid duplicating logic. Filters compose
+ * with AND semantics on the backend; the table forces the natural sort
+ * (timestamp DESC) and exposes a detail modal with the sanitized
+ * request/response payloads.
  *
  * Filter UX: form inputs feed a transient state. The fetch only fires
  * when the user clicks "Aplicar" (or paginates) - this prevents the
@@ -67,6 +69,7 @@ export function AuditLogsTab() {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [loading, setLoading] = useState(false);
+  const { isMobile } = useResponsive();
 
   const [userIdInput, setUserIdInput] = useState<string>('');
   const [endpointInput, setEndpointInput] = useState<string>('');
@@ -292,6 +295,7 @@ export function AuditLogsTab() {
         columns={columns}
         loading={loading}
         size="small"
+        scroll={{ x: 'max-content' }}
         locale={{
           emptyText: (
             <Empty
@@ -325,11 +329,11 @@ export function AuditLogsTab() {
             {AUDIT.DETAIL_MODAL.BUTTONS.CLOSE}
           </Button>,
         ]}
-        width={720}
+        width={getResponsiveModalWidth(isMobile, LAYOUT.RESPONSIVE_WIDTHS.MODAL_LG)}
       >
         {detail ? (
           <Space orientation="vertical" size={16} style={{ width: '100%' }}>
-            <Descriptions size="small" column={2} bordered>
+            <Descriptions size="small" column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2, xxxl: 2 }} bordered>
               <Descriptions.Item label={AUDIT.LIST.LABELS.TIMESTAMP}>
                 {dayjs(detail.timestamp).format(UTILS.DATE_FORMATS.DISPLAY)}
               </Descriptions.Item>

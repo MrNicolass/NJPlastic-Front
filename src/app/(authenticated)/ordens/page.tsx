@@ -26,8 +26,8 @@ const ORDERS_POLL_INTERVAL_MS = 30_000;
 const PAGE_SIZE_DEFAULT = 20;
 
 /**
- * Production Orders screen (EP-FE-05 item 5, UC05 + UC11). Owner is the
- * Shift Leader, reused by the Manager via the same route (RN03/RN04).
+ * Production Orders screen (item 5). Owner is the
+ * Shift Leader, reused by the Manager via the same route.
  * Polls every 30 seconds since order rows do not move at the same cadence
  * as the dashboard. The "+ Nova ordem" CTA is intentionally disabled on
  * the MVP per the backlog decision.

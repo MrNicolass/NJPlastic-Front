@@ -61,14 +61,14 @@ const ProductionEventService: IProductionEventService = {
   },
 
   async findRecent(
-    limit: number,
+    pageable: PageParams,
     from: string | undefined,
     to: string | undefined,
     suppressError?: boolean,
-  ): Promise<RecentEventResponse[]> {
+  ): Promise<Page<RecentEventResponse>> {
     try {
-      const response: AxiosResponse<RecentEventResponse[]> = await http.get('/events/recent', {
-        params: { limit, from, to },
+      const response: AxiosResponse<Page<RecentEventResponse>> = await http.get('/events/recent', {
+        params: { ...pageable, from, to },
         notificationConfig: buildNotificationConfig(EVENTS.KEY, suppressError),
       });
       return response.data;
