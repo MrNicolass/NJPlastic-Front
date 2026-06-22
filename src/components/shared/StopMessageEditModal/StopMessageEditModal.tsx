@@ -168,7 +168,7 @@ export function StopMessageEditModal(props: StopMessageEditModalProps): React.Re
 
         <Descriptions
           title={MACHINES.STOPS.EDIT_MODAL.READ_ONLY_TITLE}
-          column={{ xs: 1, md: 2 }}
+          column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2, xxxl: 2 }}
           size="small"
           bordered
         >

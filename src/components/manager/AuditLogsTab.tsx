@@ -333,7 +333,7 @@ export function AuditLogsTab() {
       >
         {detail ? (
           <Space orientation="vertical" size={16} style={{ width: '100%' }}>
-            <Descriptions size="small" column={{ xs: 1, md: 2 }} bordered>
+            <Descriptions size="small" column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2, xxxl: 2 }} bordered>
               <Descriptions.Item label={AUDIT.LIST.LABELS.TIMESTAMP}>
                 {dayjs(detail.timestamp).format(UTILS.DATE_FORMATS.DISPLAY)}
               </Descriptions.Item>
